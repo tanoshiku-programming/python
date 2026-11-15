@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>インデックス（添字） | Pythonずかん</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Pythonずかん
+   レイアウト: 左に目次、右に記事。Wikipediaと同じく「言葉をたどって潜る」前提。
+   章ごとに色を決めて、いま何の章にいるかを色で分かるようにする。 */
+
+:root {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface2: #ecf0f6;
+  --ink: #19202f;
+  --muted: #566074;
+  --line: #d6dde8;
+  --link: #1a5cc0;
+  --visited: #6a3fb2;
+  --focus: #1a5cc0;
+
+  --code-bg: #f2f5fa;
+  --code-line: #d3dbe8;
+  --out-bg: #fcfdfe;
+  --typed: #0a67c4;
+  --c-kw: #a22b78;
+  --c-st: #1b7334;
+  --c-nu: #a35200;
+  --c-cm: #636d80;
+  --c-bi: #06708f;
+  --c-fn: #7340b0;
+  --c-op: #46505f;
+
+  --ch0: #4a5568;
+  --ch1: #2160c6;
+  --ch2: #1f7f45;
+  --ch3: #a35a06;
+  --ch4: #8243ba;
+  --ch5: #bd3556;
+  --ch6: #0a768f;
+  --ch7: #b0309e;
+  --ch8: #6f5b47;
+  --ch9: #4a5568;
+
+  --point: #e6effc;
+  --stuck: #fcefe0;
+  --try: #e5f4ea;
+  --scratch: #fbf3d6;
+  --err-bg: #fbe8eb;
+  --err-ink: #a3203a;
+
+  --font-body: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+  --font-head: "Zen Maru Gothic", "BIZ UDPGothic", "Hiragino Maru Gothic ProN", "Yu Gothic UI", sans-serif;
+  --font-code: "BIZ UDGothic", "Menlo", "Consolas", "MS Gothic", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e131c;
+    --surface: #151b26;
+    --surface2: #1c2431;
+    --ink: #e5e9f1;
+    --muted: #9aa5ba;
+    --line: #2b3547;
+    --link: #82b2ff;
+    --visited: #b9a0f2;
+    --focus: #82b2ff;
+    --code-bg: #0f1520;
+    --code-line: #2b3547;
+    --out-bg: #121823;
+    --typed: #79b8ff;
+    --c-kw: #f092cc;
+    --c-st: #7fd69a;
+    --c-nu: #f0a95c;
+    --c-cm: #8a95aa;
+    --c-bi: #67cde8;
+    --c-fn: #c6a0f5;
+    --c-op: #aab4c6;
+    --ch0: #a9b4c4;
+    --ch1: #82aaff;
+    --ch2: #62cf88;
+    --ch3: #f0a54f;
+    --ch4: #c69df3;
+    --ch5: #ff8ca6;
+    --ch6: #5ec9e1;
+    --ch7: #e58bd8;
+    --ch8: #c9b49a;
+    --ch9: #a9b4c4;
+    --point: #1a2842;
+    --stuck: #3a2a1a;
+    --try: #17301f;
+    --scratch: #3a321a;
+    --err-bg: #3a1b22;
+    --err-ink: #ff9aab;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e131c;
+  --surface: #151b26;
+  --surface2: #1c2431;
+  --ink: #e5e9f1;
+  --muted: #9aa5ba;
+  --line: #2b3547;
+  --link: #82b2ff;
+  --visited: #b9a0f2;
+  --focus: #82b2ff;
+  --code-bg: #0f1520;
+  --code-line: #2b3547;
+  --out-bg: #121823;
+  --typed: #79b8ff;
+  --c-kw: #f092cc;
+  --c-st: #7fd69a;
+  --c-nu: #f0a95c;
+  --c-cm: #8a95aa;
+  --c-bi: #67cde8;
+  --c-fn: #c6a0f5;
+  --c-op: #aab4c6;
+  --ch0: #a9b4c4;
+  --ch1: #82aaff;
+  --ch2: #62cf88;
+  --ch3: #f0a54f;
+  --ch4: #c69df3;
+  --ch5: #ff8ca6;
+  --ch6: #5ec9e1;
+  --ch7: #e58bd8;
+  --ch8: #c9b49a;
+  --ch9: #a9b4c4;
+  --point: #1a2842;
+  --stuck: #3a2a1a;
+  --try: #17301f;
+  --scratch: #3a321a;
+  --err-bg: #3a1b22;
+  --err-ink: #ff9aab;
+  color-scheme: dark;
+}
+
+/* ---------- 基本 ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 16px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16.5px/1.95 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 56px;
+}
+body.ch-0 { --chc: var(--ch0); }
+body.ch-1 { --chc: var(--ch1); }
+body.ch-2 { --chc: var(--ch2); }
+body.ch-3 { --chc: var(--ch3); }
+body.ch-4 { --chc: var(--ch4); }
+body.ch-5 { --chc: var(--ch5); }
+body.ch-6 { --chc: var(--ch6); }
+.ch-7 { --chc: var(--ch7); }
+.ch-8 { --chc: var(--ch8); }
+.ch-9 { --chc: var(--ch9); }
+body.ch-7 { --chc: var(--ch7); }
+body.ch-8 { --chc: var(--ch8); }
+body.ch-9 { --chc: var(--ch9); }
+.ch-0 { --chc: var(--ch0); }
+.ch-1 { --chc: var(--ch1); }
+.ch-2 { --chc: var(--ch2); }
+.ch-3 { --chc: var(--ch3); }
+.ch-4 { --chc: var(--ch4); }
+.ch-5 { --chc: var(--ch5); }
+.ch-6 { --chc: var(--ch6); }
+
+a { color: var(--link); }
+a:visited { color: var(--visited); }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+h1, h2, h3 { font-family: var(--font-head); text-wrap: balance; line-height: 1.4; }
+code { font-family: var(--font-code); }
+.muted { color: var(--muted); }
+
+/* ---------- ヘッダー ---------- */
+.site-head {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+.brand {
+  font: 700 1.4rem/1.2 var(--font-head);
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5em;
+}
+.brand:visited { color: var(--ink); }
+.prompt {
+  font-family: var(--font-code);
+  font-weight: 600;
+  color: var(--muted);
+  font-size: .8em;
+  letter-spacing: -.05em;
+}
+.search { position: relative; width: min(300px, 100%); }
+.search input {
+  width: 100%;
+  font: inherit;
+  font-size: .95rem;
+  line-height: 1.5;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.search ul {
+  position: absolute;
+  z-index: 40;
+  left: 0; right: 0;
+  top: calc(100% + 4px);
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
+}
+.search li a {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+.search li a:visited { color: var(--ink); }
+.search li a:hover, .search li a.on { background: var(--surface2); }
+.search li small { display: block; color: var(--muted); font-size: .78rem; }
+
+/* ---------- レイアウト ---------- */
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.side {
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  font-size: .9rem;
+  line-height: 1.6;
+  padding-bottom: 8px;
+}
+.nav-home {
+  display: block;
+  padding: 6px 4px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.nav-ch { border-top: 1px solid var(--line); padding: 4px 0; }
+.nav-ch summary {
+  cursor: pointer;
+  padding: 6px 4px;
+  font-weight: 700;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-ch summary::-webkit-details-marker { display: none; }
+.nav-ch .no {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--chc);
+  color: var(--surface);
+  font: 700 .8rem/1 var(--font-code);
+  flex: none;
+}
+.nav-ch summary::after {
+  content: "▸";
+  margin-left: auto;
+  color: var(--muted);
+  font-size: .8em;
+}
+.nav-ch[open] summary::after { content: "▾"; }
+.nav-ch ul { list-style: none; margin: 0 0 6px; padding: 0 0 0 2.2em; }
+.nav-ch li a { display: block; padding: 1px 4px; text-decoration: none; border-radius: 4px; }
+.nav-ch li a:hover { background: var(--surface2); }
+.nav-ch li.chl a { color: var(--muted); }
+.side a[aria-current="page"] { background: var(--surface2); font-weight: 700; color: var(--chc, var(--ink)); }
+
+.article {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 26px 38px 40px;
+}
+.article::after { content: ""; display: block; clear: both; }
+.nav-m { display: none; }
+
+/* ---------- 記事の見出しまわり ---------- */
+.trail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: center;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.trail .lbl { font-weight: 700; }
+.trail a { color: var(--muted); }
+.trail .now { color: var(--ink); font-weight: 700; }
+.eyebrow { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; line-height: 1.6; }
+.art-head h1 {
+  margin: 0 0 6px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.art-head h1 .prompt { font-size: .6em; }
+.chip {
+  display: inline-block;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: .82rem;
+  line-height: 1.7;
+  text-decoration: none;
+  background: var(--surface);
+  color: var(--link);
+}
+.chip:visited { color: var(--link); }
+.eyebrow .chip, .idx .chip {
+  color: var(--chc);
+  border-color: var(--chc);
+  background: color-mix(in srgb, var(--chc) 10%, var(--surface));
+  font-weight: 700;
+}
+.eyebrow .chip:visited, .idx .chip:visited { color: var(--chc); }
+.ptype { font-size: .82rem; color: var(--muted); }
+.lede {
+  font-size: 1.08rem;
+  margin: 8px 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.article h2 {
+  font-size: 1.35rem;
+  margin: 2em 0 .6em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+  clear: none;
+}
+.article h2.plain { font-size: 1rem; border: 0; margin: 0 0 6px; }
+.article h3 { font-size: 1.1rem; margin: 1.6em 0 .4em; }
+.article p { margin: .8em 0; }
+.article ul, .article ol { margin: .8em 0; padding-left: 1.6em; }
+.article li { margin: .15em 0; }
+
+.toc {
+  display: inline-block;
+  min-width: 14em;
+  max-width: 100%;
+  margin: 0 0 8px;
+  padding: 8px 18px 8px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: .9rem;
+  line-height: 1.7;
+}
+.toc p { margin: 0; font-weight: 700; }
+.toc ol { margin: 2px 0 0; padding-left: 1.5em; }
+
+/* Wikipedia のインフォボックス */
+.infobox {
+  float: right;
+  width: 17em;
+  margin: 4px 0 16px 26px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface2);
+  font-size: .88rem;
+  line-height: 1.7;
+  overflow: hidden;
+}
+.infobox .ib-title {
+  margin: 0;
+  padding: 6px 12px;
+  font: 700 .95rem/1.5 var(--font-head);
+  background: color-mix(in srgb, var(--chc) 18%, var(--surface2));
+  color: var(--ink);
+}
+.infobox dl { margin: 0; padding: 4px 12px 8px; }
+.infobox dt { font-weight: 700; color: var(--muted); font-size: .78rem; margin-top: 6px; letter-spacing: .06em; }
+.infobox dd { margin: 0; overflow-wrap: anywhere; }
+.infobox .chip { font-size: .78rem; }
+.chips-inline { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ---------- 言葉のリンク ---------- */
+a.term, a.cterm {
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: .28em;
+}
+a.term { color: var(--link); }
+a.term:visited { color: var(--visited); }
+a.term:hover, a.cterm:hover { text-decoration-style: solid; background: var(--surface2); }
+a.cterm { color: inherit; }
+a.cterm:visited { color: inherit; }
+a.term code { color: inherit; }
+
+code {
+  font-size: .9em;
+  background: var(--surface2);
+  padding: .08em .38em;
+  border-radius: 4px;
+}
+a.term code { background: color-mix(in srgb, var(--link) 9%, var(--surface)); }
+
+/* ---------- コード ---------- */
+.runbox {
+  margin: 16px 0;
+  border: 1px solid var(--code-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.runbox figure { margin: 0; }
+.runbox figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 28px;
+  padding: 2px 12px;
+  font-size: .74rem;
+  line-height: 1.6;
+  letter-spacing: .08em;
+  color: var(--muted);
+  background: var(--surface2);
+}
+.runbox pre {
+  margin: 0;
+  padding: 10px 14px;
+  overflow-x: auto;
+  font: 400 .9rem/1.75 var(--font-code);
+  tab-size: 4;
+}
+.runbox pre code { background: none; padding: 0; border-radius: 0; font-size: inherit; }
+.code pre { background: var(--code-bg); color: var(--ink); }
+.out { border-top: 1px solid var(--code-line); }
+.out pre { background: var(--out-bg); }
+.out figcaption { background: var(--surface2); }
+.typed { color: var(--typed); font-weight: 600; }
+.err { color: var(--err-ink); }
+.out:has(.err) pre { background: var(--err-bg); }
+.copy {
+  font: inherit;
+  font-size: .74rem;
+  letter-spacing: .04em;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.copy:hover { color: var(--ink); background: var(--surface); }
+.kw, .kc { color: var(--c-kw); }
+.st { color: var(--c-st); }
+.nu { color: var(--c-nu); }
+.cm { color: var(--c-cm); }
+.bi { color: var(--c-bi); }
+.fn { color: var(--c-fn); }
+.op { color: var(--c-op); }
+a.cterm.kw, a.cterm.kc { color: var(--c-kw); }
+a.cterm.bi { color: var(--c-bi); }
+
+/* ---------- 表 ---------- */
+.tbl-wrap { overflow-x: auto; margin: 14px 0; }
+table { border-collapse: collapse; font-size: .92rem; line-height: 1.7; min-width: 20em; }
+th, td { border: 1px solid var(--line); padding: 4px 12px; text-align: left; vertical-align: top; }
+th { background: var(--surface2); white-space: nowrap; }
+
+/* ---------- ポイントなどの囲み ---------- */
+.note {
+  margin: 18px 0;
+  padding: 10px 18px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+.note > :first-child { margin-top: 0; }
+.note > :last-child { margin-bottom: 0; }
+.note .runbox { background: var(--surface); }
+.note-label {
+  margin: 0 0 2px;
+  font: 700 .78rem/1.8 var(--font-head);
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+.note-title { margin: 0 0 4px; font-weight: 700; }
+.note.point { background: var(--point); }
+.note.stuck { background: var(--stuck); }
+.note.try { background: var(--try); }
+.note.scratch { background: var(--scratch); }
+.note.deep, .note.answer { background: var(--surface); }
+.note summary { cursor: pointer; font-weight: 700; line-height: 1.8; }
+.note details[open] summary, .note[open] > summary { margin-bottom: 4px; }
+
+/* ---------- 確認テスト ---------- */
+.quiz { margin-top: 44px; clear: both; }
+.quiz-lead { margin: 0 0 6px; color: var(--muted); font-size: .94rem; }
+.qitem {
+  margin: 14px 0;
+  padding: 12px 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.qno {
+  margin: 0 0 2px !important;
+  font: 700 .85rem/1.8 var(--font-head);
+  letter-spacing: .1em;
+  color: var(--chc, var(--ink));
+}
+.qbody > :first-child { margin-top: 0; }
+.qbody > :last-child { margin-bottom: 0; }
+details.qans { margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 8px; }
+details.qans > summary { cursor: pointer; font-weight: 700; color: var(--link); line-height: 1.8; }
+.qans-body {
+  margin-top: 8px;
+  padding: 6px 16px 8px;
+  background: var(--try);
+  border-radius: 6px;
+}
+.qans-body > :first-child { margin-top: 8px; }
+.qans-body > :last-child { margin-bottom: 4px; }
+.qans-body .runbox { background: var(--surface); }
+
+/* ---------- 一覧 ---------- */
+.termlist {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0 !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+.termlist a {
+  display: block;
+  height: 100%;
+  padding: 8px 14px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.termlist a:visited { color: var(--ink); }
+.termlist a:hover { background: var(--surface2); }
+.termlist strong { display: block; color: var(--link); }
+.termlist li.tl-grp { grid-column: 1 / -1; margin: 8px 0 -4px; font-weight: 700; font-size: .9rem; color: var(--chc, var(--ink)); }
+.termlist span { font-size: .84rem; color: var(--muted); }
+
+.chapters {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0 !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.chcard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 14px;
+  height: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.chcard:visited { color: var(--ink); }
+.chcard:hover { background: var(--surface2); }
+.chcard .chno {
+  grid-row: 1 / span 3;
+  font: 700 2.4rem/1.1 var(--font-head);
+  color: var(--chc);
+}
+.chcard strong { font-size: 1.1rem; font-family: var(--font-head); }
+.chcard .sub { font-size: .86rem; color: var(--muted); }
+.chcard .words { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+.index-all { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px 24px; margin-top: 10px; }
+.idx ul { list-style: none; padding: 0 !important; margin: 6px 0 0; font-size: .95rem; line-height: 1.8; }
+
+.backlinks { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); clear: both; }
+.chips { list-style: none; padding: 0 !important; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; }
+
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+.pg {
+  display: block;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-decoration: none;
+  line-height: 1.5;
+}
+.pg small { display: block; color: var(--muted); font-size: .74rem; }
+.pg.next { text-align: right; margin-left: auto; }
+
+/* ---------- ホバーで出るプレビュー ---------- */
+.peek {
+  position: absolute;
+  z-index: 60;
+  width: min(310px, calc(100vw - 32px));
+  padding: 10px 14px 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
+  font-size: .86rem;
+  line-height: 1.7;
+}
+.peek .pk-ch { font-size: .72rem; font-weight: 700; color: var(--chc, var(--muted)); letter-spacing: .06em; }
+.peek .pk-t { font: 700 1rem/1.5 var(--font-head); margin: 0; }
+.peek .pk-s { margin: 2px 0 0; color: var(--muted); }
+
+/* ---------- 狭い画面 ---------- */
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .side { display: none; }
+  .nav-m {
+    display: block;
+    margin: -8px 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: .9rem;
+    line-height: 1.6;
+  }
+  .nav-m > summary { cursor: pointer; padding: 6px 12px; font-weight: 700; }
+  .nav-m[open] > summary { border-bottom: 1px solid var(--line); }
+  .nav-m .nav-home, .nav-m .nav-ch { padding-left: 8px; padding-right: 8px; }
+  .article { padding: 18px 16px 30px; }
+  .art-head h1 { font-size: 1.65rem; }
+  .infobox { float: none; width: auto; margin: 10px 0 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+}
+
+
+/* ---------- 命令のよみかた ---------- */
+.reads {
+  display: flow-root;
+  margin: 14px 0 6px;
+  padding: 10px 16px 12px;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--chc, var(--link));
+  border-radius: 6px;
+  background: var(--surface);
+}
+.reads-label { margin: 0 0 6px !important; font: 700 .82rem/1.6 var(--font-head); letter-spacing: .08em; color: var(--muted); }
+.reads ul { list-style: none; margin: 0; padding: 0 !important; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.reads li { display: flex; align-items: baseline; gap: 8px; margin: 0; }
+.reads li code { font-weight: 700; }
+.yomi { font: 700 1rem/1.6 var(--font-head); color: var(--chc, var(--link)); }
+td.yomi { white-space: nowrap; }
+.yomi-link { margin: 12px 0 0; }
+.yomi-link a { font-weight: 700; }
+.yomi-link span { margin-left: 10px; color: var(--muted); font-size: .88rem; }
+.nav-yomi { margin-top: 2px; }
+
+/* ---------- 書き方のテンプレート図 ---------- */
+figure.tpl {
+  margin: 16px 0;
+  padding: 0 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+figure.tpl > figcaption {
+  padding: 6px 16px;
+  font: 700 .85rem/1.8 var(--font-head);
+  letter-spacing: .06em;
+  background: color-mix(in srgb, var(--chc, var(--link)) 14%, var(--surface2));
+}
+.tpl-key { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 16px 0 !important; font-size: .78rem; color: var(--muted); }
+.tpl-code { margin: 8px 16px; padding: 12px 14px; background: var(--code-bg); border: 1px solid var(--code-line); border-radius: 6px; overflow-x: auto; }
+.tl { display: block; padding-left: calc(var(--lv, 0) * 2.4em); line-height: 2.5; white-space: nowrap; font: 400 1rem/2.5 var(--font-code); }
+.tl + .tl { margin-top: 2px; }
+.fx { display: inline-block; padding: 0 8px; font: 700 .95rem/1.7 var(--font-code); color: var(--ink); background: var(--surface); border: 1px solid var(--ink); border-radius: 4px; margin: 0 2px; }
+.ph { display: inline-block; padding: 0 8px; font: 700 .9rem/1.7 var(--font-body); color: var(--ink); border: 2px dashed var(--p, var(--link)); background: color-mix(in srgb, var(--p, var(--link)) 16%, var(--surface)); border-radius: 999px; margin: 0 2px; }
+.ph-1 { --p: var(--ch1); } .ph-2 { --p: var(--ch2); } .ph-3 { --p: var(--ch3); }
+.ph-4 { --p: var(--ch4); } .ph-5 { --p: var(--ch5); } .ph-6 { --p: var(--ch6); }
+.tpl-legend { display: grid; grid-template-columns: max-content 1fr; gap: 8px 14px; align-items: center; margin: 4px 16px 0; font-size: .92rem; }
+.tpl-legend dt, .tpl-legend dd { margin: 0; }
+.indent-mark { font: 700 .82rem/1.7 var(--font-body); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 8px; background: var(--surface2); }
+figure.tpl > p:not(.tpl-key), figure.tpl > .tbl-wrap { margin-left: 16px; margin-right: 16px; }
+
+/* ---------- 流れ図 ---------- */
+figure.flow { margin: 16px 0; padding: 12px 8px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); text-align: center; }
+figure.flow figcaption { margin-top: 4px; font-size: .88rem; color: var(--muted); }
+svg.dg { width: 100%; max-width: 520px; height: auto; }
+.dg text { fill: var(--ink); font: 700 14px var(--font-body); }
+.dg .code { font: 400 14px var(--font-code); }
+.dg .code.big { font-size: 22px; font-weight: 700; }
+.dg .num { font-size: 30px; font-weight: 700; fill: var(--c-nu); }
+.dg .note { font-weight: 400; fill: var(--muted); font-size: 13px; }
+.dg .idx { font: 700 18px var(--font-code); fill: var(--chc, var(--link)); }
+.dg .idx.neg { fill: var(--ch5); }
+.dg .lbl { font-size: 13px; }
+.dg .lbl.strong { font-size: 15px; }
+.dg .box { fill: var(--surface2); stroke: var(--chc, var(--link)); stroke-width: 2; }
+.dg .box.start { fill: color-mix(in srgb, var(--chc, var(--link)) 14%, var(--surface)); }
+.dg .cond { fill: color-mix(in srgb, var(--ch4) 16%, var(--surface)); stroke: var(--ch4); stroke-width: 2; }
+.dg .func { fill: color-mix(in srgb, var(--ch5) 10%, var(--surface)); stroke: var(--ch5); stroke-width: 2; stroke-dasharray: 6 4; }
+.dg .tag { fill: var(--chc, var(--link)); }
+.dg .tagtxt { fill: var(--surface); font-family: var(--font-code); }
+.dg .arrow { fill: none; stroke: var(--muted); stroke-width: 2; }
+.dg .ah { fill: var(--muted); }
+
+/* ---------- 作ってみよう ---------- */
+.tasks { margin-top: 44px; clear: both; }
+.tasks-lead { margin: 0 0 6px; color: var(--muted); font-size: .94rem; }
+.titem {
+  margin: 14px 0;
+  padding: 12px 18px 14px;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--chc, var(--link));
+  border-radius: 6px;
+  background: var(--surface);
+}
+.tno { margin: 0 0 2px !important; font: 700 .85rem/1.8 var(--font-head); letter-spacing: .1em; color: var(--chc, var(--ink)); }
+.tans-note { margin: 4px 0 0; font-size: .88rem; color: var(--muted); }
+.titem.challenge { border-style: dashed; border-left: 5px solid var(--chc, var(--link)); }
+.titem.challenge .tno::before { content: "★ "; }
+.qbody code, .reads code { overflow-wrap: anywhere; }
+.dg .code { white-space: pre; }
+
+/* ---------- Pyxel ---------- */
+figure.out.px { background: var(--out-bg); }
+figure.out.px img.pxshot { display: block; max-width: 100%; height: auto; margin: 8px auto; image-rendering: pixelated; border: 1px solid var(--line); }
+.nav-ch li.grp { margin-top: 6px; padding-left: 4px; font-size: .74rem; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
+table.reftbl td:first-child { white-space: nowrap; }
+ul.chips.az { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0 !important; }
+.dg .dot { fill: var(--ch5); }
+.pn { font: 700 1rem/1.7 var(--font-code); color: var(--muted); margin: 0 1px; }
+
+</style>
+</head>
+<body data-slug="list-index" data-title="インデックス（添字）" class="ch-2">
+<header class="site-head">
+  <a class="brand" href="index.html"><span class="prompt">&gt;&gt;&gt;</span>Pythonずかん</a>
+  <div class="search">
+    <input id="q" type="search" placeholder="ことばをさがす（例：if）" autocomplete="off" aria-label="ことばをさがす">
+    <ul id="results" hidden></ul>
+  </div>
+</header>
+<div class="wrap">
+  <nav class="side" aria-label="もくじ"><a class="nav-home" href="index.html">はじめに</a><a class="nav-home nav-yomi" href="yomi.html">命令のよみかた</a><a class="nav-home nav-yomi" href="trouble.html">困ったとき</a><details class="nav-ch ch-0"><summary><span class="no">0</span>はじめる前に</summary><ul><li class="chl"><a href="ch0.html">この章のまとめ</a></li></ul></details><details class="nav-ch ch-1"><summary><span class="no">1</span>計算処理</summary><ul><li class="chl"><a href="ch1.html">この章のまとめ</a></li><li class="grp">ステップ1 表示する</li><li><a href="print.html">print関数</a></li><li><a href="comment.html">コメント</a></li><li class="grp">ステップ2 計算する</li><li><a href="operator.html">算術演算子</a></li><li><a href="int.html">整数（int）</a></li><li><a href="float.html">小数（float）</a></li><li class="grp">ステップ3 入力する</li><li><a href="input.html">input関数</a></li><li><a href="str.html">文字列（str）</a></li><li><a href="typeconv.html">型変換</a></li><li><a href="fstring.html">f文字列</a></li><li class="grp">困ったら</li><li><a href="error.html">エラーメッセージ</a></li></ul></details><details class="nav-ch ch-2" open><summary><span class="no">2</span>変数とリスト</summary><ul><li class="chl"><a href="ch2.html">この章のまとめ</a></li><li><a href="variable.html">変数</a></li><li><a href="naming.html">名前のつけ方（ローマ字でもOK）</a></li><li><a href="assignment.html">代入</a></li><li><a href="list.html">リスト</a></li><li><a href="list-index.html" aria-current="page">インデックス（添字）</a></li><li><a href="bool.html">真偽値（bool）</a></li></ul></details><details class="nav-ch ch-3"><summary><span class="no">3</span>繰り返し</summary><ul><li class="chl"><a href="ch3.html">この章のまとめ</a></li><li><a href="for.html">for文</a></li><li><a href="while.html">while文</a></li><li><a href="range.html">range関数</a></li><li><a href="break.html">break と continue</a></li><li><a href="indent.html">インデント</a></li><li><a href="infinite-loop.html">無限ループ</a></li></ul></details><details class="nav-ch ch-4"><summary><span class="no">4</span>条件分岐</summary><ul><li class="chl"><a href="ch4.html">この章のまとめ</a></li><li><a href="if.html">if文</a></li><li><a href="else.html">elif と else</a></li><li><a href="comparison.html">比較演算子</a></li><li><a href="logical.html">論理演算子（and / or / not）</a></li></ul></details><details class="nav-ch ch-5"><summary><span class="no">5</span>関数</summary><ul><li class="chl"><a href="ch5.html">この章のまとめ</a></li><li><a href="function.html">関数</a></li><li><a href="argument.html">引数</a></li><li><a href="return.html">戻り値（return）</a></li><li><a href="scope.html">スコープ（変数の有効範囲）</a></li></ul></details><details class="nav-ch ch-6"><summary><span class="no">6</span>モジュール</summary><ul><li class="chl"><a href="ch6.html">この章のまとめ</a></li><li><a href="module.html">モジュール</a></li><li><a href="import.html">import</a></li><li><a href="random.html">random</a></li><li><a href="calendar.html">calendar</a></li></ul></details><details class="nav-ch ch-7"><summary><span class="no">7</span>Pyxelで作ろう</summary><ul><li class="chl"><a href="ch7.html">この章のまとめ</a></li><li><a href="pyxel.html">Pyxel（ピクセル）</a></li><li><a href="window.html">ウィンドウを出す（init と run）</a></li><li><a href="update-draw.html">update と draw</a></li><li><a href="coordinate.html">座標（x と y）</a></li><li><a href="color.html">色（16色パレット）</a></li><li><a href="pyxel-text.html">文字を表示してみよう</a></li><li><a href="shapes.html">いろいろな図形をかいてみよう</a></li><li><a href="pyxel-var.html">変数を使ってみよう</a></li><li><a href="pyxel-key.html">キー操作をやってみよう</a></li><li><a href="pyxel-mouse.html">マウス操作をやってみよう</a></li><li><a href="pyxel-jp.html">日本語を表示しよう</a></li><li><a href="app-fortune.html">占いアプリを作ろう</a></li><li><a href="app-timer.html">ストップウォッチを作ろう</a></li><li><a href="game-catch.html">ゲームを作ろう（ほしキャッチ）</a></li><li><a href="game-scene.html">画面を切り替えよう（タイトル・ゲーム・結果）</a></li><li><a href="game-list.html">たくさん動かそう（リストを使う）</a></li></ul></details><details class="nav-ch ch-8"><summary><span class="no">8</span>Pyxel辞典</summary><ul><li class="chl"><a href="ch8.html">この章のまとめ</a></li><li class="grp">基本</li><li><a href="px-init.html">init（画面の準備）</a></li><li><a href="px-run.html">run（ゲームを動かす）</a></li><li><a href="px-quit.html">quit（終了する）</a></li><li><a href="px-title.html">title（ウィンドウの名前）</a></li><li><a href="px-size.html">width・height（画面の大きさ）</a></li><li><a href="px-frame-count.html">frame_count（フレーム数）</a></li><li><a href="px-screenshot.html">screenshot（画面を保存）</a></li><li class="grp">描く（画面）</li><li><a href="px-cls.html">cls（画面を消す）</a></li><li><a href="px-pset.html">pset（点を打つ）</a></li><li><a href="px-pget.html">pget（色を調べる）</a></li><li><a href="px-line.html">line（線を引く）</a></li><li><a href="px-rect.html">rect（四角を塗る）</a></li><li><a href="px-rectb.html">rectb（四角のふち）</a></li><li><a href="px-circ.html">circ（円を塗る）</a></li><li><a href="px-circb.html">circb（円のふち）</a></li><li><a href="px-elli.html">elli（だ円を塗る）</a></li><li><a href="px-ellib.html">ellib（だ円のふち）</a></li><li><a href="px-tri.html">tri（三角形を塗る）</a></li><li><a href="px-trib.html">trib（三角形のふち）</a></li><li><a href="px-fill.html">fill（塗りつぶす）</a></li><li><a href="px-text.html">text（文字を書く）</a></li><li><a href="px-blt.html">blt（画像をはる）</a></li><li><a href="px-clip.html">clip（描く範囲をしぼる）</a></li><li><a href="px-camera.html">camera（画面をずらす）</a></li><li><a href="px-pal.html">pal（色を入れ替える）</a></li><li><a href="px-dither.html">dither（半透明）</a></li><li class="grp">入力</li><li><a href="px-btn.html">btn（キーが押されている？）</a></li><li><a href="px-btnp.html">btnp（押した瞬間）</a></li><li><a href="px-btnr.html">btnr（離した瞬間）</a></li><li><a href="px-mouse.html">mouse（矢印の表示）</a></li><li><a href="px-mouse-xy.html">mouse_x・mouse_y（マウスの位置）</a></li><li><a href="px-mouse-wheel.html">mouse_wheel（ホイール）</a></li><li><a href="px-input-text.html">input_text（打った文字）</a></li><li><a href="px-keycodes.html">KEY_（キーの名前一覧）</a></li><li class="grp">計算</li><li><a href="px-rndi.html">rndi（ランダムな整数）</a></li><li><a href="px-rndf.html">rndf（ランダムな小数）</a></li><li><a href="px-rseed.html">rseed（ランダムの種）</a></li><li><a href="px-sin.html">sin（サイン）</a></li><li><a href="px-cos.html">cos（コサイン）</a></li><li><a href="px-atan2.html">atan2（角度を求める）</a></li><li><a href="px-sqrt.html">sqrt（平方根）</a></li><li><a href="px-ceil.html">ceil（切り上げ）</a></li><li><a href="px-floor.html">floor（切り捨て）</a></li><li><a href="px-clamp.html">clamp（範囲におさめる）</a></li><li><a href="px-sgn.html">sgn（プラス・マイナスの判定）</a></li><li><a href="px-noise.html">noise（なめらかなランダム）</a></li><li class="grp">音</li><li><a href="px-play.html">play（音を鳴らす）</a></li><li><a href="px-playm.html">playm（音楽を鳴らす）</a></li><li><a href="px-stop.html">stop（音を止める）</a></li><li><a href="px-sound-class.html">Sound（音のデータ）</a></li><li><a href="px-music-class.html">Music（曲のデータ）</a></li><li class="grp">画像・データ</li><li><a href="px-image-class.html">Image（ドット絵の画像）</a></li><li><a href="px-tilemap-class.html">Tilemap（マップのデータ）</a></li><li><a href="px-load.html">load（データを読みこむ）</a></li><li><a href="px-font-class.html">Font（フォント）</a></li></ul></details><details class="nav-ch ch-9"><summary><span class="no">9</span>道具と困ったとき</summary><ul><li class="chl"><a href="ch9.html">この章のまとめ</a></li><li><a href="editor.html">エディタ（IDLE と VS Code）</a></li><li><a href="shell.html">シェル（&gt;&gt;&gt; の画面）とファイル</a></li><li><a href="pyfile.html">ファイルと拡張子（.py）</a></li><li><a href="terminal.html">ターミナルと pip</a></li><li><a href="trouble.html">困ったときは（よくあるつまずき）</a></li></ul></details></nav>
+  <main class="article">
+    <details class="nav-m"><summary>もくじを開く</summary><a class="nav-home" href="index.html">はじめに</a><a class="nav-home nav-yomi" href="yomi.html">命令のよみかた</a><a class="nav-home nav-yomi" href="trouble.html">困ったとき</a><details class="nav-ch ch-0"><summary><span class="no">0</span>はじめる前に</summary><ul><li class="chl"><a href="ch0.html">この章のまとめ</a></li></ul></details><details class="nav-ch ch-1"><summary><span class="no">1</span>計算処理</summary><ul><li class="chl"><a href="ch1.html">この章のまとめ</a></li><li class="grp">ステップ1 表示する</li><li><a href="print.html">print関数</a></li><li><a href="comment.html">コメント</a></li><li class="grp">ステップ2 計算する</li><li><a href="operator.html">算術演算子</a></li><li><a href="int.html">整数（int）</a></li><li><a href="float.html">小数（float）</a></li><li class="grp">ステップ3 入力する</li><li><a href="input.html">input関数</a></li><li><a href="str.html">文字列（str）</a></li><li><a href="typeconv.html">型変換</a></li><li><a href="fstring.html">f文字列</a></li><li class="grp">困ったら</li><li><a href="error.html">エラーメッセージ</a></li></ul></details><details class="nav-ch ch-2" open><summary><span class="no">2</span>変数とリスト</summary><ul><li class="chl"><a href="ch2.html">この章のまとめ</a></li><li><a href="variable.html">変数</a></li><li><a href="naming.html">名前のつけ方（ローマ字でもOK）</a></li><li><a href="assignment.html">代入</a></li><li><a href="list.html">リスト</a></li><li><a href="list-index.html" aria-current="page">インデックス（添字）</a></li><li><a href="bool.html">真偽値（bool）</a></li></ul></details><details class="nav-ch ch-3"><summary><span class="no">3</span>繰り返し</summary><ul><li class="chl"><a href="ch3.html">この章のまとめ</a></li><li><a href="for.html">for文</a></li><li><a href="while.html">while文</a></li><li><a href="range.html">range関数</a></li><li><a href="break.html">break と continue</a></li><li><a href="indent.html">インデント</a></li><li><a href="infinite-loop.html">無限ループ</a></li></ul></details><details class="nav-ch ch-4"><summary><span class="no">4</span>条件分岐</summary><ul><li class="chl"><a href="ch4.html">この章のまとめ</a></li><li><a href="if.html">if文</a></li><li><a href="else.html">elif と else</a></li><li><a href="comparison.html">比較演算子</a></li><li><a href="logical.html">論理演算子（and / or / not）</a></li></ul></details><details class="nav-ch ch-5"><summary><span class="no">5</span>関数</summary><ul><li class="chl"><a href="ch5.html">この章のまとめ</a></li><li><a href="function.html">関数</a></li><li><a href="argument.html">引数</a></li><li><a href="return.html">戻り値（return）</a></li><li><a href="scope.html">スコープ（変数の有効範囲）</a></li></ul></details><details class="nav-ch ch-6"><summary><span class="no">6</span>モジュール</summary><ul><li class="chl"><a href="ch6.html">この章のまとめ</a></li><li><a href="module.html">モジュール</a></li><li><a href="import.html">import</a></li><li><a href="random.html">random</a></li><li><a href="calendar.html">calendar</a></li></ul></details><details class="nav-ch ch-7"><summary><span class="no">7</span>Pyxelで作ろう</summary><ul><li class="chl"><a href="ch7.html">この章のまとめ</a></li><li><a href="pyxel.html">Pyxel（ピクセル）</a></li><li><a href="window.html">ウィンドウを出す（init と run）</a></li><li><a href="update-draw.html">update と draw</a></li><li><a href="coordinate.html">座標（x と y）</a></li><li><a href="color.html">色（16色パレット）</a></li><li><a href="pyxel-text.html">文字を表示してみよう</a></li><li><a href="shapes.html">いろいろな図形をかいてみよう</a></li><li><a href="pyxel-var.html">変数を使ってみよう</a></li><li><a href="pyxel-key.html">キー操作をやってみよう</a></li><li><a href="pyxel-mouse.html">マウス操作をやってみよう</a></li><li><a href="pyxel-jp.html">日本語を表示しよう</a></li><li><a href="app-fortune.html">占いアプリを作ろう</a></li><li><a href="app-timer.html">ストップウォッチを作ろう</a></li><li><a href="game-catch.html">ゲームを作ろう（ほしキャッチ）</a></li><li><a href="game-scene.html">画面を切り替えよう（タイトル・ゲーム・結果）</a></li><li><a href="game-list.html">たくさん動かそう（リストを使う）</a></li></ul></details><details class="nav-ch ch-8"><summary><span class="no">8</span>Pyxel辞典</summary><ul><li class="chl"><a href="ch8.html">この章のまとめ</a></li><li class="grp">基本</li><li><a href="px-init.html">init（画面の準備）</a></li><li><a href="px-run.html">run（ゲームを動かす）</a></li><li><a href="px-quit.html">quit（終了する）</a></li><li><a href="px-title.html">title（ウィンドウの名前）</a></li><li><a href="px-size.html">width・height（画面の大きさ）</a></li><li><a href="px-frame-count.html">frame_count（フレーム数）</a></li><li><a href="px-screenshot.html">screenshot（画面を保存）</a></li><li class="grp">描く（画面）</li><li><a href="px-cls.html">cls（画面を消す）</a></li><li><a href="px-pset.html">pset（点を打つ）</a></li><li><a href="px-pget.html">pget（色を調べる）</a></li><li><a href="px-line.html">line（線を引く）</a></li><li><a href="px-rect.html">rect（四角を塗る）</a></li><li><a href="px-rectb.html">rectb（四角のふち）</a></li><li><a href="px-circ.html">circ（円を塗る）</a></li><li><a href="px-circb.html">circb（円のふち）</a></li><li><a href="px-elli.html">elli（だ円を塗る）</a></li><li><a href="px-ellib.html">ellib（だ円のふち）</a></li><li><a href="px-tri.html">tri（三角形を塗る）</a></li><li><a href="px-trib.html">trib（三角形のふち）</a></li><li><a href="px-fill.html">fill（塗りつぶす）</a></li><li><a href="px-text.html">text（文字を書く）</a></li><li><a href="px-blt.html">blt（画像をはる）</a></li><li><a href="px-clip.html">clip（描く範囲をしぼる）</a></li><li><a href="px-camera.html">camera（画面をずらす）</a></li><li><a href="px-pal.html">pal（色を入れ替える）</a></li><li><a href="px-dither.html">dither（半透明）</a></li><li class="grp">入力</li><li><a href="px-btn.html">btn（キーが押されている？）</a></li><li><a href="px-btnp.html">btnp（押した瞬間）</a></li><li><a href="px-btnr.html">btnr（離した瞬間）</a></li><li><a href="px-mouse.html">mouse（矢印の表示）</a></li><li><a href="px-mouse-xy.html">mouse_x・mouse_y（マウスの位置）</a></li><li><a href="px-mouse-wheel.html">mouse_wheel（ホイール）</a></li><li><a href="px-input-text.html">input_text（打った文字）</a></li><li><a href="px-keycodes.html">KEY_（キーの名前一覧）</a></li><li class="grp">計算</li><li><a href="px-rndi.html">rndi（ランダムな整数）</a></li><li><a href="px-rndf.html">rndf（ランダムな小数）</a></li><li><a href="px-rseed.html">rseed（ランダムの種）</a></li><li><a href="px-sin.html">sin（サイン）</a></li><li><a href="px-cos.html">cos（コサイン）</a></li><li><a href="px-atan2.html">atan2（角度を求める）</a></li><li><a href="px-sqrt.html">sqrt（平方根）</a></li><li><a href="px-ceil.html">ceil（切り上げ）</a></li><li><a href="px-floor.html">floor（切り捨て）</a></li><li><a href="px-clamp.html">clamp（範囲におさめる）</a></li><li><a href="px-sgn.html">sgn（プラス・マイナスの判定）</a></li><li><a href="px-noise.html">noise（なめらかなランダム）</a></li><li class="grp">音</li><li><a href="px-play.html">play（音を鳴らす）</a></li><li><a href="px-playm.html">playm（音楽を鳴らす）</a></li><li><a href="px-stop.html">stop（音を止める）</a></li><li><a href="px-sound-class.html">Sound（音のデータ）</a></li><li><a href="px-music-class.html">Music（曲のデータ）</a></li><li class="grp">画像・データ</li><li><a href="px-image-class.html">Image（ドット絵の画像）</a></li><li><a href="px-tilemap-class.html">Tilemap（マップのデータ）</a></li><li><a href="px-load.html">load（データを読みこむ）</a></li><li><a href="px-font-class.html">Font（フォント）</a></li></ul></details><details class="nav-ch ch-9"><summary><span class="no">9</span>道具と困ったとき</summary><ul><li class="chl"><a href="ch9.html">この章のまとめ</a></li><li><a href="editor.html">エディタ（IDLE と VS Code）</a></li><li><a href="shell.html">シェル（&gt;&gt;&gt; の画面）とファイル</a></li><li><a href="pyfile.html">ファイルと拡張子（.py）</a></li><li><a href="terminal.html">ターミナルと pip</a></li><li><a href="trouble.html">困ったときは（よくあるつまずき）</a></li></ul></details></details>
+    <div class="trail" id="trail" hidden></div><header class="art-head"><p class="eyebrow"><a class="chip ch-2" href="ch2.html">第2章 変数とリスト</a><span class="ptype">考え方</span></p><h1>インデックス（添字）</h1></header><aside class="infobox ch-2"><p class="ib-title">インデックス（添字）</p><dl><dt>種類</dt><dd>考え方</dd><dt>書き方</dt><dd><code>リスト[番号]</code></dd><dt>出てくる章</dt><dd><a class="chip ch-2" href="ch2.html">第2章 変数とリスト</a></dd><dt>関連</dt><dd><span class="chips-inline"><a class="chip" data-slug="print" href="print.html">print関数</a><a class="chip" data-slug="str" href="str.html">文字列（str）</a><a class="chip" data-slug="error" href="error.html">エラーメッセージ</a><a class="chip" data-slug="list" href="list.html">リスト</a></span></dd></dl></aside><p class="lede">リストや文字列で、「何番目か」を表す番号です。0から数えます。</p><aside class="reads"><p class="reads-label">このページの命令の読み方</p><ul><li><code>index</code><span class="yomi">インデックス</span></li><li><code>len</code><span class="yomi">レン</span></li><li><code>[ ]</code><span class="yomi">かくかっこ</span></li></ul></aside><nav class="toc" aria-label="このページの内容"><p>このページの内容</p><ol><li><a href="#s1">書き方のかたち</a></li><li><a href="#s2">0から数える</a></li><li><a href="#s3">うしろから数える</a></li><li><a href="#s4">範囲をとりだす（スライス）</a></li><li><a href="#s5">文字列でも使える</a></li><li><a href="#quiz">確認テスト</a></li><li><a href="#tasks">作ってみよう</a></li></ol></nav><h2 id="s1">書き方のかたち</h2>
+<figure class="tpl"><figcaption>取り出し方</figcaption><p class="tpl-key"><span class="fx">そのまま書く言葉</span><span class="ph ph-1">自分で入れる部分</span></p><pre class="tpl-code"><span class="tl" style="--lv:0"><span class="ph ph-1">リスト名</span><span class="pn">[</span><span class="ph ph-2">番号</span><span class="pn">]</span></span></pre><dl class="tpl-legend"><dt><span class="ph ph-1">リスト名</span></dt><dd>取り出したいリストの名前</dd><dt><span class="ph ph-2">番号</span></dt><dd>0 から数える。うしろからは -1, -2 …</dd></dl></figure>
+<figure class="flow"><svg class="dg" viewBox="0 0 480 232" role="img" aria-label="リストの番号。前からは0,1,2、うしろからは-1,-2,-3" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-listidx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs><text x="240" y="25" text-anchor="middle" class="code">fruits = [&quot;りんご&quot;, &quot;みかん&quot;, &quot;バナナ&quot;]</text><rect class="box" x="40" y="80" width="120" height="56" rx="6"/><text x="100" y="113" text-anchor="middle" class="">りんご</text><text x="100" y="67" text-anchor="middle" class="idx">0</text><text x="100" y="173" text-anchor="middle" class="idx neg">-3</text><rect class="box" x="180" y="80" width="120" height="56" rx="6"/><text x="240" y="113" text-anchor="middle" class="">みかん</text><text x="240" y="67" text-anchor="middle" class="idx">1</text><text x="240" y="173" text-anchor="middle" class="idx neg">-2</text><rect class="box" x="320" y="80" width="120" height="56" rx="6"/><text x="380" y="113" text-anchor="middle" class="">バナナ</text><text x="380" y="67" text-anchor="middle" class="idx">2</text><text x="380" y="173" text-anchor="middle" class="idx neg">-1</text><text x="30" y="67" text-anchor="middle" class="note">前から</text><text x="30" y="173" text-anchor="middle" class="note">うしろから</text><text x="240" y="219" text-anchor="middle" class="note">fruits[0] → りんご　　fruits[-1] → バナナ</text></svg><figcaption>番号は 0 から。うしろからは -1 から</figcaption></figure>
+<h2 id="s2">0から数える</h2>
+<div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>]  <span class="cm"># kudamono_list にリストを入れる</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">0</span>])                         <span class="cm"># kudamono_list の 0番（1つ目）を表示する</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">2</span>])                         <span class="cm"># kudamono_list の 2番（3つ目）を表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>りんご
+バナナ</pre></figure></div>
+<div class="tbl-wrap"><table><thead><tr><th>番号</th><th>0</th><th>1</th><th>2</th></tr></thead><tbody><tr><td>中身</td><td>りんご</td><td>みかん</td><td>バナナ</td></tr></tbody></table></div>
+<p>「1番目」が <code>0</code> なので、慣れないうちは混乱しやすいです。「何個目か」ではなく「先頭から何個進んだか」と考えると覚えやすくなります。先頭の「りんご」は、先頭から0個進んだところにあるので <code>0</code> です。</p>
+<aside class="note scratch"><p class="note-label">Scratchでいうと</p><p>Scratchのリストは1番目から数えたので、「（くだもの）の（1）番目」が先頭でした。Pythonでは先頭は <code>kudamono_list[0]</code> です。</p></aside>
+<h2 id="s3">うしろから数える</h2>
+<p>マイナスの番号を使うと、うしろから数えられます。</p>
+<div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>]  <span class="cm"># kudamono_list にリストを入れる</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="op">-</span><span class="nu">1</span>])                        <span class="cm"># kudamono_list のうしろから 1つ目を表示する</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="op">-</span><span class="nu">2</span>])                        <span class="cm"># kudamono_list のうしろから 2つ目を表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>バナナ
+みかん</pre></figure></div>
+<p><code>-1</code> が最後、<code>-2</code> が最後から2つ目です。</p>
+<h2 id="s4">範囲をとりだす（スライス）</h2>
+<div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>, <span class="st">"</span><span class="st">ぶどう</span><span class="st">"</span>]  <span class="cm"># kudamono_list にリストを入れる</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">0</span>:<span class="nu">2</span>])  <span class="cm"># kudamono_list の一部を取り出して表示する</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">1</span>:])  <span class="cm"># kudamono_list の一部を取り出して表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>['りんご', 'みかん']
+['みかん', 'バナナ', 'ぶどう']</pre></figure></div>
+<p><code>[始め:終わり]</code> で、始めから終わりの1つ手前までを取り出します。終わりの番号は<strong>含みません</strong>。<code>[1:]</code> のように終わりを書かないと、最後までになります。</p>
+<h2 id="s5">文字列でも使える</h2>
+<p><a class="term" data-slug="str" href="str.html">文字列（str）</a>でも、同じように番号で取り出せます。</p>
+<div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code><a class="cterm bi" data-slug="print" href="print.html">print</a>(<span class="st">"</span><span class="st">Python</span><span class="st">"</span>[<span class="nu">0</span>])  <span class="cm"># "Python"[0] の結果を表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>P</pre></figure></div>
+<aside class="note stuck"><p class="note-label">つまずいたら</p><p>範囲の外の番号を指定すると <code>IndexError</code> です（<a class="term" data-slug="error" href="error.html">エラーメッセージ</a>、<a class="term" data-slug="list" href="list.html">リスト</a>）。</p></aside><section class="quiz"><h2 id="quiz">確認テスト</h2><p class="quiz-lead">このページを見直せば、ぜんぶ解けます。まず自分で考えて（プログラムは、自分のVS Codeで動かしてOK）、それから答えを開こう。</p><div class="qitem"><p class="qno">問1</p><div class="qbody"><p>3つ入ったリストで、最後の値の番号は何番？</p></div><details class="qans"><summary>こたえを見る</summary><div class="qans-body"><p><code>2</code> です。数え始めが0なので、3つなら <code>0</code>、<code>1</code>、<code>2</code> になります。</p></div></details></div>
+<div class="qitem"><p class="qno">問2</p><div class="qbody"><p>次のプログラムを実行すると、何が表示される？</p>
+<div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>]
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="op">-</span><span class="nu">1</span>])
+</code></pre></figure></div></div><details class="qans"><summary>こたえを見る</summary><div class="qans-body"><div class="runbox single"><figure class="out"><figcaption>実行結果</figcaption><pre>バナナ</pre></figure></div><p>マイナスの番号は、うしろから数えます。<code>-1</code> は最後の値です。</p></div></details></div>
+<div class="qitem"><p class="qno">問3</p><div class="qbody"><p>次のプログラムを実行すると、何が表示される？</p>
+<div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>, <span class="st">"</span><span class="st">ぶどう</span><span class="st">"</span>]
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">0</span>:<span class="nu">2</span>])
+</code></pre></figure></div></div><details class="qans"><summary>こたえを見る</summary><div class="qans-body"><div class="runbox single"><figure class="out"><figcaption>実行結果</figcaption><pre>['りんご', 'みかん']</pre></figure></div><p><code>[0:2]</code> は、0番目から2番目の<strong>手前</strong>までです。終わりの番号は含まれません。</p></div></details></div></section><section class="tasks"><h2 id="tasks">作ってみよう</h2><p class="tasks-lead">IDLE か VS Code にプログラムを書いて、実行してみよう。できたら「解答例を見る」を開いて、自分のコードと見比べよう。</p><div class="titem"><p class="tno">課題1</p><div class="qbody"><p><code>kudamono_list = ["りんご", "みかん", "バナナ", "ぶどう"]</code> の、最初と最後を表示してみよう。（最後は <code>-1</code> を使うよ）</p>
+<div class="runbox single"><figure class="out"><figcaption>こう表示されればOK</figcaption><pre>りんご
+ぶどう</pre></figure></div></div><details class="qans tans"><summary>解答例を見る</summary><div class="qans-body"><div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>, <span class="st">"</span><span class="st">ぶどう</span><span class="st">"</span>]  <span class="cm"># kudamono_list にリストを入れる</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">0</span>])  <span class="cm"># kudamono_list の 0番（1つ目）を表示する</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="op">-</span><span class="nu">1</span>])  <span class="cm"># kudamono_list のうしろから 1つ目を表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>りんご
+ぶどう</pre></figure></div><p class="tans-note">自分のコードと、見比べてみよう。ちがっていても、同じ結果になっていればOKです。</p></div></details></div>
+<div class="titem"><p class="tno">課題2</p><div class="qbody"><p><code>tensuu_list = [70, 85, 90]</code> の、最初の <code>70</code> を <code>75</code> に書き換えてから、リストを表示してみよう。</p>
+<div class="runbox single"><figure class="out"><figcaption>こう表示されればOK</figcaption><pre>[75, 85, 90]</pre></figure></div></div><details class="qans tans"><summary>解答例を見る</summary><div class="qans-body"><div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>tensuu_list <span class="op">=</span> [<span class="nu">70</span>, <span class="nu">85</span>, <span class="nu">90</span>]  <span class="cm"># tensuu_list にリストを入れる</span>
+tensuu_list[<span class="nu">0</span>] <span class="op">=</span> <span class="nu">75</span>         <span class="cm"># 0番目の中身を 75 に書き換える</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(tensuu_list)          <span class="cm"># tensuu_list の中身を表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>[75, 85, 90]</pre></figure></div><p class="tans-note">自分のコードと、見比べてみよう。ちがっていても、同じ結果になっていればOKです。</p></div></details></div>
+<div class="titem"><p class="tno">課題3</p><div class="qbody"><p><code>kudamono_list = ["りんご", "みかん", "バナナ", "ぶどう"]</code> の、2番目から3番目（<code>みかん</code> と <code>バナナ</code>）を、スライスで取り出して表示してみよう。</p>
+<div class="runbox single"><figure class="out"><figcaption>こう表示されればOK</figcaption><pre>['みかん', 'バナナ']</pre></figure></div></div><details class="qans tans"><summary>解答例を見る</summary><div class="qans-body"><div class="runbox"><figure class="code"><figcaption><span>プログラム</span><button type="button" class="copy">コピー</button></figcaption><pre><code>kudamono_list <span class="op">=</span> [<span class="st">"</span><span class="st">りんご</span><span class="st">"</span>, <span class="st">"</span><span class="st">みかん</span><span class="st">"</span>, <span class="st">"</span><span class="st">バナナ</span><span class="st">"</span>, <span class="st">"</span><span class="st">ぶどう</span><span class="st">"</span>]  <span class="cm"># kudamono_list にリストを入れる</span>
+<a class="cterm bi" data-slug="print" href="print.html">print</a>(kudamono_list[<span class="nu">1</span>:<span class="nu">3</span>])  <span class="cm"># kudamono_list の一部を取り出して表示する</span>
+</code></pre></figure><figure class="out"><figcaption>実行結果</figcaption><pre>['みかん', 'バナナ']</pre></figure></div>
+<p><code>[1:3]</code> は、1番目から3番目の手前までです。</p><p class="tans-note">自分のコードと、見比べてみよう。ちがっていても、同じ結果になっていればOKです。</p></div></details></div></section><section class="backlinks"><h2 class="plain">このページにリンクしているページ</h2><ul class="chips"><li><a class="chip" data-slug="str" href="str.html">文字列（str）</a></li><li><a class="chip" data-slug="error" href="error.html">エラーメッセージ</a></li><li><a class="chip" data-slug="ch2" href="ch2.html">変数とリスト</a></li><li><a class="chip" data-slug="list" href="list.html">リスト</a></li><li><a class="chip" data-slug="coordinate" href="coordinate.html">座標（x と y）</a></li><li><a class="chip" data-slug="app-fortune" href="app-fortune.html">占いアプリを作ろう</a></li><li><a class="chip" data-slug="game-list" href="game-list.html">たくさん動かそう（リストを使う）</a></li></ul></section>
+  </main>
+</div>
+<script>window.ZUKAN={pages:{"index": ["Pythonずかん", "わからない言葉は、クリックして調べよう。Pythonの基本を、リンクをたどりながら学べるサイトです。", "", "index"], "ch0": ["はじめる前に", "Pythonは、Scratchのブロックを「文字」で書くプログラミング言語です。まずは1行、動かしてみよう。", 0, "ch0 プリント アイドル ブイエスコード"], "ch1": ["計算処理（入力と表示）", "input() で入力を受け取り、計算して、print() で表示するまでの流れを作ります。", 1, "ch1 プリント インプット イント ストリング"], "print": ["print関数", "画面に文字や計算結果を表示する関数です。", 1, "print プリント エンド セップ"], "comment": ["コメント", "# のあとに書くメモです。Pythonは実行せず、人が読むためだけに使います。", 1, "comment シャープ"], "operator": ["算術演算子", "足し算や引き算などの計算に使う記号です（+ - * / // % **）。", 1, "operator プラス マイナス アスタリスク スラッシュ スラッシュ2つ パーセント アスタリスク2つ"], "int": ["整数（int）", "1、20、-5 のような、小数点のない数です。+ や - などで計算できます。", 1, "int イント タイプ"], "float": ["小数（float）", "3.14 のような、小数点のある数です。割り算の答えは、割り切れてもfloatになります。", 1, "float フロート ラウンド"], "input": ["input関数", "キーボードから入力を受け取る関数です。受け取ったものは、いつも文字列（str）になります。", 1, "input インプット イント フロート"], "str": ["文字列（str）", "「あ」や「Hello」のような、文字のならびです。\" か ' で囲んで書きます。", 1, "str ストリング レン"], "typeconv": ["型変換", "int() や str() や float() で、値のデータ型を別の型に変えることです。", 1, "typeconv イント フロート ストリング"], "fstring": ["f文字列", "文字列の中に { } で変数や計算結果をはめこめる書き方です。", 1, "fstring エフ 波かっこ コロン ドット2エフ"], "error": ["エラーメッセージ", "プログラムに間違いがあるときに出るメッセージです。最後の行に原因が書いてあります。", 1, "error ネームエラー タイプエラー バリューエラー シンタックスエラー ゼロディビジョンエラー インデックスエラー"], "datatype": ["データ型", "値の「種類」のことです。整数（int）、小数（float）、文字列（str）、真偽値（bool）などがあります。", 1, "datatype タイプ イント フロート ストリング ブール リスト"], "ch2": ["変数とリスト", "値に名前をつけて使い回す「変数」と、たくさんの値をまとめる「リスト」を学びます。", 2, "ch2 リスト アペンド レン トゥルー フォールス"], "variable": ["変数", "値に名前をつけて、あとで使えるようにしまっておく入れ物です。", 2, "variable イコール タイプ"], "naming": ["名前のつけ方（ローマ字でもOK）", "変数や関数の名前は、自分で決めてOK。このサイトでは、分かりやすさを第一に、ローマ字の名前も使います。Pythonの言葉と見分けるコツも紹介します。", 2, "変数名 名前 ローマ字 命名 予約語 キーワード naming イフ フォー ホワイル デフ リターン インポート トゥルー フォールス ナン アンド オア ノット イン エルス エルイフ ブレーク コンティニュー パス グローバル"], "assignment": ["代入", "= を使って、変数に値を入れることです。算数の「等しい」とは意味がちがいます。", 2, "assignment イコール プラスイコール マイナスイコール"], "list": ["リスト", "たくさんの値を、順番にまとめて入れておく入れ物です。[ ] で書きます。", 2, "list リスト アペンド リムーブ レン サム マックス ミン"], "list-index": ["インデックス（添字）", "リストや文字列で、「何番目か」を表す番号です。0から数えます。", 2, "list-index インデックス レン かくかっこ"], "bool": ["真偽値（bool）", "True（正しい）と False（間違い）の2つだけの値です。条件分岐で使います。", 2, "bool ブール トゥルー フォールス"], "ch3": ["繰り返し", "同じことを何回もするときに使う、for文とwhile文を学びます。", 3, "ch3 フォー イン ホワイル レンジ ブレーク コンティニュー"], "for": ["for文", "回数や、リストの中身の数だけ、同じ処理を繰り返す文です。", 3, "for フォー イン レンジ"], "while": ["while文", "条件が True のあいだ、処理を繰り返す文です。", 3, "while ホワイル トゥルー フォールス"], "range": ["range関数", "0, 1, 2… のような、連続した数のならびを作る関数です。for文とよく使います。", 3, "range レンジ リスト"], "break": ["break と continue", "break はループを途中で終わらせ、continue は今回の分だけ飛ばして次に進みます。", 3, "break ブレーク コンティニュー"], "indent": ["インデント", "行の頭の空白のことです。Pythonでは、どこまでが同じかたまりかを表す大事なルールです。", 3, "indent インデント フォー イフ"], "infinite-loop": ["無限ループ", "終わらずに、ずっと続いてしまうループです。止め方を知っておけば大丈夫です。", 3, "infinite-loop ホワイル トゥルー コントロール シー"], "ch4": ["条件分岐", "条件によって、実行する処理を変える if文を学びます。", 4, "ch4 イフ エルイフ エルス アンド オア ノット"], "if": ["if文", "条件が True のときだけ、決まった処理を実行する文です。", 4, "if イフ ダブルイコール"], "else": ["elif と else", "if の条件に合わなかったときの処理を、elif（別の条件）と else（それ以外）で書きます。", 4, "else エルイフ エルス"], "comparison": ["比較演算子", "2つの値を比べて、True か False にする記号です（== != > < >= <=）。", 4, "comparison ダブルイコール ノットイコール ダイナリイコール ショウナリイコール"], "logical": ["論理演算子（and / or / not）", "条件を組み合わせる言葉です。and は両方、or はどちらか、not は反対にします。", 4, "logical アンド オア ノット"], "ch5": ["関数", "処理に名前をつけて、何度でも呼び出せるようにする「関数」を作ります。", 5, "ch5 デフ リターン"], "function": ["関数", "処理に名前をつけてまとめたものです。名前を書くだけで、何度でも使えます。", 5, "function デフ リターン プリント"], "argument": ["引数", "関数に渡す値です。関数のかっこの中に書きます。", 5, "argument デフ ネーム"], "return": ["戻り値（return）", "関数が計算した結果を、呼び出した場所に返す仕組みです。", 5, "return リターン ナン プリント"], "scope": ["スコープ（変数の有効範囲）", "変数が使える範囲のことです。関数の中で作った変数は、関数の外では使えません。", 5, "scope デフ リターン"], "ch6": ["モジュール", "他の人が作ってくれた便利な部品（モジュール）を、importして使います。", 6, "ch6 インポート フロム ランダム カレンダー"], "module": ["モジュール", "便利な関数や道具をまとめた部品です。import して使います。", 6, "module インポート マス スクエアルート パイ"], "import": ["import", "モジュールを、自分のプログラムで使えるようにする命令です。", 6, "import インポート フロム マス スクエアルート"], "random": ["random", "ランダム（でたらめ）な数や選択を作るモジュールです。ゲームやくじに使えます。", 6, "random ランダム ランディント チョイス シャッフル"], "calendar": ["calendar", "カレンダーを表示したり、うるう年や曜日を調べたりできるモジュールです。", 6, "calendar カレンダー マンス イズリープ ウィークデイ"], "ch7": ["Pyxelで作ろう", "Pyxelを使うと、画面に文字や図形を出して、動かせます。基礎から、占いアプリ・ストップウォッチ・ゲームまで作ります。", 7, "ch7 ピクセル イニット ラン アップデート ドロー"], "pyxel": ["Pyxel（ピクセル）", "レトロゲーム風の画面（16色・ドット絵）が作れる、ゲーム作り用のモジュールです。", 7, "ピクセル ぴくせる レトロゲーム pyxel pyxel ピクセル インポート イニット ラン"], "window": ["ウィンドウを出す（init と run）", "init で画面の大きさを決めて、run でゲームを動かしはじめます。この2つが、Pyxelプログラムの骨組みです。", 7, "init イニット ウィンドウ 画面を出す 骨組み window イニット ラン インポート アップデート ドロー"], "update-draw": ["update と draw", "update は「動かす係」、draw は「描く係」。この2つを、Pyxelが1秒に30回繰り返し呼び出します。", 7, "アップデート ドロー フレーム ゲームループ fps update-draw アップデート ドロー グローバル フレーム"], "coordinate": ["座標（x と y）", "画面の上の「場所」を、横（x）と縦（y）の2つの数で表します。左上が (0, 0) です。", 7, "座標 ざひょう x y 位置 coordinate エックス ワイ"], "color": ["色（16色パレット）", "Pyxelで使える色は16色。0〜15の数で指定します。", 7, "パレット 色番号 カラー いろ COLOR_ color カラー パレット"], "pyxel-text": ["文字を表示してみよう", "pyxel.text で、画面の好きな場所に、好きな色で、文字を書きます。はじめは英数字だけです。", 7, "text テキスト 文字を出す 文字表示 pyxel-text テキスト クリアスクリーン ストリング"], "shapes": ["いろいろな図形をかいてみよう", "点・線・四角・円・だ円・三角形を描く命令があります。「b」がつくと、ふちだけです。", 7, "図形 rect circ line pset tri 四角 円 線 三角 shapes ピーセット ライン レクト レクトビー サーク サークビー エリ トライ"], "pyxel-var": ["変数を使ってみよう", "位置や速さを変数にして、update で変えると、図形が動きます。壁で、跳ね返らせることもできます。", 7, "変数 動かす アニメーション 速度 はね返り pyxel-var グローバル フレームカウント"], "pyxel-key": ["キー操作をやってみよう", "btn でキーが押されているかを調べて、キャラクターを動かします。btnp は、押した瞬間だけです。", 7, "キー btn btnp キーボード 操作 矢印キー pyxel-key ボタン ボタンピー キーレフト"], "pyxel-mouse": ["マウス操作をやってみよう", "マウスの位置は mouse_x と mouse_y。クリックは、btnp に MOUSE_BUTTON_LEFT を渡して調べます。", 7, "マウス クリック mouse_x mouse_y ボタン pyxel-mouse マウス マウスエックス マウスワイ クリック"], "pyxel-jp": ["日本語を表示しよう", "日本語は、フォントファイルを読みこんで、pyxel.text の最後に渡すと表示できます。", 7, "日本語 フォント Font bdf 漢字 pyxel-jp フォント テキスト ビーディーエフ"], "app-fortune": ["占いアプリを作ろう", "ボタンをクリックすると、おみくじの結果がランダムに出るアプリ。マウス・リスト・randomの、まとめの作品です。", 7, "占い おみくじ うらない アプリ app-fortune ランダム ランディント フォント マウスエックス"], "app-timer": ["ストップウォッチを作ろう", "スペースキーでスタート・ストップできるストップウォッチ。フレームの数から秒を計算する、割り算・True/False・キー操作のまとめです。", 7, "ストップウォッチ タイマー 時計 秒 計算アプリ app-timer ボタンピー ノット キーアール ウゴイテル ビョウ フン"], "game-catch": ["ゲームを作ろう（ほしキャッチ）", "上から落ちてくる「ほし」を、キーで動かすバーで受け止めるゲーム。ここまでの総まとめです。", 7, "ゲーム ほしキャッチ 初めてのゲーム キャッチゲーム game-catch ランディー マックス ミン スコア ミス"], "game-scene": ["画面を切り替えよう（タイトル・ゲーム・結果）", "タイトル画面 → ゲーム → 結果画面のように、場面を切り替える方法です。「今どの場面か」を変数に覚えておきます。", 7, "場面 シーン タイトル画面 ゲームオーバー 切り替え 連打ゲーム game-scene ガメン タイトル ゲーム オーバー キーアール"], "game-list": ["たくさん動かそう（リストを使う）", "雪や敵のように、たくさんのものを動かすときは、位置をリストに入れて、for でまとめて動かします。", 7, "たくさん 複数 敵を増やす 雪 リスト 弾幕 game-list アペンド レンジ エックスリスト ワイリスト"], "ch8": ["Pyxel辞典", "Pyxelの関数・変数・クラスを、辞書のように引ける一覧です。分類ごとの表と名前順の早見から探せます。", 8, "ch8"], "px-init": ["init（画面の準備）", "ゲームの最初に1回だけ書く命令。画面（ウィンドウ）の大きさを決めて、Pyxelを使える状態にします。", 8, "イニット 初期化 ウィンドウ 画面サイズ init px-init イニット タイトル エフピーエス"], "px-run": ["run（ゲームを動かす）", "update と draw を1秒に30回繰り返し呼び出して、ゲームを動かしはじめる命令です。", 8, "ラン 実行 動かす ゲームループ run px-run ラン アップデート ドロー"], "px-quit": ["quit（終了する）", "プログラムをすぐに終わらせる命令です。ウィンドウが閉じます。", 8, "クイット 終了 終わる quit px-quit クイット"], "px-title": ["title（ウィンドウの名前）", "ウィンドウの上に出る名前を、あとから変えます。", 8, "タイトル ウィンドウ名 title px-title タイトル"], "px-size": ["width・height（画面の大きさ）", "画面の幅と高さが入った変数です。init で決めた大きさを、あとから調べるのに使います。", 8, "幅 高さ 画面サイズ ウィズ ハイト width height px-size ウィズ ハイト"], "px-frame-count": ["frame_count（フレーム数）", "ゲームが始まってから進んだフレーム数が入った変数です。時間によって変化をつけるのに使います。", 8, "フレーム 時間 点滅 frame_count px-frame-count フレームカウント"], "px-screenshot": ["screenshot（画面を保存）", "いまの画面を、画像ファイル（PNG）として保存します。", 8, "スクリーンショット 画面保存 画像保存 screenshot px-screenshot スクリーンショット"], "px-cls": ["cls（画面を消す）", "画面全体を1つの色で塗りつぶします。draw のいちばん最初に書きます。", 8, "クリアスクリーン 画面を消す 背景 背景色 cls px-cls クリアスクリーン カラー"], "px-pset": ["pset（点を打つ）", "画面の1ドットだけを、指定した色にします。", 8, "ピーセット 点 ドット pset px-pset ピーセット"], "px-pget": ["pget（色を調べる）", "画面の (x, y) にあるドットの色の番号を調べます。", 8, "ピーゲット 色を調べる ピクセルの色 pget px-pget ピーゲット"], "px-line": ["line（線を引く）", "2つの点を結ぶ、まっすぐな線を引きます。", 8, "ライン 線 直線 line px-line ライン"], "px-rect": ["rect（四角を塗る）", "中を塗りつぶした四角を描きます。", 8, "レクト 四角 長方形 正方形 ボタン rect px-rect レクト"], "px-rectb": ["rectb（四角のふち）", "ふちだけの四角を描きます（中は塗りません）。", 8, "レクトビー 枠 わく 枠線 rectb px-rectb レクトビー"], "px-circ": ["circ（円を塗る）", "中を塗りつぶした円を描きます。", 8, "サーク 円 ボール まる circ px-circ サーク"], "px-circb": ["circb（円のふち）", "ふちだけの円を描きます（中は塗りません）。", 8, "サークビー 輪 輪っか circb px-circb サークビー"], "px-elli": ["elli（だ円を塗る）", "中を塗りつぶしただ円（たまご形）を描きます。", 8, "エリ だ円 楕円 たまご elli px-elli エリ"], "px-ellib": ["ellib（だ円のふち）", "ふちだけのだ円を描きます。", 8, "エリビー だ円のふち ellib px-ellib エリビー"], "px-tri": ["tri（三角形を塗る）", "3つの点を結んで、中を塗りつぶした三角形を描きます。", 8, "トライ 三角 三角形 tri px-tri トライ"], "px-trib": ["trib（三角形のふち）", "ふちだけの三角形を描きます。", 8, "トライビー 三角のふち trib px-trib トライビー"], "px-fill": ["fill（塗りつぶす）", "(x, y) と同じ色でつながっている部分を、まとめて別の色で塗ります。", 8, "フィル バケツ ぬりつぶし fill px-fill フィル"], "px-text": ["text（文字を書く）", "画面の好きな場所に、好きな色で文字を書きます。はじめは英数字だけです。", 8, "テキスト 文字 文字を書く 文字表示 日本語 text px-text テキスト フォント"], "px-blt": ["blt（画像をはる）", "イメージバンク（ドット絵を入れておく場所）の絵の一部を、画面にはりつけます。", 8, "ブリット 画像 ドット絵 キャラクター スプライト blt px-blt ブリット イメージ"], "px-clip": ["clip（描く範囲をしぼる）", "描く範囲を四角の中だけにしぼります。範囲の外には描かれません。", 8, "クリップ 描画範囲 はみ出し clip px-clip クリップ"], "px-camera": ["camera（画面をずらす）", "描く位置をまとめてずらします。広いマップを動かすときや、画面をゆらすときに使います。", 8, "カメラ スクロール 画面ゆれ ずらす camera px-camera カメラ"], "px-pal": ["pal（色を入れ替える）", "描くときの色1を色2に入れ替えます。同じ絵を色違いで描けます。", 8, "パル パレット 色違い 色替え pal px-pal パル パレット"], "px-dither": ["dither（半透明）", "細かい点々で、半透明のように見せて描きます。0.0 が透明、1.0 がふつうの描き方です。", 8, "ディザー 半透明 透明 かげ dither px-dither ディザー"], "px-btn": ["btn（キーが押されている？）", "そのキーがいま押されているかを調べます。押されているあいだ、ずっと True です。", 8, "ボタン キー 押している キー入力 btn px-btn ボタン ボタン"], "px-btnp": ["btnp（押した瞬間）", "そのキーを押した瞬間の1回だけ True になります。ジャンプや決定ボタンに使います。", 8, "ボタンピー 押した瞬間 1回だけ ジャンプ 決定 btnp px-btnp ボタンピー ホールド リピート"], "px-btnr": ["btnr（離した瞬間）", "そのキーを離した瞬間の1回だけ True になります。", 8, "ボタンアール はなした リリース btnr px-btnr ボタンアール"], "px-mouse": ["mouse（矢印の表示）", "マウスの矢印（カーソル）を、画面に表示するか隠すかを決めます。", 8, "マウス カーソル 矢印 マウスカーソル mouse px-mouse マウス トゥルー"], "px-mouse-xy": ["mouse_x・mouse_y（マウスの位置）", "マウスの横の位置と縦の位置が入っている変数です。", 8, "マウスの位置 マウス座標 mouse_x mouse_y mouse_x mouse_y px-mouse-xy マウスエックス マウスワイ"], "px-mouse-wheel": ["mouse_wheel（ホイール）", "マウスのホイールを回した量が入った変数です。", 8, "ホイール マウスホイール スクロール mouse_wheel px-mouse-wheel マウスホイール"], "px-input-text": ["input_text（打った文字）", "そのフレームにキーボードで打たれた文字が入った変数です。名前入力などに使えます。", 8, "インプットテキスト 文字入力 名前入力 キーボード入力 input_text input_keys px-input-text インプットテキスト"], "px-keycodes": ["KEY_（キーの名前一覧）", "キーを表す名前の一覧です。btn や btnp に渡して使います。マウスのボタンやゲームパッドの名前もあります。", 8, "キー名 キーコード KEY_LEFT KEY_SPACE MOUSE_BUTTON_LEFT ゲームパッド KEY_ px-keycodes キーレフト キースペース マウスボタンレフト"], "px-rndi": ["rndi（ランダムな整数）", "a から b までの整数を、ランダムに1つ選びます（a も b も出ます）。", 8, "ランディー ランダム 乱数 サイコロ 整数 rndi px-rndi ランディー"], "px-rndf": ["rndf（ランダムな小数）", "a から b までの小数を、ランダムに1つ選びます。", 8, "ランエフ 小数ランダム 乱数 rndf px-rndf ランエフ"], "px-rseed": ["rseed（ランダムの種）", "ランダムの「種」を決めます。同じ種なら、毎回同じ順番でランダムな数が出ます。", 8, "シード 種 乱数の種 rseed nseed px-rseed アールシード"], "px-sin": ["sin（サイン）", "角度（度）のサインの値を返します。円を描く動きや、ゆれる動きに使います。", 8, "サイン 波 ゆれる 三角関数 sin px-sin サイン"], "px-cos": ["cos（コサイン）", "角度（度）のコサインの値を返します。sin と組み合わせて、円を描く動きを作れます。", 8, "コサイン 円運動 ぐるぐる cos px-cos コサイン"], "px-atan2": ["atan2（角度を求める）", "2つの点の横と縦の差から、向きの角度（度）を求めます。", 8, "角度 向き 方向 アークタンジェント atan2 px-atan2 アークタンジェントツー"], "px-sqrt": ["sqrt（平方根）", "数の平方根（2乗するとその数になる数）を返します。", 8, "スクエアルート 平方根 ルート 距離 sqrt px-sqrt スクエアルート"], "px-ceil": ["ceil（切り上げ）", "小数を切り上げて整数にします。", 8, "シーリング 切り上げ ceil px-ceil シーリング"], "px-floor": ["floor（切り捨て）", "小数を切り捨てて整数にします。", 8, "フロア 切り捨て floor px-floor フロア"], "px-clamp": ["clamp（範囲におさめる）", "数を、決めた範囲（いちばん小さい数〜いちばん大きい数）の中におさめます。", 8, "クランプ 範囲 はみ出し防止 clamp px-clamp クランプ"], "px-sgn": ["sgn（プラス・マイナスの判定）", "数がプラスなら 1、0なら 0、マイナスなら -1 を返します。", 8, "符号 プラスマイナス 向き sgn px-sgn サイン"], "px-noise": ["noise（なめらかなランダム）", "なめらかに変化するランダムな値を返します（パーリンノイズ）。", 8, "ノイズ パーリンノイズ 地形 なめらか noise px-noise ノイズ"], "px-play": ["play（音を鳴らす）", "チャンネルを決めて、効果音を鳴らします。", 8, "プレイ 音 効果音 サウンド 鳴らす play px-play プレイ チャンネル サウンド"], "px-playm": ["playm（音楽を鳴らす）", "BGM（音楽）を鳴らします。", 8, "プレイエム BGM 音楽 ミュージック playm px-playm プレイエム ミュージック ループ"], "px-stop": ["stop（音を止める）", "鳴っている音を止めます。", 8, "ストップ 止める 音を止める stop px-stop ストップ"], "px-sound-class": ["Sound（音のデータ）", "音をプログラムで作るための仕組みです。音の高さ・音色・大きさ・速さを文字で決めます。", 8, "サウンド 音を作る ドレミ 効果音 音色 Sound sounds px-sound-class サウンド サウンズ ノーツ"], "px-music-class": ["Music（曲のデータ）", "いくつかの音（Sound）をチャンネルごとに並べて、1つの曲にまとめます。", 8, "ミュージック 曲 BGM 音楽を作る Music musics px-music-class ミュージック ミュージックス"], "px-image-class": ["Image（ドット絵の画像）", "ドット絵を入れておく場所（イメージバンク）です。キャラクターの絵をここに入れて、blt で画面にはります。", 8, "イメージ 画像 ドット絵 スプライト キャラ絵 Image images px-image-class イメージ イメージズ"], "px-tilemap-class": ["Tilemap（マップのデータ）", "小さな絵（タイル）を碁盤の目のように並べて、広いマップを作るための仕組みです。", 8, "タイルマップ マップ タイル RPG Tilemap tilemaps px-tilemap-class タイルマップ タイルマップス ブリットエム"], "px-load": ["load（データを読みこむ）", "Pyxel Editor で作ったリソースファイル（.pyxres）を読みこみます。画像や音がまとめて使えるようになります。", 8, "ロード 読みこむ pyxres リソース Pyxel Editor load px-load ロード ピクセルレス"], "px-font-class": ["Font（フォント）", "日本語など、はじめから入っていない文字を書くためのフォントを読みこみます。", 8, "フォント 日本語 文字 bdf Font px-font-class フォント ビーディーエフ"], "ch9": ["道具と困ったとき", "エディタ（IDLE と VS Code）やファイル、ターミナルなど、Pythonを書く道具の知識と、困ったときのつまずき集です。必要になったときに開いて使います。", 9, "ch9 アイドル ブイエスコード ドットパイ ピップ"], "editor": ["エディタ（IDLE と VS Code）", "プログラムを書くためのソフトです。この教室では、シンプルな IDLE と、いろいろな言語で使える VS Code の2つを使います。", 9, "アイドル ブイエスコード VSCode エディタ エディター 開発環境 editor アイドル ブイエスコード エディタ"], "shell": ["シェル（>>> の画面）とファイル", ">>> の画面（シェル）は、1行ずつすぐに試す場所。ファイルに書いたプログラムは、保存して、まとめて実行します。", 9, "シェル 対話モード インタラクティブ >>> プロンプト shell シェル プロンプト"], "pyfile": ["ファイルと拡張子（.py）", "Pythonのプログラムは「名前.py」というファイルに保存します。ファイル名のつけ方と、保存する場所に気をつけよう。", 9, "拡張子 ファイル名 保存 フォルダ .py パイファイル pyfile ドットパイ ファイル フォルダ"], "terminal": ["ターミナルと pip", "ターミナルは、文字で命令を打ってパソコンを動かす画面です。Pyxelのインストール（pip install）はここでします。", 9, "ターミナル コマンド コマンドプロンプト PowerShell pip インストール terminal ターミナル ピップ インストール コマンド"], "trouble": ["困ったときは（よくあるつまずき）", "「動かない」「エラーが出る」「何も表示されない」ときに見るページです。初めての人がよくつまずく原因と、直し方を集めました。", 9, "困った こまった 動かない うごかない エラー つまずき トラブル 全角 trouble シンタックスエラー ネームエラー インバリッド キャラクター"], "yomi": ["命令のよみかた", "Pythonの命令や記号の、カタカナの読み方をまとめた表です。正確でなくても、声に出せればOK。", "", "よみかた 読み方 カタカナ ふりがな yomi"]}};</script>
+<script>
+/* Pythonずかん: 検索、たどってきた道、ホバープレビュー、コピーボタン */
+(function () {
+  var D = (window.ZUKAN && window.ZUKAN.pages) || {};
+  var body = document.body;
+
+  function hrefOf(slug) { return slug + ".html"; }
+
+  /* ---- コピーボタン ---- */
+  Array.prototype.forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var pre = b.closest(".runbox").querySelector(".code pre");
+      var text = pre.innerText.replace(/\n$/, "");
+      function done(ok) {
+        b.textContent = ok ? "コピーしました" : "選んでコピーしてね";
+        setTimeout(function () { b.textContent = "コピー"; }, 1600);
+      }
+      function fallback() {
+        try {
+          var r = document.createRange();
+          r.selectNodeContents(pre);
+          var s = window.getSelection();
+          s.removeAllRanges();
+          s.addRange(r);
+        } catch (e) {}
+        done(false);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+      } else {
+        fallback();
+      }
+    });
+  });
+
+  /* ---- たどってきた道 ---- */
+  (function () {
+    var box = document.getElementById("trail");
+    var cur = { s: body.getAttribute("data-slug"), t: body.getAttribute("data-title") };
+    var key = "zukan-trail";
+    var trail = [];
+    try { trail = JSON.parse(sessionStorage.getItem(key) || "[]"); } catch (e) { trail = []; }
+    if (!Array.isArray(trail)) trail = [];
+    if (cur.s === "index") {
+      trail = [cur];
+    } else {
+      var i = -1;
+      trail.forEach(function (x, k) { if (x.s === cur.s) i = k; });
+      if (i >= 0) trail = trail.slice(0, i + 1); else trail.push(cur);
+      if (trail.length > 6) trail = trail.slice(-6);
+    }
+    try { sessionStorage.setItem(key, JSON.stringify(trail)); } catch (e) {}
+    if (!box || trail.length < 2) return;
+    var html = '<span class="lbl">たどってきた道</span>';
+    trail.forEach(function (x, k) {
+      var last = k === trail.length - 1;
+      var title = x.t || x.s;
+      if (k > 0) html += "<span>›</span>";
+      if (last) {
+        html += '<span class="now"></span>';
+      } else {
+        html += '<a href="' + hrefOf(x.s) + '"></a>';
+      }
+    });
+    box.innerHTML = html;
+    var nodes = box.querySelectorAll("a, .now");
+    trail.forEach(function (x, k) { nodes[k].textContent = x.t || x.s; });
+    box.hidden = false;
+  })();
+
+  /* ---- 検索 ---- */
+  (function () {
+    var q = document.getElementById("q");
+    var res = document.getElementById("results");
+    if (!q || !res) return;
+    var items = Object.keys(D).map(function (s) {
+      return { s: s, t: D[s][0], d: D[s][1], a: (D[s][3] || "") };
+    });
+    function norm(x) { return (x || "").toLowerCase(); }
+    var sel = -1;
+    function render() {
+      var v = norm(q.value.trim());
+      if (!v) { res.hidden = true; res.innerHTML = ""; return; }
+      var hits = items.filter(function (it) {
+        return norm(it.t + " " + it.a + " " + it.d).indexOf(v) >= 0;
+      });
+      hits.sort(function (a, b) {
+        var as = norm(a.t).indexOf(v) === 0 || norm(a.a).indexOf(v) === 0 ? 0 : 1;
+        var bs = norm(b.t).indexOf(v) === 0 || norm(b.a).indexOf(v) === 0 ? 0 : 1;
+        return as - bs;
+      });
+      hits = hits.slice(0, 8);
+      sel = hits.length ? 0 : -1;
+      if (!hits.length) {
+        res.innerHTML = '<li><a style="pointer-events:none">見つかりませんでした</a></li>';
+        res.hidden = false;
+        return;
+      }
+      res.innerHTML = hits.map(function (it, k) {
+        return '<li><a href="' + hrefOf(it.s) + '"' + (k === 0 ? ' class="on"' : "") + "></a></li>";
+      }).join("");
+      Array.prototype.forEach.call(res.querySelectorAll("a"), function (a, k) {
+        var t = document.createElement("span");
+        t.textContent = hits[k].t;
+        var d = document.createElement("small");
+        d.textContent = hits[k].d;
+        a.appendChild(t);
+        a.appendChild(d);
+      });
+      res.hidden = false;
+    }
+    function move(dir) {
+      var as = res.querySelectorAll("a");
+      if (!as.length || res.hidden) return;
+      if (sel >= 0) as[sel].classList.remove("on");
+      sel = (sel + dir + as.length) % as.length;
+      as[sel].classList.add("on");
+    }
+    q.addEventListener("input", render);
+    q.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+      else if (e.key === "Escape") { res.hidden = true; }
+      else if (e.key === "Enter") {
+        var as = res.querySelectorAll("a");
+        if (!res.hidden && sel >= 0 && as[sel] && as[sel].getAttribute("href")) {
+          window.location.href = as[sel].getAttribute("href");
+        }
+      }
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".search")) res.hidden = true;
+    });
+  })();
+
+  /* ---- ホバーでプレビュー（マウスがある端末だけ） ---- */
+  (function () {
+    if (!window.matchMedia || !window.matchMedia("(hover: hover)").matches) return;
+    var CH = { 0: "第0章 はじめる前に", 1: "第1章 計算処理", 2: "第2章 変数とリスト",
+               3: "第3章 繰り返し", 4: "第4章 条件分岐", 5: "第5章 関数", 6: "第6章 モジュール",
+               7: "第7章 Pyxelで作ろう", 8: "第8章 Pyxel辞典", 9: "第9章 道具と困ったとき" };
+    var card = document.createElement("div");
+    card.className = "peek";
+    card.hidden = true;
+    card.setAttribute("role", "tooltip");
+    document.body.appendChild(card);
+    var showT = null, hideT = null;
+
+    function show(a) {
+      var slug = a.getAttribute("data-slug");
+      var d = D[slug];
+      if (!d) return;
+      card.className = "peek" + (d[2] !== "" ? " ch-" + d[2] : "");
+      card.innerHTML = '<div class="pk-ch"></div><p class="pk-t"></p><p class="pk-s"></p>';
+      card.querySelector(".pk-ch").textContent = d[2] !== "" ? CH[d[2]] : "";
+      card.querySelector(".pk-t").textContent = d[0];
+      card.querySelector(".pk-s").textContent = d[1];
+      card.hidden = false;
+      var r = a.getBoundingClientRect();
+      var w = card.offsetWidth;
+      var left = Math.max(8, Math.min(r.left + window.pageXOffset, window.pageXOffset + document.documentElement.clientWidth - w - 8));
+      card.style.left = left + "px";
+      card.style.top = (r.bottom + window.pageYOffset + 6) + "px";
+    }
+    function hide() { card.hidden = true; }
+
+    document.addEventListener("mouseover", function (e) {
+      var a = e.target.closest && e.target.closest("a[data-slug]");
+      if (a) {
+        clearTimeout(hideT);
+        clearTimeout(showT);
+        showT = setTimeout(function () { show(a); }, 300);
+      } else if (e.target.closest && e.target.closest(".peek")) {
+        clearTimeout(hideT);
+      }
+    });
+    document.addEventListener("mouseout", function (e) {
+      var t = e.target.closest && (e.target.closest("a[data-slug]") || e.target.closest(".peek"));
+      if (t) {
+        clearTimeout(showT);
+        hideT = setTimeout(hide, 180);
+      }
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hide(); });
+  })();
+})();
+
+</script>
+</body>
+</html>

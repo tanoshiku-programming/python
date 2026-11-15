@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "サイトを作り直して開く",
+      "type": "shell",
+      "command": "./build.sh open",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "GitHub に保存して公開する",
+      "type": "shell",
+      "command": "./save.sh \"${input:message}\"",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "message",
+      "type": "promptString",
+      "description": "何を変えたか（例：3章の課題を追加）"
+    }
+  ]
+}

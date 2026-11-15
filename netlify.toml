@@ -1,0 +1,5 @@
+# Netlify はもう使わない（GitHub Pages に引っ越した）。
+# 万一 Netlify の連携が残っていても、公開しない（＝クレジットを使わない）ようにしておく。
+[build]
+  publish = "site"
+  ignore = "exit 0"

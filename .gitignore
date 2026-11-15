@@ -1,0 +1,5 @@
+# 自分のパソコンだけで使うもの（GitHub には送らない）
+.venv/
+__pycache__/
+tools/_tmp_*
+.DS_Store
