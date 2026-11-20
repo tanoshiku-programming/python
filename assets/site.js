@@ -137,7 +137,8 @@
     if (!window.matchMedia || !window.matchMedia("(hover: hover)").matches) return;
     var CH = { 0: "第0章 はじめる前に", 1: "第1章 計算処理", 2: "第2章 変数とリスト",
                3: "第3章 繰り返し", 4: "第4章 条件分岐", 5: "第5章 関数", 6: "第6章 モジュール",
-               7: "第7章 Pyxelで作ろう", 8: "第8章 Pyxel辞典", 9: "第9章 道具と困ったとき" };
+               7: "第7章 Pyxelで作ろう", 8: "第8章 クラスで作ろう", 9: "第9章 Pyxel辞典",
+               10: "第10章 道具と困ったとき" };
     var card = document.createElement("div");
     card.className = "peek";
     card.hidden = true;

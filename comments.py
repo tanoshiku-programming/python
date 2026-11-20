@@ -315,6 +315,47 @@ def comment_for(line, is_error=False):
     if s in OVERRIDE:
         return OVERRIDE[s]
     m = None
+    # --- クラス
+    if m := re.fullmatch(r"class (\w+):", s):
+        return f"{m[1]} というクラス（設計図）を作る"
+    if m := re.fullmatch(r"def __init__\(self(?:, (.+))?\):", s):
+        return "インスタンスを作るときに、自動で1回だけ動く準備のメソッド" + (f"（{m[1]} を受け取る）" if m[1] else "")
+    if s == "def update(self):":
+        return "update メソッドを作る（ゲームの中身を動かす係。1フレームごとに呼ばれる）"
+    if s == "def draw(self):":
+        return "draw メソッドを作る（画面を描く係。1フレームごとに呼ばれる）"
+    if m := re.fullmatch(r"def (\w+)\(self(?:, (.+))?\):", s):
+        return f"{m[1]} というメソッド（クラスの中の関数）を作る" + (f"（{m[2]} を受け取る）" if m[2] else "")
+    if m := re.fullmatch(r"self\.(\w+) = self\.\1 ([+\-]) (.+)", s):
+        op = "足す" if m[2] == "+" else "引く"
+        return f"自分の {m[1]} に {m[3]} を{op}"
+    if m := re.fullmatch(r"self\.(\w+) = ([A-Z]\w*)\((.*)\)", s):
+        return f"{m[2]} のインスタンスを作って、自分の {m[1]} に入れる"
+    if m := re.fullmatch(r"self\.(\w+)\((.*)\)", s):
+        return f"自分の {m[1]} メソッドを呼び出す"
+    if m := re.fullmatch(r"self\.(\w+) = (.+)", s):
+        v = px_value(m[2])
+        if v:
+            return f"{v}。その答えを、自分の {m[1]} に入れる"
+        return f"自分の {m[1]} に {m[2]} を入れる"
+    if m := re.fullmatch(r"self\.(\w+)\.(\w+)\((.*)\)", s):
+        return f"自分の {m[1]} の、{m[2]} メソッドを呼び出す"
+    if m := re.fullmatch(r"(\w+)\.(\w+) = \1\.\2 ([+\-]) (.+)", s):
+        op = "足す" if m[3] == "+" else "引く"
+        return f"{m[1]} の {m[2]} に {m[4]} を{op}"
+    if m := re.fullmatch(r"(\w+)\.(\w+) = (.+)", s):
+        return f"{m[1]} の {m[2]} に {m[3]} を入れる"
+    if m := re.fullmatch(r"([A-Z]\w*)\(\)", s):
+        return f"{m[1]} のインスタンスを作る（__init__ が動く）"
+    if m := re.fullmatch(r"(\w+) = ([A-Z]\w*)\((.*)\)", s):
+        return f"{m[2]} のインスタンスを作って、{m[1]} に入れる"
+    if m := re.fullmatch(r"([\w.]+)\.append\(([A-Z]\w*)\((.*)\)\)", s):
+        return f"{m[2]} のインスタンスを作って、{m[1]} の最後に足す"
+    if m := re.fullmatch(r"(\w+)\.(\w+)\((.*)\)", s):
+        if m[1] not in ("print", "random", "math", "calendar", "pyxel") and not m[2] in ("append", "sort", "clear", "remove"):
+            return f"{m[1]} の {m[2]} メソッドを呼び出す"
+    if m := re.fullmatch(r"for (\w+) in (self\.\w+):", s):
+        return f"{m[2]} の中身を1つずつ {m[1]} に入れながら、くり返す"
     # --- 制御構文
     if m := re.fullmatch(r"for (\w+) in range\((.+)\):", s):
         return f"{m[1]} に range({m[2]}) の数を1つずつ入れながら、繰り返す"

@@ -48,11 +48,12 @@ CHAPTERS = {
     5: ("ch5", "関数", "処理に名前をつける"),
     6: ("ch6", "モジュール", "random や calendar を使う"),
     7: ("ch7", "Pyxelで作ろう", "画面に出して、動かす"),
-    8: ("ch8", "Pyxel辞典", "関数やクラスを引く"),
-    9: ("ch9", "道具と困ったとき", "エディタ・ターミナル・つまずき集"),
+    8: ("ch8", "クラスで作ろう", "class と self で、まとめて書く"),
+    9: ("ch9", "Pyxel辞典", "関数やクラスを引く"),
+    10: ("ch10", "道具と困ったとき", "エディタ・ターミナル・つまずき集"),
 }
-REF_CHAPTER = 8   # 辞典の章（確認テスト・課題は不要）
-NO_TASK_CHAPTERS = {0, REF_CHAPTER, 9}   # 課題（作ってみよう）がいらない章
+REF_CHAPTER = 9   # 辞典の章（確認テスト・課題は不要）
+NO_TASK_CHAPTERS = {0, REF_CHAPTER, 10}   # 課題（作ってみよう）がいらない章
 PYXEL_API = {}    # Pyxelの名前（init, rect ...） -> 辞典ページの slug
 
 # コードの中・文章中の `code` で、クリックして飛べるようにする言葉
@@ -67,6 +68,7 @@ CODE_TERMS = {
     "len": "list", "sum": "list", "max": "math-func", "min": "math-func", "round": "math-func",
     "in": "for", "None": "none", "global": "update-draw", "math": "module",
     "pass": "pass", "abs": "math-func", "is": "none",
+    "class": "class", "self": "init-self", "__init__": "init-self",
 }
 
 PAGES = {}       # slug -> dict
@@ -461,7 +463,7 @@ def inline(s, ctx, autolink=True, in_link=False):
                 slug = pyxel_slug(m.group(1)) or slug
             elif raw == "pyxel":
                 slug = PYXEL_API.get("pyxel")
-            elif not slug and ctx.page["chapter"] in (7, 8):
+            elif not slug and ctx.page["chapter"] in (7, 8, 9):
                 slug = pyxel_slug(re.split(r"[(\s.]", raw)[0])
             if slug and slug != ctx.slug and slug in PAGES:
                 ctx.page["links"].add(slug)
@@ -1100,7 +1102,7 @@ def main():
     for p in PAGES.values():
         if p["kind"] in ("term", "chapter") and p["chapter"] not in NO_TASK_CHAPTERS and not p["tasks_html"]:
             PROBLEMS.append(f'{p["slug"]}: 作ってみようがありません（@@ task:{p["slug"]}）')
-        if p["kind"] in ("term", "chapter") and not p["reads"] and p["slug"] != "ch8":
+        if p["kind"] in ("term", "chapter") and not p["reads"] and p["slug"] != "ch9":
             PROBLEMS.append(f'{p["slug"]}: reads（カタカナ読み）がありません')
     for s in TASKS:
         if s not in PAGES:

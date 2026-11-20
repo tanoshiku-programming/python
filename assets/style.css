@@ -33,8 +33,9 @@
   --ch5: #bd3556;
   --ch6: #0a768f;
   --ch7: #b0309e;
-  --ch8: #6f5b47;
-  --ch9: #4a5568;
+  --ch8: #0f7b6c;
+  --ch9: #6f5b47;
+  --ch10: #4a5568;
 
   --point: #e6effc;
   --stuck: #fcefe0;
@@ -78,8 +79,9 @@
     --ch5: #ff8ca6;
     --ch6: #5ec9e1;
     --ch7: #e58bd8;
-    --ch8: #c9b49a;
-    --ch9: #a9b4c4;
+    --ch8: #5fd3c0;
+    --ch9: #c9b49a;
+    --ch10: #a9b4c4;
     --point: #1a2842;
     --stuck: #3a2a1a;
     --try: #17301f;
@@ -119,8 +121,9 @@
   --ch5: #ff8ca6;
   --ch6: #5ec9e1;
   --ch7: #e58bd8;
-  --ch8: #c9b49a;
-  --ch9: #a9b4c4;
+  --ch8: #5fd3c0;
+  --ch9: #c9b49a;
+  --ch10: #a9b4c4;
   --point: #1a2842;
   --stuck: #3a2a1a;
   --try: #17301f;
@@ -152,9 +155,11 @@ body.ch-6 { --chc: var(--ch6); }
 .ch-7 { --chc: var(--ch7); }
 .ch-8 { --chc: var(--ch8); }
 .ch-9 { --chc: var(--ch9); }
+.ch-10 { --chc: var(--ch10); }
 body.ch-7 { --chc: var(--ch7); }
 body.ch-8 { --chc: var(--ch8); }
 body.ch-9 { --chc: var(--ch9); }
+body.ch-10 { --chc: var(--ch10); }
 .ch-0 { --chc: var(--ch0); }
 .ch-1 { --chc: var(--ch1); }
 .ch-2 { --chc: var(--ch2); }

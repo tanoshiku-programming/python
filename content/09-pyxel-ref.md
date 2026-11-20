@@ -1,7 +1,7 @@
-@@ ch8
+@@ ch9
 title: Pyxel辞典
 kind: chapter
-chapter: 8
+chapter: 9
 summary: Pyxelの関数・変数・クラスを、辞書のように引ける一覧です。分類ごとの表と名前順の早見から探せます。
 --
 ## この辞典の使い方
@@ -21,7 +21,7 @@ Pyxelの命令を**1つずつ**詳しく説明したページが集まってい�
 @@ px-init
 title: init（画面の準備）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.init(幅, 高さ, title=タイトル, fps=30)
 summary: ゲームの最初に1回だけ書く命令。画面（ウィンドウ）の大きさを決めて、Pyxelを使える状態にします。
@@ -77,7 +77,7 @@ pyxel.run(update, draw)
 @@ px-run
 title: run（ゲームを動かす）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.run(update, draw)
 summary: update と draw を1秒に30回繰り返し呼び出して、ゲームを動かしはじめる命令です。
@@ -126,7 +126,7 @@ pyxel.run(update, draw)
 @@ px-show
 title: show（画面を表示して待つ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.show()
 summary: それまでに描いた画面を表示して、ESCキーが押されるまで待ちます。update と draw を作らずに、絵を1枚だけ見せたいときに使います。
@@ -178,7 +178,7 @@ pyxel.show()
 @@ px-quit
 title: quit（終了する）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.quit()
 summary: プログラムをすぐに終わらせる命令です。ウィンドウが閉じます。
@@ -221,7 +221,7 @@ pyxel.run(update, draw)
 @@ px-title
 title: title（ウィンドウの名前）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.title(タイトル)
 summary: ウィンドウの上に出る名前を、あとから変えます。
@@ -242,7 +242,7 @@ pyxel.title("〔新しいタイトル〕")
 @@ px-size
 title: width・height（画面の大きさ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.width / pyxel.height
 summary: 画面の幅と高さが入った変数です。init で決めた大きさを、あとから調べるのに使います。
@@ -285,7 +285,7 @@ pyxel.run(update, draw)
 @@ px-frame-count
 title: frame_count（フレーム数）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.frame_count
 summary: ゲームが始まってから進んだフレーム数が入った変数です。時間によって変化をつけるのに使います。
@@ -328,7 +328,7 @@ pyxel.run(update, draw)
 @@ px-screenshot
 title: screenshot（画面を保存）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 基本
 syntax: pyxel.screenshot()
 summary: いまの画面を、画像ファイル（PNG）として保存します。
@@ -349,7 +349,7 @@ pyxel.screenshot()
 @@ px-cls
 title: cls（画面を消す）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.cls(色)
 summary: 画面全体を1つの色で塗りつぶします。draw のいちばん最初に書きます。
@@ -397,7 +397,7 @@ pyxel.run(update, draw)
 @@ px-pset
 title: pset（点を打つ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.pset(x, y, 色)
 summary: 画面の1ドットだけを、指定した色にします。
@@ -442,7 +442,7 @@ pyxel.run(update, draw)
 @@ px-pget
 title: pget（色を調べる）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.pget(x, y)
 summary: 画面の (x, y) にあるドットの色の番号を調べます。
@@ -487,7 +487,7 @@ pyxel.run(update, draw)
 @@ px-line
 title: line（線を引く）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.line(x1, y1, x2, y2, 色)
 summary: 2つの点を結ぶ、まっすぐな線を引きます。
@@ -531,7 +531,7 @@ pyxel.run(update, draw)
 @@ px-rect
 title: rect（四角を塗る）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.rect(x, y, 幅, 高さ, 色)
 summary: 中を塗りつぶした四角を描きます。
@@ -583,7 +583,7 @@ pyxel.run(update, draw)
 @@ px-rectb
 title: rectb（四角のふち）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.rectb(x, y, 幅, 高さ, 色)
 summary: ふちだけの四角を描きます（中は塗りません）。
@@ -627,7 +627,7 @@ pyxel.run(update, draw)
 @@ px-circ
 title: circ（円を塗る）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.circ(x, y, 半径, 色)
 summary: 中を塗りつぶした円を描きます。
@@ -676,7 +676,7 @@ pyxel.run(update, draw)
 @@ px-circb
 title: circb（円のふち）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.circb(x, y, 半径, 色)
 summary: ふちだけの円を描きます（中は塗りません）。
@@ -719,7 +719,7 @@ pyxel.run(update, draw)
 @@ px-elli
 title: elli（だ円を塗る）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.elli(x, y, 幅, 高さ, 色)
 summary: 中を塗りつぶしただ円（たまご形）を描きます。
@@ -762,7 +762,7 @@ pyxel.run(update, draw)
 @@ px-ellib
 title: ellib（だ円のふち）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.ellib(x, y, 幅, 高さ, 色)
 summary: ふちだけのだ円を描きます。
@@ -805,7 +805,7 @@ pyxel.run(update, draw)
 @@ px-tri
 title: tri（三角形を塗る）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.tri(x1, y1, x2, y2, x3, y3, 色)
 summary: 3つの点を結んで、中を塗りつぶした三角形を描きます。
@@ -849,7 +849,7 @@ pyxel.run(update, draw)
 @@ px-trib
 title: trib（三角形のふち）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.trib(x1, y1, x2, y2, x3, y3, 色)
 summary: ふちだけの三角形を描きます。
@@ -890,7 +890,7 @@ pyxel.run(update, draw)
 @@ px-fill
 title: fill（塗りつぶす）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.fill(x, y, 色)
 summary: (x, y) と同じ色でつながっている部分を、まとめて別の色で塗ります。
@@ -934,7 +934,7 @@ pyxel.run(update, draw)
 @@ px-text
 title: text（文字を書く）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.text(x, y, 文字, 色)
 summary: 画面の好きな場所に、好きな色で文字を書きます。はじめは英数字だけです。
@@ -985,7 +985,7 @@ pyxel.run(update, draw)
 @@ px-blt
 title: blt（画像をはる）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.blt(x, y, 画像番号, u, v, 幅, 高さ, 透明色)
 summary: イメージバンク（ドット絵を入れておく場所）の絵の一部を、画面にはりつけます。
@@ -1035,7 +1035,7 @@ pyxel.run(update, draw)
 @@ px-bltm
 title: bltm（マップをはる）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.bltm(x, y, マップ番号, u, v, 幅, 高さ, 透明色)
 summary: タイルマップ（小さな絵を並べて作ったマップ）の一部を、画面にはりつけます。RPGやアクションゲームの背景に使います。
@@ -1093,7 +1093,7 @@ pyxel.run(update, draw)
 @@ px-clip
 title: clip（描く範囲をしぼる）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.clip(x, y, 幅, 高さ)
 summary: 描く範囲を四角の中だけにしぼります。範囲の外には描かれません。
@@ -1141,7 +1141,7 @@ pyxel.run(update, draw)
 @@ px-camera
 title: camera（画面をずらす）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.camera(x, y)
 summary: 描く位置をまとめてずらします。広いマップを動かすときや、画面をゆらすときに使います。
@@ -1190,7 +1190,7 @@ pyxel.run(update, draw)
 @@ px-pal
 title: pal（色を入れ替える）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.pal(色1, 色2)
 summary: 描くときの色1を色2に入れ替えます。同じ絵を色違いで描けます。
@@ -1238,7 +1238,7 @@ pyxel.run(update, draw)
 @@ px-dither
 title: dither（半透明）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 描く（画面）
 syntax: pyxel.dither(0〜1)
 summary: 細かい点々で、半透明のように見せて描きます。0.0 が透明、1.0 がふつうの描き方です。
@@ -1281,7 +1281,7 @@ pyxel.run(update, draw)
 @@ px-btn
 title: btn（キーが押されている？）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.btn(キー)
 summary: そのキーがいま押されているかを調べます。押されているあいだ、ずっと True です。
@@ -1329,7 +1329,7 @@ pyxel.run(update, draw)
 @@ px-btnp
 title: btnp（押した瞬間）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.btnp(キー)
 summary: そのキーを押した瞬間の1回だけ True になります。ジャンプや決定ボタンに使います。
@@ -1383,7 +1383,7 @@ pyxel.run(update, draw)
 @@ px-btnr
 title: btnr（離した瞬間）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.btnr(キー)
 summary: そのキーを離した瞬間の1回だけ True になります。
@@ -1405,7 +1405,7 @@ if pyxel.btnr(pyxel.KEY_〔キー名〕):
 @@ px-mouse
 title: mouse（矢印の表示）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.mouse(True)
 summary: マウスの矢印（カーソル）を、画面に表示するか隠すかを決めます。
@@ -1429,7 +1429,7 @@ Pyxelの画面では、はじめはマウスの矢印が見えません。マウ
 @@ px-mouse-xy
 title: mouse_x・mouse_y（マウスの位置）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.mouse_x / pyxel.mouse_y
 summary: マウスの横の位置と縦の位置が入っている変数です。
@@ -1472,7 +1472,7 @@ pyxel.run(update, draw)
 @@ px-mouse-wheel
 title: mouse_wheel（ホイール）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.mouse_wheel
 summary: マウスのホイールを回した量が入った変数です。
@@ -1491,7 +1491,7 @@ pyxel.mouse_wheel
 @@ px-input-text
 title: input_text（打った文字）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.input_text
 summary: そのフレームにキーボードで打たれた文字が入った変数です。名前入力などに使えます。
@@ -1535,7 +1535,7 @@ pyxel.run(update, draw)
 @@ px-keycodes
 title: KEY_（キーの名前一覧）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 入力
 syntax: pyxel.KEY_LEFT など
 summary: キーを表す名前の一覧です。btn や btnp に渡して使います。マウスのボタンやゲームパッドの名前もあります。
@@ -1571,7 +1571,7 @@ pyxel.MOUSE_BUTTON_〔LEFT か RIGHT〕
 @@ px-rndi
 title: rndi（ランダムな整数）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.rndi(a, b)
 summary: a から b までの整数を、ランダムに1つ選びます（a も b も出ます）。
@@ -1615,7 +1615,7 @@ pyxel.run(update, draw)
 @@ px-rndf
 title: rndf（ランダムな小数）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.rndf(a, b)
 summary: a から b までの小数を、ランダムに1つ選びます。
@@ -1636,7 +1636,7 @@ reads: rndf=ランエフ
 @@ px-rseed
 title: rseed（ランダムの種）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.rseed(数)
 summary: ランダムの「種」を決めます。同じ種なら、毎回同じ順番でランダムな数が出ます。
@@ -1657,7 +1657,7 @@ pyxel.rseed(〔数〕)
 @@ px-sin
 title: sin（サイン）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.sin(角度)
 summary: 角度（度）のサインの値を返します。円を描く動きや、ゆれる動きに使います。
@@ -1702,7 +1702,7 @@ pyxel.run(update, draw)
 @@ px-cos
 title: cos（コサイン）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.cos(角度)
 summary: 角度（度）のコサインの値を返します。sin と組み合わせて、円を描く動きを作れます。
@@ -1745,7 +1745,7 @@ pyxel.run(update, draw)
 @@ px-atan2
 title: atan2（角度を求める）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.atan2(y, x)
 summary: 2つの点の横と縦の差から、向きの角度（度）を求めます。
@@ -1767,7 +1767,7 @@ pyxel.atan2(〔縦の差〕, 〔横の差〕)
 @@ px-sqrt
 title: sqrt（平方根）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.sqrt(数)
 summary: 数の平方根（2乗するとその数になる数）を返します。
@@ -1788,7 +1788,7 @@ pyxel.sqrt(〔数〕)
 @@ px-ceil
 title: ceil（切り上げ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.ceil(数)
 summary: 小数を切り上げて整数にします。
@@ -1809,7 +1809,7 @@ pyxel.ceil(〔数〕)
 @@ px-floor
 title: floor（切り捨て）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.floor(数)
 summary: 小数を切り捨てて整数にします。
@@ -1830,7 +1830,7 @@ pyxel.floor(〔数〕)
 @@ px-clamp
 title: clamp（範囲におさめる）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.clamp(数, 小, 大)
 summary: 数を、決めた範囲（いちばん小さい数〜いちばん大きい数）の中におさめます。
@@ -1876,7 +1876,7 @@ pyxel.run(update, draw)
 @@ px-sgn
 title: sgn（プラス・マイナスの判定）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.sgn(数)
 summary: 数がプラスなら 1、0なら 0、マイナスなら -1 を返します。
@@ -1897,7 +1897,7 @@ pyxel.sgn(〔数〕)
 @@ px-noise
 title: noise（なめらかなランダム）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 計算
 syntax: pyxel.noise(x, y, z)
 summary: なめらかに変化するランダムな値を返します（パーリンノイズ）。
@@ -1918,7 +1918,7 @@ pyxel.noise(〔x〕, 〔y〕, 〔z〕)
 @@ px-play
 title: play（音を鳴らす）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 音
 syntax: pyxel.play(チャンネル, 音の番号)
 summary: チャンネルを決めて、効果音を鳴らします。
@@ -1965,7 +1965,7 @@ pyxel.run(update, draw)
 @@ px-playm
 title: playm（音楽を鳴らす）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 音
 syntax: pyxel.playm(音楽の番号, loop=True)
 summary: BGM（音楽）を鳴らします。
@@ -1987,7 +1987,7 @@ BGMのように、**いくつかの音を重ねた曲**を鳴らします。`pla
 @@ px-stop
 title: stop（音を止める）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 音
 syntax: pyxel.stop()
 summary: 鳴っている音を止めます。
@@ -2010,7 +2010,7 @@ BGMを止めたいとき（ゲームオーバーなど）に使います。
 @@ px-sound-class
 title: Sound（音のデータ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 音
 syntax: pyxel.sounds[番号].set(…)
 summary: 音をプログラムで作るための仕組みです。音の高さ・音色・大きさ・速さを文字で決めます。
@@ -2048,7 +2048,7 @@ pyxel.play(0, 0)
 @@ px-music-class
 title: Music（曲のデータ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 音
 syntax: pyxel.musics[番号].set(…)
 summary: いくつかの音（Sound）をチャンネルごとに並べて、1つの曲にまとめます。
@@ -2078,7 +2078,7 @@ pyxel.playm(0, loop=True)
 @@ px-image-class
 title: Image（ドット絵の画像）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 画像・データ
 syntax: pyxel.images[番号]
 summary: ドット絵を入れておく場所（イメージバンク）です。キャラクターの絵をここに入れて、blt で画面にはります。
@@ -2129,7 +2129,7 @@ pyxel.run(update, draw)
 @@ px-tilemap-class
 title: Tilemap（マップのデータ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 画像・データ
 syntax: pyxel.tilemaps[番号]
 summary: 小さな絵（タイル）を碁盤の目のように並べて、広いマップを作るための仕組みです。
@@ -2157,7 +2157,7 @@ RPGなどのマップを作るときに使います。まずは、画像（[[px-
 @@ px-load
 title: load（データを読みこむ）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 画像・データ
 syntax: pyxel.load(ファイル名)
 summary: Pyxel Editor で作ったリソースファイル（.pyxres）を読みこみます。画像や音がまとめて使えるようになります。
@@ -2182,7 +2182,7 @@ Pyxel Editor は、ターミナルで `pyxel edit ファイル名.pyxres` と打
 @@ px-font-class
 title: Font（フォント）
 type: Pyxelの命令
-chapter: 8
+chapter: 9
 group: 画像・データ
 syntax: pyxel.Font(ファイル名)
 summary: 日本語など、はじめから入っていない文字を書くためのフォントを読みこみます。

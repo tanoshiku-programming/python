@@ -1,7 +1,7 @@
-@@ ch9
+@@ ch10
 title: 道具と困ったとき
 kind: chapter
-chapter: 9
+chapter: 10
 summary: エディタ（IDLE と VS Code）やファイル、ターミナルなど、Pythonを書く道具の知識と、困ったときのつまずき集です。必要になったときに開いて使います。
 reads: IDLE=アイドル | VS Code=ブイエスコード | .py=ドットパイ | pip=ピップ
 --
@@ -28,7 +28,7 @@ reads: IDLE=アイドル | VS Code=ブイエスコード | .py=ドットパイ |
 @@ editor
 title: エディタ（IDLE と VS Code）
 type: 道具
-chapter: 9
+chapter: 10
 summary: プログラムを書くためのソフトです。この教室では、シンプルな IDLE と、いろいろな言語で使える VS Code の2つを使います。
 aliases: アイドル, ブイエスコード, VSCode, エディタ, エディター, 開発環境
 reads: IDLE=アイドル | VS Code=ブイエスコード | editor=エディタ
@@ -88,7 +88,7 @@ Mac のノートパソコンでは、F5 キーを押すときに **fn キーも�
 @@ shell
 title: シェル（>>> の画面）とファイル
 type: 道具
-chapter: 9
+chapter: 10
 summary: >>> の画面（シェル）は、1行ずつすぐに試す場所。ファイルに書いたプログラムは、保存して、まとめて実行します。
 aliases: シェル, 対話モード, インタラクティブ, >>>, プロンプト
 reads: shell=シェル | >>>=プロンプト
@@ -140,7 +140,7 @@ VS Code のターミナルで `python`（Mac では `python3`）と打つと、�
 @@ pyfile
 title: ファイルと拡張子（.py）
 type: 道具
-chapter: 9
+chapter: 10
 summary: Pythonのプログラムは「名前.py」というファイルに保存します。ファイル名のつけ方と、保存する場所に気をつけよう。
 aliases: 拡張子, ファイル名, 保存, フォルダ, .py, パイファイル
 reads: .py=ドットパイ | file=ファイル | folder=フォルダ
@@ -189,7 +189,7 @@ Pyxelは、`pyxel.init()` のあとは、**プログラム（.py）があるフ�
 @@ terminal
 title: ターミナルと pip
 type: 道具
-chapter: 9
+chapter: 10
 summary: ターミナルは、文字で命令を打ってパソコンを動かす画面です。Pyxelのインストール（pip install）はここでします。
 aliases: ターミナル, コマンド, コマンドプロンプト, PowerShell, pip, インストール
 reads: terminal=ターミナル | pip=ピップ | install=インストール | command=コマンド
@@ -238,7 +238,7 @@ IDLE だけでPythonを書いている人も、`pip install` をするときだ�
 @@ trouble
 title: 困ったときは（よくあるつまずき）
 type: まとめ
-chapter: 9
+chapter: 10
 summary: 「動かない」「エラーが出る」「何も表示されない」ときに見るページです。初めての人がよくつまずく原因と、直し方を集めました。
 aliases: 困った, こまった, 動かない, うごかない, エラー, つまずき, トラブル, 全角
 reads: SyntaxError=シンタックスエラー | NameError=ネームエラー | invalid character=インバリッド キャラクター
