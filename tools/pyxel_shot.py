@@ -27,8 +27,9 @@ def run(update, draw):
 
     def upd():
         n = state["n"]
-        for name in ops.get("hold", []):
-            pyxel.set_btn(getattr(pyxel, name), True)
+        if n == 0:   # 最初に1回だけ押して、あとは押したままにする（毎フレーム押し直すと btnp が毎回 True になる）
+            for name in ops.get("hold", []):
+                pyxel.set_btn(getattr(pyxel, name), True)
         if "click" in ops:
             pyxel.set_mouse_pos(*ops["click"])
             if n == frames // 2:

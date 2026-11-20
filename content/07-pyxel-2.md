@@ -304,7 +304,7 @@ if pyxel.btn(pyxel.KEY_〔キー名〕):
 ## 矢印キーで動かす
 `update` の中でキーが押されているかを調べて、位置の変数を変えます（[[if]]）。Scratchの「もし（右向き矢印）キーが押されたなら」と同じ考え方です。
 
-```python px gif frames=50 hold=KEY_RIGHT
+```python px gif frames=30 hold=KEY_RIGHT
 import pyxel
 
 pyxel.init(160, 120, title="キーで動かす")

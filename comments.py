@@ -315,6 +315,18 @@ def comment_for(line, is_error=False):
     if s in OVERRIDE:
         return OVERRIDE[s]
     m = None
+    # --- 何行かに分けて書いたリスト
+    if m := re.fullmatch(r"(\w+) = \[", s):
+        return f"{m[1]} にリストを入れる（] の行まで）"
+    if s == "]":
+        return "リストの終わり"
+    if re.fullmatch(r"(\"[^\"]*\"|\[[^\]]*\]),", s):
+        return "リストの中身（1行分）"
+    # --- リスト内包表記
+    if m := re.fullmatch(r"(\w+) = \[(\w+) for \2 in (\w+) if (.+)\]", s):
+        return f"{m[3]} の中から、「{m[4]}」のものだけを集めて、{m[1]} に入れる"
+    if s in ("return True", "return False"):
+        return f"{s[7:]} を、呼び出した場所に返す（ここで関数は終わる）"
     # --- クラス
     if m := re.fullmatch(r"class (\w+):", s):
         return f"{m[1]} というクラス（設計図）を作る"

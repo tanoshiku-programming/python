@@ -56,6 +56,18 @@ pyxel.run(update, draw)
 18. [[game-hit]]：当たり判定を作る
 19. [[game-sound]]：音を鳴らす
 
+### ゲームの技
+必要になったものから読もう。
+
+- [[game-shot]]：弾を撃つ
+- [[game-enemy]]：敵を出す
+- [[game-scroll]]：スクロール
+- [[game-map]]：マップ
+- [[game-jump]]：ジャンプ
+- [[game-wall]]：壁にぶつかったら止める
+- [[game-effect]]：爆発・ゆれ・無敵時間
+- [[game-highscore]]：ハイスコアとランキング
+
 ::: point
 Pyxelの命令の意味は、[[ch9|Pyxel辞典]]でいつでも引けます。分からない命令が出てきたら、コードの中の言葉をクリックしてみよう。
 :::

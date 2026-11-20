@@ -738,3 +738,696 @@ pyxel.run(update, draw)
 ::: deep BGM（音楽）を流したいときは
 いくつかの音を重ねた曲は、`pyxel.musics` で作って `pyxel.playm(0, loop=True)` で流します（[[px-playm]]）。曲作りは、文字で書くより **Pyxel Editor** のサウンドエディタとミュージックエディタを使うのがおすすめです。
 :::
+
+@@ game-shot
+title: 弾を撃とう
+type: 作品
+chapter: 7
+syntax: tama_list.append({"x": x, "y": y})
+summary: スペースキーで弾を撃ちます。弾は辞書で作ってリストに入れ、画面の外に出た弾はリストから消します。
+aliases: 弾, 発射, 撃つ, シューティング, 連射, たま
+reads: tama=タマ | jibun=ジブン | nokori=ノコリ | append=アペンド
+--
+## 弾は「たくさん」出てくる
+弾は、撃つたびに1つずつ増えて、画面の上に消えていきます。何発出るか分からないので、[[game-list]]と同じように**リスト**で覚えます。
+
+1つの弾には「横の位置」と「縦の位置」があります。これを[[dict]]で `{"x": 40, "y": 100}` のようにまとめて、リストに入れていきます。
+
+## スペースで弾を撃つ
+```python px gif frames=60 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="弾を撃つ")
+jibun_x = 76
+tama_list = []
+
+
+def update():
+    global jibun_x, tama_list
+    if pyxel.btn(pyxel.KEY_LEFT):
+        jibun_x = max(0, jibun_x - 2)
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        jibun_x = min(152, jibun_x + 2)
+    if pyxel.btnp(pyxel.KEY_SPACE, 8, 8):
+        tama_list.append({"x": jibun_x + 3, "y": 100})
+    nokori = []
+    for tama in tama_list:
+        tama["y"] = tama["y"] - 4
+        if tama["y"] > -8:
+            nokori.append(tama)
+    tama_list = nokori
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.tri(jibun_x, 112, jibun_x + 4, 104, jibun_x + 8, 112, 11)
+    for tama in tama_list:
+        pyxel.rect(tama["x"], tama["y"], 2, 6, 10)
+    pyxel.text(4, 4, f"TAMA {len(tama_list)}", 7)
+
+
+pyxel.run(update, draw)
+```
+画像は、スペースキーを押しつづけたときの様子です。
+
+## 仕組みを読み解く
+### 撃つ：リストに足す
+スペースキーが押されたら、自分の上に新しい弾 `{"x": …, "y": 100}` を作って、`tama_list` に `append` します（[[list]]）。
+
+`pyxel.btnp(pyxel.KEY_SPACE, 8, 8)` は、押した瞬間に1発、押しつづけると8フレームごとに1発、という**連射**の書き方です（[[px-btnp]]）。
+
+### 動かす：全部の弾を上へ
+`for tama in tama_list:` で弾を1つずつ取り出して、`tama["y"]` を4ずつ減らします。
+
+### 消す：残す弾だけ、新しいリストに入れる
+画面の上（`y` が `-8` より上）まで行った弾は、もう見えません。そのままにしておくと、リストがどんどん長くなって、ゲームが重くなります。
+
+そこで、**まだ画面の中にある弾だけ**を、新しいリスト `nokori` に入れていきます。最後に `tama_list = nokori` として、残った弾だけのリストに入れかえます。画面左上の `TAMA` の数が、増えつづけないことを確かめよう。
+
+::: point
+「消したいものを消す」のではなく、「**残したいものだけ集めて、入れかえる**」。たくさんのものを消すときの、安全なやり方です。
+:::
+
+::: stuck
+`tama_list = nokori` のように、変数そのものに新しいリストを入れているので、`global tama_list` が必要です（[[update-draw]]）。
+:::
+
+@@ game-enemy
+title: 敵を出そう
+type: 作品
+chapter: 7
+syntax: if pyxel.frame_count % 20 == 0:
+summary: 一定の時間ごとに敵を出して、上から動かします。弾が当たったら、敵を消して点数を増やします。
+aliases: 敵, 出現, てき, 撃ち落とす, シューティング, 点数
+reads: teki=テキ | tama=タマ | atari=アタリ
+--
+## 敵を、時間ごとに出す
+「20フレームごとに1体」のように、時間を決めて敵を出すには、`pyxel.frame_count`（[[px-frame-count]]）と `%`（余り）を使います。
+
+```python norun
+if pyxel.frame_count % 20 == 0:
+    teki_list.append({"x": pyxel.rndi(0, 152), "y": -8})
+```
+`frame_count % 20` は、20フレームごとに `0` になります。そのときだけ、画面の上の外（`y` が `-8`）に、新しい敵を足します。横の位置は[[px-rndi]]でランダムです。
+
+## 撃って、当てる
+[[game-shot]]の弾と組み合わせて、敵に当たったら消えるようにします。
+
+```python px gif frames=120 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="敵を撃つ")
+jibun_x = 76
+tama_list = []
+teki_list = []
+score = 0
+
+
+def update():
+    global jibun_x, tama_list, teki_list, score
+    if pyxel.btn(pyxel.KEY_LEFT):
+        jibun_x = max(0, jibun_x - 2)
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        jibun_x = min(152, jibun_x + 2)
+    if pyxel.btnp(pyxel.KEY_SPACE, 8, 8):
+        tama_list.append({"x": jibun_x + 3, "y": 100})
+    if pyxel.frame_count % 20 == 0:
+        teki_list.append({"x": pyxel.rndi(60, 92), "y": -8})
+
+    for tama in tama_list:
+        tama["y"] = tama["y"] - 4
+    for teki in teki_list:
+        teki["y"] = teki["y"] + 1
+
+    for teki in teki_list:
+        for tama in tama_list:
+            if abs(teki["x"] + 4 - tama["x"]) < 6 and abs(teki["y"] + 4 - tama["y"]) < 6:
+                teki["y"] = 999
+                tama["y"] = -999
+                score = score + 10
+
+    tama_list = [tama for tama in tama_list if tama["y"] > -8]
+    teki_list = [teki for teki in teki_list if teki["y"] < 120]
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.tri(jibun_x, 112, jibun_x + 4, 104, jibun_x + 8, 112, 11)
+    for tama in tama_list:
+        pyxel.rect(tama["x"], tama["y"], 2, 6, 10)
+    for teki in teki_list:
+        pyxel.rect(teki["x"], teki["y"], 8, 8, 8)
+    pyxel.text(4, 4, f"SCORE {score}", 7)
+
+
+pyxel.run(update, draw)
+```
+画像は、スペースキーを押しつづけて、真ん中あたりの敵を撃っている様子です。
+
+## 仕組みを読み解く
+### 全部の敵 × 全部の弾を調べる
+`for teki in teki_list:` の中に `for tama in tama_list:` を入れた**二重ループ**です。敵が3体、弾が5発あれば、3 × 5 ＝ 15 組の当たりを調べます。当たり判定は、[[game-hit]]の「近いかどうか（abs）」の方法です。
+
+### 当たった敵と弾を、画面の外へ飛ばす
+当たったら、敵の `y` を `999`（画面のずっと下）、弾の `y` を `-999`（ずっと上）にしています。こうしておくと、そのあとの「画面の外に出たものを消す」処理で、いっしょに消えます。消す処理を1か所にまとめられる工夫です。
+
+### 1行で「残すものだけ集める」
+```python norun
+tama_list = [tama for tama in tama_list if tama["y"] > -8]
+```
+これは、[[game-shot]]で4行で書いた「残す弾だけ `nokori` に集める」を、1行で書いたものです。**リスト内包表記**といいます。
+
+| 部分 | 意味 |
+| --- | --- |
+| `for tama in tama_list` | 弾を1つずつ取り出して |
+| `if tama["y"] > -8` | 画面の中にある弾だけ |
+| 最初の `tama` | それを集めて、新しいリストにする |
+
+4行の書き方のほうが分かりやすければ、そちらで書いてもまったく問題ありません。
+
+@@ game-scroll
+title: スクロールさせよう
+type: 作品
+chapter: 7
+syntax: pyxel.camera(camera_x, 0)
+summary: 背景を動かして、進んでいるように見せる「スクロール」の作り方です。背景を流す方法と、カメラでキャラクターを追いかける方法の2つを学びます。
+aliases: スクロール, 背景, カメラ, 横スクロール, 縦スクロール
+reads: camera=カメラ | hoshizora=ホシゾラ
+--
+## スクロールってなに？
+画面の外まで続く広い世界を、少しずつ見せていくことを**スクロール**といいます。作り方は2つあります。
+
+| 方法 | どんなゲーム？ |
+| --- | --- |
+| ① 背景を流す | 自分は画面の中にいて、背景が流れていく（宇宙を飛ぶゲームなど） |
+| ② カメラで追いかける | 広い世界をキャラクターが歩いて、画面がついていく（アクションゲームなど） |
+
+## 方法①：背景を流す
+星を下に動かしつづけて、画面の下まで行ったら上に戻します。[[game-list]]の雪と同じ仕組みです。
+
+```python px gif frames=60
+import pyxel
+
+pyxel.init(160, 120, title="星空スクロール")
+hoshizora = []
+for i in range(40):
+    hoshizora.append({"x": pyxel.rndi(0, 159), "y": pyxel.rndi(0, 119), "hayasa": pyxel.rndi(1, 3)})
+
+
+def update():
+    for hoshi in hoshizora:
+        hoshi["y"] = hoshi["y"] + hoshi["hayasa"]
+        if hoshi["y"] > 120:
+            hoshi["y"] = 0
+            hoshi["x"] = pyxel.rndi(0, 159)
+
+
+def draw():
+    pyxel.cls(0)
+    for hoshi in hoshizora:
+        pyxel.pset(hoshi["x"], hoshi["y"], 7 if hoshi["hayasa"] == 3 else 5)
+    pyxel.tri(76, 100, 80, 90, 84, 100, 11)
+
+
+pyxel.run(update, draw)
+```
+自分（緑の三角）は止まっているのに、前に進んでいるように見えます。速い星を明るく、おそい星を暗くすると、遠くの星はゆっくり流れて見えて、奥行きが出ます（[[ternary]]）。
+
+## 方法②：カメラで追いかける
+幅480ドットの広い世界を作って、キャラクターが歩くと、画面がついていくようにします。
+
+```python px gif frames=90 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="カメラで追いかける")
+x = 20
+
+
+def update():
+    global x
+    if pyxel.btn(pyxel.KEY_LEFT):
+        x = max(0, x - 2)
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = min(472, x + 2)
+
+
+def draw():
+    camera_x = min(max(x - 76, 0), 320)
+    pyxel.cls(12)
+    pyxel.camera(camera_x, 0)
+    pyxel.rect(0, 100, 480, 20, 3)
+    for i in range(6):
+        pyxel.rect(40 + i * 80, 70, 16, 30, 4)
+        pyxel.circ(48 + i * 80, 64, 14, 11)
+    pyxel.rect(x, 92, 8, 8, 8)
+    pyxel.camera()
+    pyxel.text(4, 4, f"X {x}", 0)
+
+
+pyxel.run(update, draw)
+```
+画像は、右キーを押しつづけて、木の並ぶ広い世界を歩いている様子です。
+
+## 仕組みを読み解く
+- 木もキャラクターも、**広い世界の中の位置**（0〜480）で描いている
+- `pyxel.camera(camera_x, 0)` で、「世界の `camera_x` から先を、画面の左はしに見せる」ように、描く位置をまとめてずらす（[[px-camera]]）
+- `camera_x = x - 76` で、キャラクターがいつも画面のまん中あたりに来る。`min` と `max` で、世界のはしより外は見せないようにしている（[[math-func]]）
+- 点数などは画面に固定したいので、`pyxel.camera()` でずらすのをやめてから描く
+
+::: deep マップを使ったスクロール
+タイルマップで作った広いマップなら、[[px-bltm]]で切り取る場所 `u` を変えていく方法もあります。マップの作り方は[[game-map]]を見よう。
+:::
+
+@@ game-map
+title: マップを作ろう
+type: 作品
+chapter: 7
+syntax: mappu[y][x] == "#"
+summary: 文字を並べた二次元リストで、迷路やステージのマップを作ります。マップを画面に描いて、壁のところは通れないようにします。
+aliases: マップ, 迷路, ステージ, 壁, タイル, マス目
+reads: mappu=マップ | masu=マス | tsugi=ツギ
+--
+## マップを文字で書く
+[[list2d]]で学んだように、文字を並べて、マップを作ります。
+
+| 文字 | 意味 |
+| --- | --- |
+| `#` | 壁（通れない） |
+| `.` | 道（通れる） |
+| `G` | ゴール |
+
+1文字を、画面の **8×8ドットのマス**として描きます。
+
+## マス目を歩くゲーム
+```python px gif frames=80 hold=KEY_RIGHT
+import pyxel
+
+mappu = [
+    "####################",
+    "#........#.........#",
+    "#.####...#..####...#",
+    "#....#......#......#",
+    "####.#..#####..#####",
+    "#....#.........#...#",
+    "#.#######..###.#.#.#",
+    "#.........#......#.#",
+    "#..####...#.####.#.#",
+    "#.....#.......#..#.#",
+    "#..#..#..###..#...G#",
+    "#..#...........#####",
+    "#..#..####.........#",
+    "####################",
+]
+pyxel.init(160, 112, title="マップ")
+masu_x = 1
+masu_y = 1
+
+
+def update():
+    global masu_x, masu_y
+    tsugi_x = masu_x
+    tsugi_y = masu_y
+    if pyxel.btnp(pyxel.KEY_LEFT, 6, 6):
+        tsugi_x = masu_x - 1
+    if pyxel.btnp(pyxel.KEY_RIGHT, 6, 6):
+        tsugi_x = masu_x + 1
+    if pyxel.btnp(pyxel.KEY_UP, 6, 6):
+        tsugi_y = masu_y - 1
+    if pyxel.btnp(pyxel.KEY_DOWN, 6, 6):
+        tsugi_y = masu_y + 1
+    if mappu[tsugi_y][tsugi_x] != "#":
+        masu_x = tsugi_x
+        masu_y = tsugi_y
+
+
+def draw():
+    pyxel.cls(0)
+    for y in range(len(mappu)):
+        for x in range(len(mappu[y])):
+            if mappu[y][x] == "#":
+                pyxel.rect(x * 8, y * 8, 8, 8, 4)
+            elif mappu[y][x] == "G":
+                pyxel.rect(x * 8, y * 8, 8, 8, 10)
+    pyxel.rect(masu_x * 8 + 1, masu_y * 8 + 1, 6, 6, 11)
+    if mappu[masu_y][masu_x] == "G":
+        pyxel.text(60, 52, "GOAL!", 7)
+
+
+pyxel.run(update, draw)
+```
+画像は、右キーを押しつづけて、壁にぶつかって止まったところです。
+
+## 仕組みを読み解く
+### マスの番号と、画面の位置
+キャラクターの位置は、ドットではなく**マスの番号**（`masu_x`、`masu_y`）で覚えています。画面に描くときだけ、`× 8` してドットに直します。
+
+| マスの番号 | 画面の位置（ドット） |
+| --- | --- |
+| `masu_x = 3` | `3 * 8` ＝ 24 |
+
+### マップを描く（二重ループ）
+外側の `for y` で1行ずつ、内側の `for x` でその行の1文字ずつ調べて、`#` なら茶色、`G` なら黄色の四角を描きます。
+
+### 壁は通さない
+1. 動く前に、行きたい場所を `tsugi_x`、`tsugi_y` に計算する
+2. `mappu[tsugi_y][tsugi_x]` が壁 `#` でなければ、そこへ動く
+3. 壁なら、動かない
+
+「動く前に、行き先を調べる」のが、マス目のゲームで壁を作るコツです。
+
+::: stuck
+`mappu[y][x]` の順番に注意しよう。二次元リストは `[たて][よこ]` なので、`mappu[masu_x][masu_y]` と逆に書くと、ちがう場所を調べてしまいます。
+:::
+
+::: deep もっと広いマップや、絵のついたマップ
+マップが画面より大きいときは、[[game-scroll]]のカメラと組み合わせます。草や岩などの絵を使いたいときは、Pyxelの**タイルマップ**（[[px-tilemap-class]]・[[px-bltm]]）を使うと、Pyxel Editor で描いたマップをそのまま使えます。
+:::
+
+@@ game-jump
+title: ジャンプさせよう
+type: 作品
+chapter: 7
+syntax: vy = vy + 0.5 / y = y + vy
+summary: キャラクターをジャンプさせて、重力で落ちてくるようにします。「上下の速さ」を変数にして、毎フレーム少しずつ下向きに増やすのがコツです。
+aliases: ジャンプ, 重力, 落下, 地面, アクション
+reads: vy=ブイワイ | jimen=ジメン | jimen_ni_iru=ジメンニイル
+--
+## ジャンプは「速さ」で作る
+ジャンプを「`y` を一気に20減らす」で作ると、ワープしたように見えてしまいます。本物っぽく動かすコツは、**上下の速さ** `vy` を変数にすることです。
+
+| タイミング | すること |
+| --- | --- |
+| ジャンプした瞬間 | `vy` を上向き（マイナス）にする。例：`vy = -6` |
+| 毎フレーム | `y = y + vy` で動かす |
+| 毎フレーム | `vy = vy + 0.5` で、少しずつ下向きに変える（これが**重力**） |
+| 地面についたら | `y` を地面に合わせて、`vy = 0` にする |
+
+上向きの速さが、重力で少しずつ弱まって、てっぺんで止まり、今度は下向きにだんだん速くなります。ボールを上に投げたときと同じ動きです。
+
+## スペースでジャンプ
+```python px gif frames=40 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="ジャンプ")
+jimen = 92
+x = 76
+y = jimen
+vy = 0
+
+
+def update():
+    global x, y, vy
+    if pyxel.btn(pyxel.KEY_LEFT):
+        x = x - 2
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = x + 2
+    jimen_ni_iru = y >= jimen
+    if jimen_ni_iru and pyxel.btnp(pyxel.KEY_SPACE):
+        vy = -6
+    vy = vy + 0.5
+    y = y + vy
+    if y >= jimen:
+        y = jimen
+        vy = 0
+
+
+def draw():
+    pyxel.cls(12)
+    pyxel.rect(0, 100, 160, 20, 3)
+    pyxel.rect(x, y, 8, 8, 8)
+
+
+pyxel.run(update, draw)
+```
+画像は、スペースキーを押して、1回ジャンプしたときの様子です。
+
+## 仕組みを読み解く
+- `vy = -6`：ジャンプした瞬間に、上向きの速さ 6 をつける（上はマイナス。[[coordinate]]）
+- `vy = vy + 0.5`：毎フレーム、下向きに 0.5 ずつ強くなる。これが重力
+- `if y >= jimen:`：地面より下に行こうとしたら、地面の上にもどして、速さを 0 にする
+- `jimen_ni_iru`：地面にいるときだけ `True` になる変数（[[bool]]）。空中ではジャンプできないようにしている
+
+::: point
+ジャンプの高さを変えたいときは `-6` を、ふわっと感を変えたいときは重力の `0.5` を変えてみよう。数字を少し変えるだけで、ゲームの手ざわりががらっと変わります。
+:::
+
+::: stuck
+`jimen_ni_iru` の確かめを入れないと、空中でもスペースを押すたびにジャンプできて、どこまでも上に飛んでいってしまいます（それはそれで「空を飛ぶゲーム」になりますが）。
+:::
+
+@@ game-wall
+title: 壁にぶつかったら止めよう（押し戻し）
+type: 作品
+chapter: 7
+syntax: 動く前の位置を覚えて、壁に重なったら戻す
+summary: キャラクターが壁を通りぬけないようにする方法です。動いたあとで壁と重なっていたら、動く前の位置に戻します。
+aliases: 押し戻し, 壁, すり抜け, ぶつかる, 当たり判定
+reads: mae_x=マエエックス | kabe_list=カベリスト | kasanatteru=カサナッテル
+--
+## 「戻す」だけで壁になる
+[[game-map]]では、マス目ごとに「行き先が壁か」を調べました。1ドットずつなめらかに動くゲームでは、こう考えます。
+
+1. 動く前の位置を、`mae_x` と `mae_y` に覚えておく
+2. ふつうに動く
+3. もし壁と重なっていたら（[[game-hit]]）、`mae_x` と `mae_y` に**戻す**
+
+壁にめりこんだ瞬間に元に戻るので、見た目には「壁で止まった」ように見えます。
+
+## 壁のある部屋
+```python px gif frames=60 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="押し戻し")
+kabe_list = [(0, 0, 160, 8), (0, 112, 160, 8), (0, 0, 8, 120), (152, 0, 8, 120), (90, 30, 12, 60)]
+x = 30
+y = 56
+
+
+def kasanatteru(x1, y1, w1, h1, x2, y2, w2, h2):
+    return x1 < x2 + w2 and x2 < x1 + w1 and y1 < y2 + h2 and y2 < y1 + h1
+
+
+def kabe_ni_atatta():
+    for kabe in kabe_list:
+        if kasanatteru(x, y, 8, 8, kabe[0], kabe[1], kabe[2], kabe[3]):
+            return True
+    return False
+
+
+def update():
+    global x, y
+    mae_x = x
+    if pyxel.btn(pyxel.KEY_LEFT):
+        x = x - 2
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = x + 2
+    if kabe_ni_atatta():
+        x = mae_x
+    mae_y = y
+    if pyxel.btn(pyxel.KEY_UP):
+        y = y - 2
+    if pyxel.btn(pyxel.KEY_DOWN):
+        y = y + 2
+    if kabe_ni_atatta():
+        y = mae_y
+
+
+def draw():
+    pyxel.cls(1)
+    for kabe in kabe_list:
+        pyxel.rect(kabe[0], kabe[1], kabe[2], kabe[3], 13)
+    pyxel.rect(x, y, 8, 8, 10)
+
+
+pyxel.run(update, draw)
+```
+画像は、右キーを押しつづけて、まん中の壁にぶつかって止まったところです。
+
+## 仕組みを読み解く
+- 壁は、`(x, y, 幅, 高さ)` の[[tuple]]にして、`kabe_list` に並べている
+- `kabe_ni_atatta()` は、全部の壁を調べて、1つでも重なっていれば `True` を返す関数（[[function]]・[[return]]）
+- **横の移動と、縦の移動を分けて**戻しているのがポイント
+
+### なぜ横と縦を分けるの？
+もし右上へななめに動いて壁に当たったとき、横と縦をまとめて戻すと、キャラクターが壁にはりついて動けなくなります。横と縦を分けて戻すと、「横は壁で止まるけど、縦にはすべって動ける」ようになって、気持ちよく動かせます。
+
+::: deep もっとぴったり止めたいとき
+この方法では、1回に動く量（ここでは2ドット）の分だけ、壁の手前で止まることがあります。ぴったり壁にくっつけたいときは、1ドットずつ動かして調べたり、重なった分だけ押し戻す計算をしたりする方法があります。
+:::
+
+@@ game-effect
+title: エフェクトをつけよう（爆発・ゆれ・無敵）
+type: 作品
+chapter: 7
+syntax: pyxel.camera(ゆれ, ゆれ) / if pyxel.frame_count % 4 < 2:
+summary: 爆発の輪、画面のゆれ、やられたあとの点滅（無敵時間）。ゲームを気持ちよくする「演出」の作り方です。
+aliases: エフェクト, 爆発, 画面ゆれ, 振動, 無敵, 点滅, 演出
+reads: bakuhatsu=バクハツ | yure=ユレ | muteki=ムテキ
+--
+## 爆発の輪
+当たったところに、輪がだんだん大きくなって消える「爆発」を出します。爆発も、[[game-shot]]の弾と同じように、辞書のリストで管理します。
+
+```python px gif frames=12 press=KEY_SPACE@2
+import pyxel
+
+pyxel.init(160, 120, title="爆発")
+bakuhatsu_list = []
+yure = 0
+
+
+def update():
+    global bakuhatsu_list, yure
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        bakuhatsu_list.append({"x": 80, "y": 60, "r": 0})
+        yure = 10
+    for b in bakuhatsu_list:
+        b["r"] = b["r"] + 1
+    bakuhatsu_list = [b for b in bakuhatsu_list if b["r"] < 16]
+    if yure > 0:
+        yure = yure - 1
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.camera(pyxel.rndi(-yure, yure) // 3, pyxel.rndi(-yure, yure) // 3)
+    pyxel.rect(70, 50, 20, 20, 13)
+    for b in bakuhatsu_list:
+        pyxel.circb(b["x"], b["y"], b["r"], 10 if b["r"] < 8 else 8)
+    pyxel.camera()
+
+
+pyxel.run(update, draw)
+```
+スペースキーを押すと、まん中で爆発が起きて、画面がゆれます。
+
+### 爆発の輪
+- 爆発は `{"x": 80, "y": 60, "r": 0}`。`r` は輪の半径
+- 毎フレーム `r` を1ずつ大きくして、`circb`（ふちだけの円）で描く（[[px-circb]]）
+- 半径が16になったら、リストから消す（[[game-enemy]]の1行で集める書き方）
+- 小さいうちは黄色、大きくなったら赤にして、熱が冷めていく感じを出している（[[ternary]]）
+
+### 画面のゆれ
+- `yure` は「あと何フレームゆれるか」。爆発したら10にして、毎フレーム1ずつ減らす
+- `pyxel.camera(…)` で、描く位置をランダムに少しずらす（[[px-camera]]）。`yure` が小さくなるほど、ゆれも小さくなって、自然におさまる
+
+## 無敵時間（点滅）
+敵にぶつかったあと、しばらくやられないようにする時間を**無敵時間**といいます。無敵のあいだは、キャラクターを点滅させて、プレイヤーに知らせます。
+
+```python px gif frames=60 press=KEY_SPACE@2
+import pyxel
+
+pyxel.init(160, 120, title="無敵時間")
+muteki = 0
+
+
+def update():
+    global muteki
+    if pyxel.btnp(pyxel.KEY_SPACE) and muteki == 0:
+        muteki = 60
+    if muteki > 0:
+        muteki = muteki - 1
+
+
+def draw():
+    pyxel.cls(1)
+    if muteki == 0 or pyxel.frame_count % 4 < 2:
+        pyxel.rect(76, 56, 8, 8, 11)
+    pyxel.text(48, 100, f"MUTEKI {muteki}", 7)
+
+
+pyxel.run(update, draw)
+```
+スペースキーを（敵にぶつかった代わりに）押すと、2秒間（60フレーム）点滅します。
+
+- `muteki` は「あと何フレーム無敵か」。0のときは、ふつうの状態
+- `pyxel.frame_count % 4 < 2` は、4フレームのうち2フレームだけ `True`。そのときだけ描くので、チカチカ点滅して見える（[[px-frame-count]]）
+- 当たり判定のところで `muteki == 0` のときだけやられるようにすれば、無敵時間のできあがり
+
+::: point
+「あと何フレーム続くか」を数える変数を作って、毎フレーム1ずつ減らす。爆発、ゆれ、無敵時間、どれも同じ考え方です。
+:::
+
+@@ game-highscore
+title: ハイスコアとランキングを作ろう
+type: 作品
+chapter: 7
+syntax: ranking.sort(reverse=True)
+summary: いちばん良かった点数（ハイスコア）を覚えておいて、ゲームをやり直しても残るようにします。上位3つのランキングも作ります。
+aliases: ハイスコア, 最高点, ランキング, 記録, ソート, 並べかえ
+reads: high_score=ハイスコア | ranking=ランキング | sort=ソート | reverse=リバース
+--
+## ハイスコアは「上書きしない」変数
+`score` は、ゲームを始めるたびに0に戻します。でも、**ハイスコア**（いちばん良かった点数）は戻しません。ゲームが終わったときに、今回の点数がハイスコアより大きければ、入れかえます。
+
+```python
+high_score = 0
+for score in [12, 30, 25]:
+    if score > high_score:
+        high_score = score
+print(high_score)
+```
+3回遊んで、点数が12、30、25だったとき、ハイスコアは30です。`max(high_score, score)` と書いても同じです（[[math-func]]）。
+
+## 上位3つのランキング
+```python
+ranking = [12, 30, 25]
+ranking.append(41)
+ranking.sort(reverse=True)
+ranking = ranking[:3]
+print(ranking)
+```
+1. 今回の点数を `append` で足す
+2. `sort(reverse=True)` で、大きい順に並べかえる（[[list]]）
+3. `[:3]` で、上から3つだけ残す（[[list-index]]のスライス）
+
+## 連打ゲームにつける
+[[game-scene]]の5秒連打ゲームに、ハイスコアとランキングをつけます。
+
+```python px frames=10
+import pyxel
+
+pyxel.init(160, 120, title="ランキング")
+gamen = "kekka"
+score = 23
+ranking = [31, 18, 9]
+
+
+def kekka_ni_suru():
+    global gamen, ranking
+    gamen = "kekka"
+    ranking.append(score)
+    ranking.sort(reverse=True)
+    ranking = ranking[:3]
+
+
+def update():
+    global gamen
+    if gamen == "kekka" and pyxel.btnp(pyxel.KEY_R):
+        gamen = "title"
+
+
+def draw():
+    pyxel.cls(0)
+    if gamen == "kekka":
+        pyxel.text(52, 20, f"SCORE {score}", 10)
+        pyxel.text(52, 40, f"HIGH  {ranking[0]}", 11)
+        for i in range(len(ranking)):
+            pyxel.text(52, 60 + i * 10, f"{i + 1}. {ranking[i]}", 7)
+
+
+kekka_ni_suru()
+pyxel.run(update, draw)
+```
+確かめやすいように、はじめから「点数23で結果画面になった」ところを表示しています。
+
+- `kekka_ni_suru()` は、ゲームが終わったときに1回だけ呼ぶ関数。ここで、点数をランキングに入れる
+- ランキングの0番（`ranking[0]`）が、いつもハイスコアになる
+- 連打ゲームでは、`nokori <= 0` になったところで `gamen = "kekka"` と書くかわりに、`kekka_ni_suru()` を呼びます
+
+::: point
+ランキングは、**ゲームが終わったときに1回だけ**入れます。`update` に書くと、毎フレーム同じ点数が入ってしまいます。
+:::
+
+::: deep パソコンを閉じても残したいときは
+このハイスコアは、プログラムを終わらせると消えてしまいます。ずっと残したいときは、点数を**ファイルに書いて保存**して、次に起動したときに読みこみます。Pythonの `open()` という関数を使います。
+:::

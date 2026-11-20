@@ -232,3 +232,52 @@ if seireki % 4 == 0 and seireki % 100 != 0:
     print("うるう年です")
 ```
 :::
+
+@@ task:ternary
+::: t
+`nenrei = 15` のとき、18以上なら `"大人"`、そうでなければ `"子ども"` を、三項演算子で変数 `kubun` に入れて表示しよう。
+```output
+子ども
+```
+:::
+::: s
+```python
+nenrei = 15
+kubun = "大人" if nenrei >= 18 else "子ども"
+print(kubun)
+```
+:::
+
+::: t
+`x = -3` のとき、プラスなら `"右"`、そうでなければ `"左"` を表示しよう。三項演算子を `print` の中に直接書きます。
+```output
+左
+```
+:::
+::: s
+```python
+x = -3
+print("右" if x > 0 else "左")
+```
+:::
+
+::: t
+次の4行を、三項演算子を使って1行にまとめよう。
+```python norun
+if hp > 0:
+    joutai = "げんき"
+else:
+    joutai = "やられた"
+```
+`hp = 0` で試します。
+```output
+やられた
+```
+:::
+::: s
+```python
+hp = 0
+joutai = "げんき" if hp > 0 else "やられた"
+print(joutai)
+```
+:::

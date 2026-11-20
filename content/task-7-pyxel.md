@@ -1817,3 +1817,779 @@ pyxel.run(update, draw)
 ```
 音を作る `set` は最初に1回、鳴らす `play` は受け止めた瞬間に書きます。
 :::
+
+@@ task:game-shot
+::: t
+弾の色を水色（12番）に、弾の速さを6にしよう。
+:::
+::: s
+```python px gif frames=40 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="速い弾")
+jibun_x = 76
+tama_list = []
+
+
+def update():
+    global tama_list
+    if pyxel.btnp(pyxel.KEY_SPACE, 8, 8):
+        tama_list.append({"x": jibun_x + 3, "y": 100})
+    nokori = []
+    for tama in tama_list:
+        tama["y"] = tama["y"] - 6
+        if tama["y"] > -8:
+            nokori.append(tama)
+    tama_list = nokori
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.tri(jibun_x, 112, jibun_x + 4, 104, jibun_x + 8, 112, 11)
+    for tama in tama_list:
+        pyxel.rect(tama["x"], tama["y"], 2, 6, 12)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+1回押すと、弾が2発同時に出る（自分の左はしと右はしから出る）ようにしよう。
+:::
+::: s
+```python px gif frames=40 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="2発同時")
+jibun_x = 76
+tama_list = []
+
+
+def update():
+    global tama_list
+    if pyxel.btnp(pyxel.KEY_SPACE, 8, 8):
+        tama_list.append({"x": jibun_x, "y": 100})
+        tama_list.append({"x": jibun_x + 6, "y": 100})
+    nokori = []
+    for tama in tama_list:
+        tama["y"] = tama["y"] - 4
+        if tama["y"] > -8:
+            nokori.append(tama)
+    tama_list = nokori
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.tri(jibun_x, 112, jibun_x + 4, 104, jibun_x + 8, 112, 11)
+    for tama in tama_list:
+        pyxel.rect(tama["x"], tama["y"], 2, 6, 10)
+
+
+pyxel.run(update, draw)
+```
+`append` を2回書くだけで、2発になります。
+:::
+
+::: t
+弾を、上ではなく右に飛ばそう。自分は画面の左はしにいて、上下キーで動きます。
+:::
+::: s
+```python px gif frames=40 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="右に撃つ")
+jibun_y = 56
+tama_list = []
+
+
+def update():
+    global jibun_y, tama_list
+    if pyxel.btn(pyxel.KEY_UP):
+        jibun_y = max(0, jibun_y - 2)
+    if pyxel.btn(pyxel.KEY_DOWN):
+        jibun_y = min(112, jibun_y + 2)
+    if pyxel.btnp(pyxel.KEY_SPACE, 8, 8):
+        tama_list.append({"x": 12, "y": jibun_y + 3})
+    nokori = []
+    for tama in tama_list:
+        tama["x"] = tama["x"] + 4
+        if tama["x"] < 160:
+            nokori.append(tama)
+    tama_list = nokori
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.tri(4, jibun_y, 12, jibun_y + 4, 4, jibun_y + 8, 11)
+    for tama in tama_list:
+        pyxel.rect(tama["x"], tama["y"], 6, 2, 10)
+
+
+pyxel.run(update, draw)
+```
+横に飛ばすので、変えるのは `x` です。画面の右（160）より左にある弾だけを残します。
+:::
+
+@@ task:game-enemy
+::: t
+敵が、40フレームごとに出てくるようにしよう（弾はなしで、敵が落ちてくるだけ）。
+:::
+::: s
+```python px gif frames=100
+import pyxel
+
+pyxel.init(160, 120, title="敵が出る")
+teki_list = []
+
+
+def update():
+    global teki_list
+    if pyxel.frame_count % 40 == 0:
+        teki_list.append({"x": pyxel.rndi(0, 152), "y": -8})
+    for teki in teki_list:
+        teki["y"] = teki["y"] + 1
+    teki_list = [teki for teki in teki_list if teki["y"] < 120]
+
+
+def draw():
+    pyxel.cls(0)
+    for teki in teki_list:
+        pyxel.rect(teki["x"], teki["y"], 8, 8, 8)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+敵の落ちる速さを、1体ずつランダム（1〜3）にしよう。敵の辞書に `"hayasa"` を足します。
+:::
+::: s
+```python px gif frames=100
+import pyxel
+
+pyxel.init(160, 120, title="速さのちがう敵")
+teki_list = []
+
+
+def update():
+    global teki_list
+    if pyxel.frame_count % 20 == 0:
+        teki_list.append({"x": pyxel.rndi(0, 152), "y": -8, "hayasa": pyxel.rndi(1, 3)})
+    for teki in teki_list:
+        teki["y"] = teki["y"] + teki["hayasa"]
+    teki_list = [teki for teki in teki_list if teki["y"] < 120]
+
+
+def draw():
+    pyxel.cls(0)
+    for teki in teki_list:
+        pyxel.rect(teki["x"], teki["y"], 8, 8, 8)
+
+
+pyxel.run(update, draw)
+```
+辞書なら、`"hayasa"` を足すだけで、敵ごとに速さを持たせられます。
+:::
+
+::: t
+画面の下まで落ちてきた敵の数を `miss` で数えて、画面に表示しよう。
+:::
+::: s
+```python px frames=200
+import pyxel
+
+pyxel.init(160, 120, title="ミスを数える")
+teki_list = []
+miss = 0
+
+
+def update():
+    global teki_list, miss
+    if pyxel.frame_count % 20 == 0:
+        teki_list.append({"x": pyxel.rndi(0, 152), "y": -8})
+    for teki in teki_list:
+        teki["y"] = teki["y"] + 2
+        if teki["y"] >= 120:
+            miss = miss + 1
+    teki_list = [teki for teki in teki_list if teki["y"] < 120]
+
+
+def draw():
+    pyxel.cls(0)
+    for teki in teki_list:
+        pyxel.rect(teki["x"], teki["y"], 8, 8, 8)
+    pyxel.text(4, 4, f"MISS {miss}", 8)
+
+
+pyxel.run(update, draw)
+```
+消す前に、下まで来た敵を数えています。
+:::
+
+@@ task:game-scroll
+::: t
+星空スクロールを、上向き（星が上に流れる）にしよう。
+:::
+::: s
+```python px gif frames=40
+import pyxel
+
+pyxel.init(160, 120, title="上に流れる")
+hoshizora = []
+for i in range(40):
+    hoshizora.append({"x": pyxel.rndi(0, 159), "y": pyxel.rndi(0, 119)})
+
+
+def update():
+    for hoshi in hoshizora:
+        hoshi["y"] = hoshi["y"] - 2
+        if hoshi["y"] < 0:
+            hoshi["y"] = 120
+            hoshi["x"] = pyxel.rndi(0, 159)
+
+
+def draw():
+    pyxel.cls(0)
+    for hoshi in hoshizora:
+        pyxel.pset(hoshi["x"], hoshi["y"], 7)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+星空を、横向き（右から左へ流れる）にしよう。
+:::
+::: s
+```python px gif frames=40
+import pyxel
+
+pyxel.init(160, 120, title="横に流れる")
+hoshizora = []
+for i in range(40):
+    hoshizora.append({"x": pyxel.rndi(0, 159), "y": pyxel.rndi(0, 119)})
+
+
+def update():
+    for hoshi in hoshizora:
+        hoshi["x"] = hoshi["x"] - 2
+        if hoshi["x"] < 0:
+            hoshi["x"] = 160
+            hoshi["y"] = pyxel.rndi(0, 119)
+
+
+def draw():
+    pyxel.cls(0)
+    for hoshi in hoshizora:
+        pyxel.pset(hoshi["x"], hoshi["y"], 7)
+
+
+pyxel.run(update, draw)
+```
+横に流すので、変えるのは `x` です。
+:::
+
+::: t
+カメラで追いかける例で、世界のいちばん右（x が 470 より右）に、黄色いゴールの旗（四角）を立てよう。
+:::
+::: s
+```python px gif frames=60 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="ゴール")
+x = 380
+
+
+def update():
+    global x
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = min(472, x + 2)
+
+
+def draw():
+    camera_x = min(max(x - 76, 0), 320)
+    pyxel.cls(12)
+    pyxel.camera(camera_x, 0)
+    pyxel.rect(0, 100, 480, 20, 3)
+    pyxel.rect(470, 70, 2, 30, 7)
+    pyxel.rect(472, 70, 8, 6, 10)
+    pyxel.rect(x, 92, 8, 8, 8)
+    pyxel.camera()
+
+
+pyxel.run(update, draw)
+```
+旗も、**世界の中の位置**（470）で描きます。確かめやすいように、はじめの位置を 380 にしています。
+:::
+
+@@ task:game-map
+::: t
+マップに、通れない水 `~` を足そう。水は水色（12番）で描いて、壁と同じように通れないようにします。
+:::
+::: s
+```python px frames=10
+import pyxel
+
+mappu = [
+    "##########",
+    "#........#",
+    "#..~~~...#",
+    "#..~~~...#",
+    "#.......G#",
+    "##########",
+]
+pyxel.init(80, 48, title="水")
+masu_x = 1
+masu_y = 1
+
+
+def update():
+    global masu_x, masu_y
+    tsugi_x = masu_x
+    tsugi_y = masu_y
+    if pyxel.btnp(pyxel.KEY_RIGHT, 6, 6):
+        tsugi_x = masu_x + 1
+    if pyxel.btnp(pyxel.KEY_DOWN, 6, 6):
+        tsugi_y = masu_y + 1
+    if mappu[tsugi_y][tsugi_x] != "#" and mappu[tsugi_y][tsugi_x] != "~":
+        masu_x = tsugi_x
+        masu_y = tsugi_y
+
+
+def draw():
+    pyxel.cls(0)
+    for y in range(len(mappu)):
+        for x in range(len(mappu[y])):
+            if mappu[y][x] == "#":
+                pyxel.rect(x * 8, y * 8, 8, 8, 4)
+            elif mappu[y][x] == "~":
+                pyxel.rect(x * 8, y * 8, 8, 8, 12)
+            elif mappu[y][x] == "G":
+                pyxel.rect(x * 8, y * 8, 8, 8, 10)
+    pyxel.rect(masu_x * 8 + 1, masu_y * 8 + 1, 6, 6, 11)
+
+
+pyxel.run(update, draw)
+```
+`and` で、「壁でもなく、水でもない」ときだけ動けるようにしています。
+:::
+
+::: t
+自分で考えたマップを、6行×10文字で作って、画面に描こう。ゴール `G` も1つ置きます。
+:::
+::: s
+```python px frames=5
+import pyxel
+
+mappu = [
+    "##########",
+    "#....#...#",
+    "#.##.#.#.#",
+    "#.#....#.#",
+    "#...##..G#",
+    "##########",
+]
+pyxel.init(80, 48, title="自分のマップ")
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(0)
+    for y in range(len(mappu)):
+        for x in range(len(mappu[y])):
+            if mappu[y][x] == "#":
+                pyxel.rect(x * 8, y * 8, 8, 8, 4)
+            elif mappu[y][x] == "G":
+                pyxel.rect(x * 8, y * 8, 8, 8, 10)
+
+
+pyxel.run(update, draw)
+```
+文字を書きかえるだけで、マップの形が変わります。いろいろな迷路を作ってみよう。
+:::
+
+::: t
+ゴールに着いたら、何歩で着いたかを表示しよう。動けたときだけ `hosuu`（歩数）を1増やします。
+:::
+::: s
+```python px frames=60 hold=KEY_RIGHT
+import pyxel
+
+mappu = [
+    "##########",
+    "#.......G#",
+    "##########",
+]
+pyxel.init(80, 40, title="歩数")
+masu_x = 1
+masu_y = 1
+hosuu = 0
+
+
+def update():
+    global masu_x, masu_y, hosuu
+    tsugi_x = masu_x
+    if pyxel.btnp(pyxel.KEY_RIGHT, 6, 6):
+        tsugi_x = masu_x + 1
+    if pyxel.btnp(pyxel.KEY_LEFT, 6, 6):
+        tsugi_x = masu_x - 1
+    if tsugi_x != masu_x and mappu[masu_y][tsugi_x] != "#":
+        masu_x = tsugi_x
+        hosuu = hosuu + 1
+
+
+def draw():
+    pyxel.cls(0)
+    for y in range(len(mappu)):
+        for x in range(len(mappu[y])):
+            if mappu[y][x] == "#":
+                pyxel.rect(x * 8, y * 8, 8, 8, 4)
+            elif mappu[y][x] == "G":
+                pyxel.rect(x * 8, y * 8, 8, 8, 10)
+    pyxel.rect(masu_x * 8 + 1, masu_y * 8 + 1, 6, 6, 11)
+    if mappu[masu_y][masu_x] == "G":
+        pyxel.text(4, 28, f"GOAL {hosuu}", 7)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+@@ task:game-jump
+::: t
+ジャンプの高さを高くしよう（`vy = -8` にする）。
+:::
+::: s
+```python px gif frames=50 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="高いジャンプ")
+jimen = 92
+y = jimen
+vy = 0
+
+
+def update():
+    global y, vy
+    if y >= jimen and pyxel.btnp(pyxel.KEY_SPACE):
+        vy = -8
+    vy = vy + 0.5
+    y = y + vy
+    if y >= jimen:
+        y = jimen
+        vy = 0
+
+
+def draw():
+    pyxel.cls(12)
+    pyxel.rect(0, 100, 160, 20, 3)
+    pyxel.rect(76, y, 8, 8, 8)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+重力を弱くして（`0.2`）、月の上のように、ふわっとしたジャンプにしよう。
+:::
+::: s
+```python px gif frames=60 hold=KEY_SPACE
+import pyxel
+
+pyxel.init(160, 120, title="月のジャンプ")
+jimen = 92
+y = jimen
+vy = 0
+
+
+def update():
+    global y, vy
+    if y >= jimen and pyxel.btnp(pyxel.KEY_SPACE):
+        vy = -4
+    vy = vy + 0.2
+    y = y + vy
+    if y >= jimen:
+        y = jimen
+        vy = 0
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.rect(0, 100, 160, 20, 13)
+    pyxel.rect(76, y, 8, 8, 7)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+空中にいるあいだだけ、キャラクターの色を黄色（10番）に変えよう。
+:::
+::: s
+```python px frames=8 press=KEY_SPACE@2
+import pyxel
+
+pyxel.init(160, 120, title="空中で色が変わる")
+jimen = 92
+y = jimen
+vy = 0
+
+
+def update():
+    global y, vy
+    if y >= jimen and pyxel.btnp(pyxel.KEY_SPACE):
+        vy = -6
+    vy = vy + 0.5
+    y = y + vy
+    if y >= jimen:
+        y = jimen
+        vy = 0
+
+
+def draw():
+    pyxel.cls(12)
+    pyxel.rect(0, 100, 160, 20, 3)
+    iro = 8 if y >= jimen else 10
+    pyxel.rect(76, y, 8, 8, iro)
+
+
+pyxel.run(update, draw)
+```
+地面にいるかどうかで、三項演算子を使って色を選んでいます（[[ternary]]）。
+:::
+
+@@ task:game-wall
+::: t
+押し戻しの部屋に、もう1つ壁 `(40, 70, 40, 10)` を足そう。
+:::
+::: s
+```python px frames=5
+import pyxel
+
+pyxel.init(160, 120, title="壁を足す")
+kabe_list = [(0, 0, 160, 8), (0, 112, 160, 8), (0, 0, 8, 120), (152, 0, 8, 120), (90, 30, 12, 60), (40, 70, 40, 10)]
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(1)
+    for kabe in kabe_list:
+        pyxel.rect(kabe[0], kabe[1], kabe[2], kabe[3], 13)
+
+
+pyxel.run(update, draw)
+```
+壁はリストに並んでいるので、タプルを1つ足すだけで増やせます。
+:::
+
+::: t
+`kasanatteru` を使って、四角 `(30, 30, 10, 10)` が、壁 `(35, 0, 5, 100)` に重なっているかを表示しよう。
+```output
+True
+```
+:::
+::: s
+```python
+def kasanatteru(x1, y1, w1, h1, x2, y2, w2, h2):
+    return x1 < x2 + w2 and x2 < x1 + w1 and y1 < y2 + h2 and y2 < y1 + h1
+
+
+print(kasanatteru(30, 30, 10, 10, 35, 0, 5, 100))
+```
+:::
+
+::: t
+壁にぶつかったときだけ、画面に「BUMP!」と表示しよう。`butsukatta` という変数を使います。
+:::
+::: s
+```python px frames=50 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="ぶつかった")
+kabe_list = [(90, 30, 12, 60)]
+x = 50
+y = 56
+butsukatta = False
+
+
+def kasanatteru(x1, y1, w1, h1, x2, y2, w2, h2):
+    return x1 < x2 + w2 and x2 < x1 + w1 and y1 < y2 + h2 and y2 < y1 + h1
+
+
+def update():
+    global x, butsukatta
+    mae_x = x
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = x + 2
+    butsukatta = False
+    for kabe in kabe_list:
+        if kasanatteru(x, y, 8, 8, kabe[0], kabe[1], kabe[2], kabe[3]):
+            x = mae_x
+            butsukatta = True
+
+
+def draw():
+    pyxel.cls(1)
+    for kabe in kabe_list:
+        pyxel.rect(kabe[0], kabe[1], kabe[2], kabe[3], 13)
+    pyxel.rect(x, y, 8, 8, 10)
+    if butsukatta:
+        pyxel.text(66, 100, "BUMP!", 8)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+@@ task:game-effect
+::: t
+爆発の輪の大きさを、半径24まで大きくなるようにしよう。
+:::
+::: s
+```python px frames=20 press=KEY_SPACE@2
+import pyxel
+
+pyxel.init(160, 120, title="大きな爆発")
+bakuhatsu_list = []
+
+
+def update():
+    global bakuhatsu_list
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        bakuhatsu_list.append({"x": 80, "y": 60, "r": 0})
+    for b in bakuhatsu_list:
+        b["r"] = b["r"] + 1
+    bakuhatsu_list = [b for b in bakuhatsu_list if b["r"] < 24]
+
+
+def draw():
+    pyxel.cls(0)
+    for b in bakuhatsu_list:
+        pyxel.circb(b["x"], b["y"], b["r"], 10)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+マウスでクリックしたところに、爆発の輪が出るようにしよう。
+:::
+::: s
+```python px frames=20 click=50,40
+import pyxel
+
+pyxel.init(160, 120, title="クリックで爆発")
+pyxel.mouse(True)
+bakuhatsu_list = []
+
+
+def update():
+    global bakuhatsu_list
+    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+        bakuhatsu_list.append({"x": pyxel.mouse_x, "y": pyxel.mouse_y, "r": 0})
+    for b in bakuhatsu_list:
+        b["r"] = b["r"] + 1
+    bakuhatsu_list = [b for b in bakuhatsu_list if b["r"] < 16]
+
+
+def draw():
+    pyxel.cls(0)
+    for b in bakuhatsu_list:
+        pyxel.circb(b["x"], b["y"], b["r"], 10)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+無敵時間を3秒（90フレーム）にして、点滅をゆっくり（8フレームのうち4フレーム表示）にしよう。
+:::
+::: s
+```python px frames=30 press=KEY_SPACE@2
+import pyxel
+
+pyxel.init(160, 120, title="ゆっくり点滅")
+muteki = 0
+
+
+def update():
+    global muteki
+    if pyxel.btnp(pyxel.KEY_SPACE) and muteki == 0:
+        muteki = 90
+    if muteki > 0:
+        muteki = muteki - 1
+
+
+def draw():
+    pyxel.cls(1)
+    if muteki == 0 or pyxel.frame_count % 8 < 4:
+        pyxel.rect(76, 56, 8, 8, 11)
+    pyxel.text(48, 100, f"MUTEKI {muteki}", 7)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+@@ task:game-highscore
+::: t
+点数のリスト `[8, 21, 15, 30, 12]` から、ハイスコアを `for` と `if` で求めて表示しよう。
+```output
+30
+```
+:::
+::: s
+```python
+high_score = 0
+for score in [8, 21, 15, 30, 12]:
+    if score > high_score:
+        high_score = score
+print(high_score)
+```
+:::
+
+::: t
+ランキング `[30, 21, 15]` に、新しい点数 `25` を入れて、上位3つを大きい順に表示しよう。
+```output
+[30, 25, 21]
+```
+:::
+::: s
+```python
+ranking = [30, 21, 15]
+ranking.append(25)
+ranking.sort(reverse=True)
+ranking = ranking[:3]
+print(ranking)
+```
+:::
+
+::: t
+ランキングを「1位 30点」のように、1行ずつ表示しよう。
+```output
+1位 30点
+2位 25点
+3位 21点
+```
+:::
+::: s
+```python
+ranking = [30, 25, 21]
+for i in range(len(ranking)):
+    print(f"{i + 1}位 {ranking[i]}点")
+```
+番号は0から始まるので、順位は `i + 1` にしています。
+:::

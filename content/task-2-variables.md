@@ -400,3 +400,48 @@ for kudamono in nedan:
     print(kudamono, f"{nedan[kudamono]}円")
 ```
 :::
+
+@@ task:list2d
+::: t
+`hyou = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]` を作って、まん中の `5` を表示しよう。
+```output
+5
+```
+:::
+::: s
+```python
+hyou = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+print(hyou[1][1])
+```
+:::
+
+::: t
+二重ループを使って、3×3 の表を、1行ずつ並べて表示しよう。
+```output
+1 2 3 
+4 5 6 
+7 8 9 
+```
+:::
+::: s
+```python
+hyou = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+for gyou in hyou:
+    for kazu in gyou:
+        print(kazu, end=" ")
+    print()
+```
+:::
+
+::: t
+文字のマップ `mappu = ["###", "#.G", "###"]` で、ゴールの `G` がある場所（2行目の3文字目）を取り出して表示しよう。
+```output
+G
+```
+:::
+::: s
+```python
+mappu = ["###", "#.G", "###"]
+print(mappu[1][2])
+```
+:::

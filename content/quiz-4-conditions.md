@@ -157,3 +157,27 @@ print(not False)
 ::: a
 `not` は、反対にします。`False` の反対は `True` です。
 :::
+
+@@ quiz:ternary
+::: q
+次のプログラムを実行すると、何が表示される？
+```python hideout
+n = 7
+print("偶数" if n % 2 == 0 else "奇数")
+```
+:::
+::: a
+`7 % 2` は `1` なので、条件は `False`。`else` のあとの `"奇数"` が選ばれます。
+:::
+
+::: q
+`kekka = "合格" if tensuu >= 60 else "不合格"` を、ふつうの `if` と `else` で書くと？
+:::
+::: a
+```python norun
+if tensuu >= 60:
+    kekka = "合格"
+else:
+    kekka = "不合格"
+```
+:::
