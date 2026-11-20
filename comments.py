@@ -223,6 +223,10 @@ def px_call(name, args):
         return "鳴っている音を止める"
     if name == "load":
         return f"{g(0)} から、画像や音のデータを読みこむ"
+    if name == "show":
+        return "描いた画面を表示して、ESC キーが押されるまで待つ"
+    if name == "bltm":
+        return f"タイルマップ {g(2)} の ({g(3)}, {g(4)}) から、幅 {g(5)}・高さ {g(6)} を、画面の ({g(0)}, {g(1)}) にはる"
     if name == "Font":
         return f"{g(0)} のフォント（日本語が書ける文字）を読みこむ"
     return None
@@ -272,6 +276,11 @@ def px_line(s):
     m = re.match(r"pyxel\.sounds\[(\d+)\]\.set\(", s)
     if m:
         return f"サウンド {m[1]} に、音を作る（音の高さ・音色・大きさ・効果・速さ）"
+    m = re.match(r"pyxel\.tilemaps\[(\d+)\]\.set\(", s)
+    if m:
+        return f"タイルマップ {m[1]} に、タイルの並べ方を書く（4けたで1枚のタイル）"
+    if s.startswith("pyxel.screen.load("):
+        return "画像ファイルを、画面に直接読みこむ"
     m = re.match(r"pyxel\.musics\[(\d+)\]\.set\(", s)
     if m:
         return f"ミュージック {m[1]} に、チャンネルごとに鳴らす音の番号を並べる"
@@ -335,14 +344,24 @@ def comment_for(line, is_error=False):
     if m := re.fullmatch(r"import (\w+)", s):
         return f"{m[1]} モジュールを使えるようにする"
     # --- 代入
-    if m := re.fullmatch(r"(\w+)\[(\w+)\] = \1\[\2\] ([+\-]) (.+)", s):
+    if m := re.fullmatch(r"(\w+)\.sort\(\)", s):
+        return f"{m[1]} を小さい順に並べかえる"
+    if m := re.fullmatch(r"(\w+)\.sort\(reverse=True\)", s):
+        return f"{m[1]} を大きい順に並べかえる"
+    if m := re.fullmatch(r"(\w+)\.clear\(\)", s):
+        return f"{m[1]} の中身を全部消して、空っぽにする"
+    if m := re.fullmatch(r"(\w+), (\w+) = (.+)", s):
+        return f"{m[3]} の中身を、{m[1]} と {m[2]} に分けて入れる"
+    if m := re.fullmatch(r"(\w+)\[(\w+|\"[^\"]*\")\] = \1\[\2\] ([+\-]) (.+)", s):
         op = "足す" if m[3] == "+" else "引く"
-        return f"{m[1]} の {m[2]} 番の中身に、{m[4]} を{op}"
-    if m := re.fullmatch(r"(\w+)\[(\w+)\] = (.+)", s):
+        basho = f"{m[2]} の中身" if m[2].startswith('"') else f"{m[2]} 番の中身"
+        return f"{m[1]} の {basho}に、{m[4]} を{op}"
+    if m := re.fullmatch(r"(\w+)\[(\w+|\"[^\"]*\")\] = (.+)", s):
+        basho = m[2] if m[2].startswith('"') else f"{m[2]} 番"
         v = px_value(m[3])
         if v:
-            return f"{v}。その答えを {m[1]} の {m[2]} 番に入れる"
-        return f"{m[1]} の {m[2]} 番に {m[3]} を入れる"
+            return f"{v}。その答えを {m[1]} の {basho}に入れる"
+        return f"{m[1]} の {basho}に {m[3]} を入れる"
     if m := re.fullmatch(r"(\w+) = (\w+)\[(\w+)\]", s):
         return f"{m[2]} の {m[3]} 番目を取り出して、{m[1]} に入れる"
     if m := re.fullmatch(r"(\w+) = int\(input\((.*)\)\)", s):

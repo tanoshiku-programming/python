@@ -52,6 +52,9 @@ pyxel.run(update, draw)
 14. [[game-catch]]：ゲームを作る
 15. [[game-scene]]：タイトル画面と結果画面をつける
 16. [[game-list]]：たくさんのものを動かす
+17. [[game-image]]：画像を表示して動かす
+18. [[game-hit]]：当たり判定を作る
+19. [[game-sound]]：音を鳴らす
 
 ::: point
 Pyxelの命令の意味は、[[ch8|Pyxel辞典]]でいつでも引けます。分からない命令が出てきたら、コードの中の言葉をクリックしてみよう。

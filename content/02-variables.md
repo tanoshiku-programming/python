@@ -11,6 +11,8 @@ reads: list=リスト | append=アペンド | len=レン | True=トゥルー | F
 - [[variable]]：ひとつの値に名前をつける
 - [[list]]：たくさんの値を、順番にまとめる
 
+ほかにも、中身を変えられない[[tuple]]や、名前で取り出せる[[dict]]という入れ物もあります。必要になったら見てみよう。
+
 ## 変数：値に名前をつける
 ```python
 score = 80
@@ -315,6 +317,25 @@ print(sum(tensuu_list), max(tensuu_list), min(tensuu_list))
 ```
 `len` は個数、`sum` は合計、`max` は最大、`min` は最小です。
 
+## 便利な命令
+```python
+kazu_list = [30, 10, 20]
+kazu_list.sort()
+print(kazu_list)
+kazu_list.sort(reverse=True)
+print(kazu_list)
+saigo = kazu_list.pop()
+print(saigo, kazu_list)
+kazu_list.clear()
+print(kazu_list)
+```
+| 命令 | すること |
+| --- | --- |
+| `sort()` | 小さい順に並べかえる（`reverse=True` で大きい順） |
+| `pop()` | 最後の1つを取り出す（リストからはなくなる） |
+| `clear()` | 中身を全部消して、空っぽにする |
+| `remove(値)` | その値を1つ消す |
+
 ## 全部に同じことをする
 [[for]]文と組み合わせると、リストの中身を1つずつ使えます。
 
@@ -395,6 +416,124 @@ print("Python"[0])
 
 ::: stuck
 範囲の外の番号を指定すると `IndexError` です（[[error]]、[[list]]）。
+:::
+
+@@ tuple
+title: タプル
+type: データ型
+chapter: 2
+syntax: (値1, 値2)
+summary: 中身を変えられないリストのようなものです。( ) で書きます。座標の (x, y) のように、組にしておきたい値に使います。
+aliases: tuple, 組, ( )
+reads: tuple=タプル
+--
+## 書き方
+```python
+basho = (80, 60)
+print(basho)
+print(basho[0])
+print(basho[1])
+```
+値を `( )` で囲んで、`,` で区切ります。取り出し方は、リストと同じです（[[list-index]]）。
+
+## リストとのちがい：中身を変えられない
+```python error
+basho = (80, 60)
+basho[0] = 100
+```
+タプルは、作ったあとで中身を変えられません。「変わってはいけない値」をタプルにしておくと、うっかり書き換えるのを防げます。
+
+| | リスト | タプル |
+| --- | --- | --- |
+| 書き方 | `[1, 2]` | `(1, 2)` |
+| 中身を変える | できる | できない |
+| `append` で足す | できる | できない |
+
+## まとめて取り出す
+```python
+basho = (80, 60)
+x, y = basho
+print(x, y)
+```
+タプルの中身を、左の変数に順番に入れます。
+
+関数で `return 80, 60` のように2つの値を返したときも、じつはタプルになっています（[[return]]）。
+
+```python
+def ichi():
+    return 80, 60
+
+
+kekka = ichi()
+print(kekka)
+print(type(kekka))
+```
+
+::: deep Pyxelでも出てくる
+Pyxelの命令にも、答えをタプルで返すものがあります。たとえば、タイルマップの `pget` は、`(1, 0)` のような組で答えます（[[px-tilemap-class]]）。
+:::
+
+@@ dict
+title: 辞書（dict）
+type: データ型
+chapter: 2
+syntax: {キー: 値}
+summary: 「名前（キー）」と「値」をセットにして入れておく入れ物です。番号ではなく、名前で取り出せます。
+aliases: dict, ディクショナリ, 辞書, キー, 連想配列
+reads: dict=ディクト | key=キー | value=バリュー
+--
+## 書き方
+```python
+tensuu = {"国語": 80, "数学": 95, "英語": 72}
+print(tensuu["数学"])
+```
+`{ }` で囲んで、`キー: 値` のセットを `,` で区切ります。取り出すときは、`[ ]` の中に**キー**を書きます。
+
+## リストとのちがい
+| | リスト | 辞書 |
+| --- | --- | --- |
+| 書き方 | `[80, 95, 72]` | `{"国語": 80, "数学": 95}` |
+| 取り出し方 | 番号で `[1]` | キーで `["数学"]` |
+| 向いていること | 順番に並んだもの | 名前で呼びたいもの |
+
+「数学の点数は、何番目だっけ？」と迷わずに、名前でそのまま取り出せるのが、辞書の良いところです。
+
+## 書き換える・増やす
+```python
+tensuu = {"国語": 80, "数学": 95}
+tensuu["国語"] = 85
+tensuu["理科"] = 90
+print(tensuu)
+```
+すでにあるキーなら書き換え、まだないキーなら新しく増えます。
+
+## 全部を順番に使う
+```python
+tensuu = {"国語": 80, "数学": 95, "英語": 72}
+for kamoku in tensuu:
+    print(kamoku, tensuu[kamoku])
+```
+[[for]]で回すと、キーが1つずつ `kamoku` に入ります。
+
+::: stuck
+ないキーを取り出そうとすると、`KeyError` になります（[[error]]）。
+
+```python error
+tensuu = {"国語": 80}
+print(tensuu["数学"])
+```
+キーのつづりがまちがっていないか確かめよう。
+:::
+
+::: deep ゲームでの使い方
+キャラクターの情報を、1つの辞書にまとめておけます。
+
+```python
+chara = {"x": 40, "y": 60, "hp": 3}
+chara["x"] = chara["x"] + 2
+print(chara)
+```
+変数を `chara_x`、`chara_y`、`chara_hp` と3つ作るかわりに、1つの辞書にまとめています。
 :::
 
 @@ bool

@@ -461,3 +461,280 @@ pyxel.run(update, draw)
 ::: stuck
 `IndexError: list index out of range` が出たら、リストに入っている数より大きい番号を使っています。`range(30)` の数と、リストに入れた数がそろっているか確かめよう（[[error]]）。
 :::
+
+@@ game-image
+title: 画像を表示して動かそう
+type: 作品
+chapter: 7
+syntax: pyxel.blt(x, y, 0, u, v, 8, 8, 0)
+summary: ドット絵のキャラクターを blt で画面に出して、キーで動かします。透明色・アニメーション・左右の向きの変え方も学びます。
+aliases: 画像, ドット絵, キャラクター, スプライト, アニメーション, 歩く, 反転
+reads: blt=ブリット | images=イメージズ | muki=ムキ
+--
+## 図形から、ドット絵へ
+ここまでは、`rect` や `circ` の図形でキャラクターを作ってきました。ゲームらしくするなら、**ドット絵**を使いたいですね。
+
+Pyxelでは、ドット絵を**イメージバンク**という置き場所に入れておいて、[[px-blt]]で画面にはります。
+
+| 手順 | 命令 |
+| --- | --- |
+| ① イメージバンクに絵を入れる | `pyxel.images[0].set(…)`、または `pyxel.images[0].load(…)` |
+| ② 画面にはる | `pyxel.blt(…)` |
+
+## ひよこを出してみる
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="ひよこ")
+pyxel.images[0].set(0, 0, ["000aaa00", "00aaaaa0", "00aaa1a0", "0aaaaaa9", "aaaaaaa0", "0aaaaaa0", "00aaaa00", "00900900"])
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.blt(50, 56, 0, 0, 0, 8, 8)
+    pyxel.blt(100, 56, 0, 0, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+`images[0].set(0, 0, […])` で、イメージバンク0番の左上に、8×8のひよこを描いています。1文字が1ドットで、`a` が黄色、`1` が目、`9` がくちばし、`0` が何もないところです（[[px-image-class]]）。
+
+`blt(x, y, 0, 0, 0, 8, 8)` は、「イメージバンク0番の (0, 0) から 8×8 を切り取って、画面の (x, y) にはる」という意味です。
+
+::: point
+左のひよこは、まわりが黒い四角になっています。右のひよこは、最後に `0` を足したので、**0番の色（黒）が透明**になって、背景が見えています。キャラクターをはるときは、透明色をつけるのが基本です。
+:::
+
+## キーで動かして、歩かせる
+```python px gif frames=40 hold=KEY_LEFT
+import pyxel
+
+pyxel.init(160, 120, title="歩くひよこ")
+pyxel.images[0].set(0, 0, ["000aaa00", "00aaaaa0", "00aaa1a0", "0aaaaaa9", "aaaaaaa0", "0aaaaaa0", "00aaaa00", "00900900"])
+pyxel.images[0].set(8, 0, ["000aaa00", "00aaaaa0", "00aaa1a0", "0aaaaaa9", "aaaaaaa0", "0aaaaaa0", "00aaaa00", "00099000"])
+x = 76
+muki = 1
+
+
+def update():
+    global x, muki
+    if pyxel.btn(pyxel.KEY_LEFT):
+        x = x - 1
+        muki = -1
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = x + 1
+        muki = 1
+
+
+def draw():
+    pyxel.cls(5)
+    u = pyxel.frame_count // 8 % 2 * 8
+    pyxel.blt(x, 56, 0, u, 0, 8 * muki, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+画像は、左キーを押しつづけたときの様子です。
+
+## 仕組みを読み解く
+### 足を動かす（アニメーション）
+イメージバンクの (0, 0) と (8, 0) に、足の形がちがう2枚の絵を描いています。
+
+`u = pyxel.frame_count // 8 % 2 * 8` は、8フレームごとに `0` と `8` を交互にくり返す計算です。
+
+| `frame_count` | `// 8` | `% 2` | `* 8` ＝ `u` |
+| --- | --- | --- | --- |
+| 0〜7 | 0 | 0 | 0（1枚目） |
+| 8〜15 | 1 | 1 | 8（2枚目） |
+| 16〜23 | 2 | 0 | 0（1枚目） |
+
+切り取る場所 `u` が変わるので、2枚の絵が交互に表示されて、歩いているように見えます。パラパラ漫画と同じです。
+
+### 向きを変える（左右反転）
+`blt` の幅を**マイナス**にすると、絵が左右反転します。`muki` は、右向きなら `1`、左向きなら `-1` です。幅を `8 * muki` にしているので、左に歩くときは `-8` になって、ひよこが左を向きます。
+
+::: scratch
+Scratchの「次のコスチュームにする」がアニメーション、「回転方法を左右のみにする」が左右反転にあたります。Pyxelでは、どちらも `blt` の数を変えるだけでできます。
+:::
+
+::: deep 自分で描いた画像を使う
+本格的な絵は、文字で書くより、**Pyxel Editor**（ターミナルで `pyxel edit ファイル名.pyxres`）で描くほうが簡単です。描いた絵は `pyxel.load("ファイル名.pyxres")` で読みこみます（[[px-load]]）。PNG画像なら、`pyxel.images[0].load(0, 0, "ファイル名.png")` で、イメージバンクに読みこめます。
+:::
+
+@@ game-hit
+title: 当たり判定を作ろう
+type: 作品
+chapter: 7
+syntax: x1 < x2 + w2 and x2 < x1 + w1 and …
+summary: キャラクターと敵がぶつかったかどうかを調べる「当たり判定」の作り方です。四角どうし・近さ・円どうしの3つの方法を学びます。
+aliases: 当たり判定, 衝突判定, ヒットチェック, ぶつかる, 重なる, あたりはんてい
+reads: kasanatteru=カサナッテル | kyori=キョリ | sqrt=スクエアルート
+--
+## 当たり判定ってなに？
+シューティングで弾が敵に当たったか、アクションでキャラクターが敵にぶつかったか。ゲームでは「**2つのものが重なっているか**」を、毎フレーム調べます。これを**当たり判定**といいます。
+
+::: scratch
+Scratchには「（敵）に触れた」ブロックがありました。Pythonには、そのブロックはありません。位置と大きさから、自分で計算して調べます。
+:::
+
+## 方法1：四角どうしが重なっているか
+2つの四角が重なっているのは、次の4つが**全部**成り立つときです。
+
+| 条件 | 意味 |
+| --- | --- |
+| `x1 < x2 + w2` | Aの左はしが、Bの右はしより左にある |
+| `x2 < x1 + w1` | Bの左はしが、Aの右はしより左にある |
+| `y1 < y2 + h2` | Aの上はしが、Bの下はしより上にある |
+| `y2 < y1 + h1` | Bの上はしが、Aの下はしより上にある |
+
+1つでも成り立たなければ、2つの四角は、どこかで離れています。この4つを `and` でつなげて、関数にしておくと便利です（[[function]]・[[logical]]）。
+
+```python px gif frames=70 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="当たり判定")
+x = 20
+
+
+def kasanatteru(x1, y1, w1, h1, x2, y2, w2, h2):
+    return x1 < x2 + w2 and x2 < x1 + w1 and y1 < y2 + h2 and y2 < y1 + h1
+
+
+def update():
+    global x
+    if pyxel.btn(pyxel.KEY_LEFT):
+        x = x - 1
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = x + 1
+
+
+def draw():
+    pyxel.cls(0)
+    if kasanatteru(x, 50, 16, 16, 80, 45, 24, 24):
+        pyxel.rect(80, 45, 24, 24, 8)
+        pyxel.text(70, 100, "HIT!", 8)
+    else:
+        pyxel.rect(80, 45, 24, 24, 13)
+    pyxel.rect(x, 50, 16, 16, 11)
+
+
+pyxel.run(update, draw)
+```
+画像は、右キーを押しつづけたときの様子です。緑の四角が灰色の四角に重なると、赤くなって `HIT!` と出ます。
+
+`kasanatteru` は、重なっていれば `True`、離れていれば `False` を返す関数です（[[bool]]）。1回作っておけば、敵が何体いても、同じ関数で調べられます。
+
+## 方法2：近いかどうか（同じ大きさのとき）
+2つが同じくらいの大きさなら、もっと簡単に「x も y も、近ければ当たり」と考えられます。
+
+```python
+x1 = 40
+y1 = 50
+x2 = 46
+y2 = 53
+print(abs(x1 - x2) < 8 and abs(y1 - y2) < 8)
+```
+`abs` は「ちがいの大きさ」を出す関数です（[[math-func]]）。横の差も縦の差も8より小さければ、当たりとしています。
+
+## 方法3：円どうし
+ボールや弾のように丸いものは、**中心どうしの距離**で調べます。距離が「2つの半径の合計」より小さければ、重なっています。
+
+```python
+import math
+
+x1 = 10
+y1 = 10
+x2 = 16
+y2 = 18
+kyori = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+print(kyori)
+print(kyori < 5 + 6)
+```
+距離は、横の差と縦の差から、`√(横の差² ＋ 縦の差²)` で求めます。中学3年で習う「三平方の定理」です。Pyxelでは `pyxel.sqrt` も使えます（[[px-sqrt]]）。
+
+::: point
+| 方法 | 向いているもの |
+| --- | --- |
+| 四角どうし | ほとんどのゲーム。まずはこれ |
+| 近いかどうか（abs） | 同じ大きさのキャラクターどうし |
+| 円どうし | ボール、弾、丸い敵 |
+:::
+
+::: stuck
+キャラクターの見た目より当たり判定を少し**小さく**すると、「当たってないのにやられた！」という不満が減って、遊びやすくなります。
+:::
+
+@@ game-sound
+title: 音を鳴らそう
+type: 作品
+chapter: 7
+syntax: pyxel.sounds[0].set(…) / pyxel.play(0, 0)
+summary: 効果音を作って鳴らします。ジャンプやアイテムを取ったときに音が鳴ると、ゲームが一気に楽しくなります。
+aliases: 音, 効果音, サウンド, BGM, 鳴らす, ドレミ
+reads: sounds=サウンズ | set=セット | play=プレイ
+--
+## 2つの手順
+| 手順 | 命令 |
+| --- | --- |
+| ① 音を作る（最初に1回） | `pyxel.sounds[番号].set(音の高さ, 音色, 大きさ, 効果, 速さ)` |
+| ② 鳴らす（鳴らしたいとき） | `pyxel.play(チャンネル, 音の番号)` |
+
+## スペースで「ピコン」
+```python px press=KEY_SPACE@3 frames=10
+import pyxel
+
+pyxel.init(160, 120, title="効果音")
+pyxel.sounds[0].set("c3e3g3c4", "p", "7", "n", 5)
+pyxel.sounds[1].set("c2r c1", "n", "7", "f", 10)
+
+
+def update():
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        pyxel.play(0, 0)
+    if pyxel.btnp(pyxel.KEY_Z):
+        pyxel.play(0, 1)
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.text(40, 50, "SPACE: PIKON", 10)
+    pyxel.text(40, 64, "Z: DOON", 8)
+
+
+pyxel.run(update, draw)
+```
+スペースキーで「ドミソド」と上がる明るい音、Zキーで「ドーン」という低い音が鳴ります。
+
+## 音の作り方
+`set` の5つの文字で、音を決めます（[[px-sound-class]]）。
+
+| 引数 | 書き方 | 例 |
+| --- | --- | --- |
+| 音の高さ | ドレミのアルファベット（c d e f g a b）と、高さの数字（0〜4）。`r` は休み | `"c3e3g3c4"` |
+| 音色 | `t` 三角波（やわらかい）、`s` 四角波（ファミコン風）、`p` パルス波、`n` ノイズ（爆発など） | `"p"` |
+| 大きさ | `0`〜`7` | `"7"` |
+| 効果 | `n` なし、`s` スライド、`v` ビブラート、`f` だんだん小さく | `"n"` |
+| 速さ | 1音の長さ。小さいほど速い | `5` |
+
+数字を少しずつ変えて、自分だけの音を作ってみよう。
+
+## ゲームに入れる
+音は、**何かが起きた瞬間**に鳴らします。ほしキャッチなら、ほしを受け止めたところに1行足すだけです（[[game-catch]]）。
+
+```python norun
+    if hoshi_y > 104 and bar_x - 4 <= hoshi_x <= bar_x + 20:
+        score = score + 1
+        pyxel.play(0, 0)
+```
+
+::: point
+音を作る `set` は、プログラムの最初に1回だけ。鳴らす `play` は、`update` の中の「起きた瞬間」に書きます。`draw` に書くと、毎フレーム鳴りつづけてしまいます。
+:::
+
+::: deep BGM（音楽）を流したいときは
+いくつかの音を重ねた曲は、`pyxel.musics` で作って `pyxel.playm(0, loop=True)` で流します（[[px-playm]]）。曲作りは、文字で書くより **Pyxel Editor** のサウンドエディタとミュージックエディタを使うのがおすすめです。
+:::

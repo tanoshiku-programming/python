@@ -266,3 +266,95 @@ kekka = tsukuru()
 print(kekka)
 ```
 :::
+
+@@ task:pass
+::: t
+何もしない関数 `junbi` を作って呼び出したあと、「OK」と表示しよう。
+```output
+OK
+```
+:::
+::: s
+```python
+def junbi():
+    pass
+
+
+junbi()
+print("OK")
+```
+:::
+
+::: t
+`n = 0` のときは何もしない、そうでなければ `n` を表示する `if` 文を書こう。`n = 0` で試すと、何も表示されません。
+:::
+::: s
+```python
+n = 0
+if n == 0:
+    pass
+else:
+    print(n)
+```
+:::
+
+::: t
+`for` で3回くり返すけれど、中では何もしない。くり返しが終わったら「おわり」と表示しよう。
+```output
+おわり
+```
+:::
+::: s
+```python
+for i in range(3):
+    pass
+print("おわり")
+```
+:::
+
+@@ task:none
+::: t
+変数 `kekka` に `None` を入れて、表示しよう。
+```output
+None
+```
+:::
+::: s
+```python
+kekka = None
+print(kekka)
+```
+:::
+
+::: t
+`return` のない関数 `nanimo` を作って、その答えを `print` で表示しよう。
+```output
+None
+```
+:::
+::: s
+```python
+def nanimo():
+    pass
+
+
+print(nanimo())
+```
+`return` がない関数の答えは、`None` です。
+:::
+
+::: t
+`erabareta = None` のとき「まだ選ばれていません」、そうでなければ「〇〇が選ばれました」と表示しよう。`None` のときで試します。
+```output
+まだ選ばれていません
+```
+:::
+::: s
+```python
+erabareta = None
+if erabareta is None:
+    print("まだ選ばれていません")
+else:
+    print(f"{erabareta}が選ばれました")
+```
+:::

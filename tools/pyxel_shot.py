@@ -69,5 +69,14 @@ def run(update, draw):
 
 
 pyxel.run = run
+
+
+def show():
+    # show は「画面を出して ESC まで待つ」命令。ここでは、その画面を画像にして終わる
+    pyxel.screen.save(out, max(2, min(4, 480 // pyxel.width)))
+    sys.exit(0)
+
+
+pyxel.show = show
 code = open(src, encoding="utf-8").read()
 exec(compile(code, src, "exec"), {"__name__": "__main__"})

@@ -123,6 +123,58 @@ pyxel.run(update, draw)
 `pyxel.run(update(), draw())` のように `()` をつけると、エラーになります。ここでは関数を**呼び出す**のではなく、Pyxelに**渡す**ので、名前だけを書きます（[[window]]）。
 :::
 
+@@ px-show
+title: show（画面を表示して待つ）
+type: Pyxelの命令
+chapter: 8
+group: 基本
+syntax: pyxel.show()
+summary: それまでに描いた画面を表示して、ESCキーが押されるまで待ちます。update と draw を作らずに、絵を1枚だけ見せたいときに使います。
+aliases: ショー, 表示, 1枚だけ, 静止画
+api: show
+reads: show=ショー
+--
+## 書き方のかたち
+::: tpl show の書き方
+import pyxel
+pyxel.init(〔幅〕, 〔高さ〕)
+〔描く命令〕
+pyxel.show()
+
+| 〔描く命令〕 | cls や circ、text など。ここで描いたものが表示される |
+:::
+
+## どんな命令？
+ふつうのPyxelのプログラムは、`update` と `draw` を作って `run` で動かします（[[px-run]]）。でも、「動かさずに、絵を1枚だけ見せたい」ときは、`show` を使うともっと短く書けます。
+
+## 使い方
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="show")
+pyxel.cls(1)
+pyxel.circ(80, 55, 30, 10)
+pyxel.text(52, 100, "pyxel.show()", 7)
+pyxel.show()
+```
+
+`update` も `draw` もありません。`init` のあとに描いて、最後に `show` を書くだけです。ESCキーを押すと終わります。
+
+画像を表示するだけなら、次の3行でもできます。`image.png` は、プログラムと同じフォルダに置きます。
+
+```python norun
+import pyxel
+
+pyxel.init(160, 120)
+pyxel.screen.load(0, 0, "image.png")
+pyxel.show()
+```
+`pyxel.screen` は画面そのもので、そこに画像を直接読みこんでいます。色は、Pyxelの16色のうち近い色に置き換わります。
+
+::: point
+`show` の画面は動きません。キーで動かしたり、アニメーションしたりしたいときは、`run` を使います（[[update-draw]]）。
+:::
+
 @@ px-quit
 title: quit（終了する）
 type: Pyxelの命令
@@ -971,7 +1023,7 @@ def update():
 
 def draw():
     pyxel.cls(1)
-    pyxel.blt(60, 40, 0, 0, 0, 16, 16, 0)
+    pyxel.blt(60, 40, 0, 0, 0, 8, 8, 0)
     pyxel.text(40, 80, "blt: image bank 0", 7)
 
 
@@ -979,6 +1031,64 @@ pyxel.run(update, draw)
 ```
 
 上の例では、`pyxel.images[0].set(…)` で小さな絵を自分で作ってから、`blt` で画面にはっています（[[px-image-class]]）。
+
+@@ px-bltm
+title: bltm（マップをはる）
+type: Pyxelの命令
+chapter: 8
+group: 描く（画面）
+syntax: pyxel.bltm(x, y, マップ番号, u, v, 幅, 高さ, 透明色)
+summary: タイルマップ（小さな絵を並べて作ったマップ）の一部を、画面にはりつけます。RPGやアクションゲームの背景に使います。
+aliases: ブリットエム, マップ, タイルマップ, 背景, ステージ
+api: bltm
+reads: bltm=ブリットエム | tilemap=タイルマップ
+--
+## 書き方のかたち
+::: tpl bltm の書き方
+pyxel.bltm(〔x〕, 〔y〕, 〔マップ番号〕, 〔u〕, 〔v〕, 〔幅〕, 〔高さ〕)
+
+| 〔x〕, 〔y〕 | 画面のどこにはるか（左上の位置） |
+| 〔マップ番号〕 | タイルマップの番号（0〜7） |
+| 〔u〕, 〔v〕 | マップの、どこから切り取るか（ドット数で書く） |
+| 〔幅〕, 〔高さ〕 | 切り取る大きさ（ドット数） |
+:::
+
+## どんな命令？
+`bltm` の **m** は **map（マップ）**です。[[px-blt]]が「イメージバンクの絵」をはるのに対して、`bltm` は「**タイルマップ**」をはります。
+
+タイルマップは、8×8ドットの小さな絵（タイル）を、碁盤の目のように並べたものです。同じタイルを何度も使えるので、広いマップを少ないデータで作れます（[[px-tilemap-class]]）。
+
+## 使い方
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="bltm")
+pyxel.images[0].set(0, 0, ["33333333", "33b33333", "33333b33", "33333333", "3b333333", "333333b3", "33333333", "333b3333"])
+pyxel.images[0].set(8, 0, ["44444444", "44494444", "44444444", "49444449", "44444444", "44449444", "44444444", "94444444"])
+pyxel.tilemaps[0].set(0, 0, ["0000 0000 0100 0100 0000", "0000 0100 0100 0000 0000", "0100 0100 0000 0000 0100", "0000 0000 0000 0100 0100"])
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.bltm(40, 40, 0, 0, 0, 40, 32)
+
+
+pyxel.run(update, draw)
+```
+
+1. `pyxel.images[0].set(…)` で、草（左）と土（右）の2つのタイルを描く
+2. `pyxel.tilemaps[0].set(…)` で、タイルの並べ方を決める。`0000` が草、`0100` が土。4けたのうち、前の2けたがイメージバンクの横の何番目、後ろの2けたが縦の何番目かです
+3. `bltm` で、マップの左上から 40×32 ドット（タイル5×4枚分）を画面にはる
+
+ふつうは、マップは **Pyxel Editor** のタイルマップエディタで描いて、`pyxel.load` で読みこみます（[[px-load]]）。
+
+::: deep スクロールに使う
+`u` と `v` を少しずつ変えると、マップの見える場所が動いて、**スクロール**になります。広いマップの中を歩くゲームは、この仕組みで作ります。
+:::
 
 @@ px-clip
 title: clip（描く範囲をしぼる）

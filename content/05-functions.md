@@ -355,3 +355,94 @@ print(zeikomi(1000))
 ::: deep 関数の中から、外の変数を書き換えたいときは？
 `global 変数名` と書くと、関数の中から外の変数を書き換えられます。7章のPyxelでは、`update` の中で位置や点数を変えるために、この `global` をよく使います（[[update-draw]]）。
 :::
+
+@@ pass
+title: pass（何もしない）
+type: 構文
+chapter: 5
+syntax: pass
+summary: 「ここは何もしない」という意味の言葉です。中身を書かなければいけない場所を、空っぽのままにしておきたいときに使います。
+aliases: パス, 何もしない, 空っぽ
+reads: pass=パス | def=デフ
+--
+## なぜ必要なの？
+Pythonでは、`:` で終わる行の次には、インデントした中身が**必ず**いります（[[indent]]）。中身を1行も書かないと、エラーになります。
+
+```python error
+def update():
+
+print("おわり")
+```
+「中身はまだないけど、関数だけは作っておきたい」。そんなときに、`pass` を1行入れます。
+
+```python
+def update():
+    pass
+
+
+print("おわり")
+```
+`pass` は「何もしない」という命令なので、`update` を呼んでも何も起きません。でも、エラーにはなりません。
+
+## Pyxelでよく見る pass
+7章のPyxelのプログラムには、よくこう書いてあります。
+
+```python norun
+def update():
+    pass
+```
+「動かすものがまだないので、`update` は何もしない」という意味です。Pyxelは `update` と `draw` の2つがそろっていないと動かないので、空っぽでも `update` を作っておきます（[[update-draw]]）。
+
+## あとで書くための「仮置き」
+```python
+tensuu = 75
+if tensuu >= 60:
+    pass
+else:
+    print("もう少し！")
+```
+「合格のときに何をするかは、あとで考えよう」というときも、`pass` で場所だけ取っておけます。
+
+::: scratch
+Scratchでは、中が空っぽの「もし〜なら」ブロックを置いておけましたね。Pythonでは空っぽにできないので、かわりに `pass` を入れておきます。
+:::
+
+@@ none
+title: None（何もない）
+type: データ型
+chapter: 5
+syntax: None
+summary: 「何もない」ことを表す特別な値です。return を書かなかった関数は、None を返します。
+aliases: ナン, 何もない, 空, null
+reads: None=ナン | is=イズ | return=リターン
+--
+## 「何もない」という値
+```python
+x = None
+print(x)
+print(type(x))
+```
+`None` は、`0` でも、空の文字 `""` でもありません。「**まだ何も入っていない**」ことを表す、特別な値です。先頭の `N` は大文字です。
+
+## return のない関数は None を返す
+```python
+def aisatsu():
+    print("こんにちは")
+
+
+kekka = aisatsu()
+print(kekka)
+```
+`aisatsu` には `return` がないので、呼び出した答えは `None` になります（[[return]]）。「計算した結果を使いたいのに `None` が出てきた」ときは、`return` を書き忘れていないか確かめよう。
+
+## None かどうか調べる
+```python
+erabareta = None
+if erabareta is None:
+    print("まだ選ばれていません")
+```
+`None` かどうかは、`is None` で調べるのがPythonのきまりです（`== None` でも動きます）。`is` は「同じものかどうか」を調べる言葉です。
+
+::: deep ゲームでの使い方
+「まだ敵が出ていない」「まだ何も選んでいない」のような状態を、`None` で表すことがあります。`if teki is None:` で「敵がいないとき」の処理を書けます。
+:::

@@ -64,8 +64,9 @@ CODE_TERMS = {
     "return": "return", "import": "import", "from": "import", "and": "logical",
     "or": "logical", "not": "logical", "True": "bool", "False": "bool",
     "random": "random", "calendar": "calendar",
-    "len": "list", "sum": "list", "max": "list", "min": "list", "round": "float",
-    "in": "for", "None": "return", "global": "update-draw", "math": "module",
+    "len": "list", "sum": "list", "max": "math-func", "min": "math-func", "round": "math-func",
+    "in": "for", "None": "none", "global": "update-draw", "math": "module",
+    "pass": "pass", "abs": "math-func", "is": "none",
 }
 
 PAGES = {}       # slug -> dict

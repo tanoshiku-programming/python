@@ -1537,3 +1537,283 @@ pyxel.run(update, draw)
 ```
 上へ動かすので、`y` を減らします。画面の上（0より小さい）まで行ったら、下（120）に戻します。
 :::
+
+@@ task:game-image
+::: t
+ひよこの絵を使って、画面の3か所にひよこを並べよう。黒は透明にします。
+:::
+::: s
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="3羽のひよこ")
+pyxel.images[0].set(0, 0, ["000aaa00", "00aaaaa0", "00aaa1a0", "0aaaaaa9", "aaaaaaa0", "0aaaaaa0", "00aaaa00", "00900900"])
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.blt(40, 56, 0, 0, 0, 8, 8, 0)
+    pyxel.blt(76, 56, 0, 0, 0, 8, 8, 0)
+    pyxel.blt(112, 56, 0, 0, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+ひよこを、左を向いた形で表示しよう。（ヒント：幅をマイナスにする）
+:::
+::: s
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="左向き")
+pyxel.images[0].set(0, 0, ["000aaa00", "00aaaaa0", "00aaa1a0", "0aaaaaa9", "aaaaaaa0", "0aaaaaa0", "00aaaa00", "00900900"])
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.blt(76, 56, 0, 0, 0, -8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+くちばしが左についていればOKです。
+:::
+
+::: t
+`for` を使って、ひよこを4羽、横一列に並べよう。となりのひよことは、16ドットずつはなします。
+:::
+::: s
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="ひよこの行列")
+pyxel.images[0].set(0, 0, ["000aaa00", "00aaaaa0", "00aaa1a0", "0aaaaaa9", "aaaaaaa0", "0aaaaaa0", "00aaaa00", "00900900"])
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(5)
+    for i in range(4):
+        pyxel.blt(50 + i * 16, 56, 0, 0, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+`i` が 0, 1, 2, 3 と変わるので、x が 16 ずつずれていきます。
+:::
+
+@@ task:game-hit
+::: t
+`kasanatteru` 関数を使って、2つの四角 (10, 10, 20, 20) と (25, 15, 20, 20) が重なっているかを、`print` で表示しよう。
+```output
+True
+```
+:::
+::: s
+```python
+def kasanatteru(x1, y1, w1, h1, x2, y2, w2, h2):
+    return x1 < x2 + w2 and x2 < x1 + w1 and y1 < y2 + h2 and y2 < y1 + h1
+
+
+print(kasanatteru(10, 10, 20, 20, 25, 15, 20, 20))
+```
+1つ目の四角は x が 10〜30、2つ目は 25〜45 なので、25〜30 のところで重なっています。
+:::
+
+::: t
+マウスで動く円と、真ん中に置いた円の当たり判定を作ろう。重なったら、真ん中の円を赤（8番）にします。半径はどちらも 10 です。
+:::
+::: s
+```python px click=75,55 frames=10
+import pyxel
+
+pyxel.init(160, 120, title="円の当たり判定")
+pyxel.mouse(True)
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(0)
+    dx = pyxel.mouse_x - 80
+    dy = pyxel.mouse_y - 60
+    kyori = pyxel.sqrt(dx * dx + dy * dy)
+    if kyori < 10 + 10:
+        pyxel.circ(80, 60, 10, 8)
+    else:
+        pyxel.circ(80, 60, 10, 13)
+    pyxel.circ(pyxel.mouse_x, pyxel.mouse_y, 10, 11)
+
+
+pyxel.run(update, draw)
+```
+中心どうしの距離 `kyori` が、半径の合計 `20` より小さければ当たりです。
+:::
+
+::: t
+ほしキャッチの当たり判定を、`kasanatteru` 関数を使った書き方に書きかえよう。ほしは 8×8 の四角、バーは 16×6 の四角と考えます。
+:::
+::: s
+```python px hold=KEY_RIGHT frames=90 gif
+import pyxel
+
+pyxel.init(160, 120, title="ほしキャッチ")
+bar_x = 70
+hoshi_x = pyxel.rndi(8, 150)
+hoshi_y = 0
+score = 0
+
+
+def kasanatteru(x1, y1, w1, h1, x2, y2, w2, h2):
+    return x1 < x2 + w2 and x2 < x1 + w1 and y1 < y2 + h2 and y2 < y1 + h1
+
+
+def update():
+    global bar_x, hoshi_x, hoshi_y, score
+    if pyxel.btn(pyxel.KEY_LEFT):
+        bar_x = max(0, bar_x - 3)
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        bar_x = min(144, bar_x + 3)
+    hoshi_y = hoshi_y + 2
+    if kasanatteru(hoshi_x - 4, hoshi_y - 4, 8, 8, bar_x, 110, 16, 6):
+        score = score + 1
+        hoshi_y = 0
+        hoshi_x = pyxel.rndi(8, 150)
+    elif hoshi_y > 120:
+        hoshi_y = 0
+        hoshi_x = pyxel.rndi(8, 150)
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.rect(bar_x, 110, 16, 6, 11)
+    pyxel.circ(hoshi_x, hoshi_y, 4, 10)
+    pyxel.text(4, 4, f"SCORE {score}", 7)
+
+
+pyxel.run(update, draw)
+```
+円の中心 (hoshi_x, hoshi_y) から4ずつ引いた位置が、ほしを囲む四角の左上です。
+:::
+
+@@ task:game-sound
+::: t
+スペースキーを押すと「ドレミ」と鳴るプログラムを作ろう。音色は三角波（`t`）にします。
+:::
+::: s
+```python px frames=5
+import pyxel
+
+pyxel.init(160, 120, title="ドレミ")
+pyxel.sounds[0].set("c3d3e3", "t", "7", "n", 15)
+
+
+def update():
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        pyxel.play(0, 0)
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.text(52, 56, "PUSH SPACE", 7)
+
+
+pyxel.run(update, draw)
+```
+:::
+
+::: t
+上の「ドレミ」を、ノイズ（`n`）・四角波（`s`）・パルス波（`p`）の音色に変えて、聞きくらべてみよう。どれがいちばんファミコンっぽい？
+:::
+::: s
+```python px frames=5
+import pyxel
+
+pyxel.init(160, 120, title="音色くらべ")
+pyxel.sounds[0].set("c3d3e3", "t", "7", "n", 15)
+pyxel.sounds[1].set("c3d3e3", "s", "7", "n", 15)
+pyxel.sounds[2].set("c3d3e3", "p", "7", "n", 15)
+pyxel.sounds[3].set("c3d3e3", "n", "7", "n", 15)
+
+
+def update():
+    if pyxel.btnp(pyxel.KEY_1):
+        pyxel.play(0, 0)
+    if pyxel.btnp(pyxel.KEY_2):
+        pyxel.play(0, 1)
+    if pyxel.btnp(pyxel.KEY_3):
+        pyxel.play(0, 2)
+    if pyxel.btnp(pyxel.KEY_4):
+        pyxel.play(0, 3)
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.text(40, 40, "1: t  2: s", 7)
+    pyxel.text(40, 56, "3: p  4: n", 7)
+
+
+pyxel.run(update, draw)
+```
+1〜4のキーで、音色をくらべられます。ファミコンっぽいのは、四角波（`s`）とパルス波（`p`）です。
+:::
+
+::: t
+ほしキャッチで、ほしを受け止めたときに「ピコン」と鳴るようにしよう。
+:::
+::: s
+```python px hold=KEY_RIGHT frames=60
+import pyxel
+
+pyxel.init(160, 120, title="ほしキャッチ")
+pyxel.sounds[0].set("c3e3g3c4", "p", "7", "n", 5)
+bar_x = 70
+hoshi_x = pyxel.rndi(8, 150)
+hoshi_y = 0
+score = 0
+
+
+def update():
+    global bar_x, hoshi_x, hoshi_y, score
+    if pyxel.btn(pyxel.KEY_LEFT):
+        bar_x = max(0, bar_x - 3)
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        bar_x = min(144, bar_x + 3)
+    hoshi_y = hoshi_y + 2
+    if hoshi_y > 104 and bar_x - 4 <= hoshi_x <= bar_x + 20:
+        score = score + 1
+        pyxel.play(0, 0)
+        hoshi_y = 0
+        hoshi_x = pyxel.rndi(8, 150)
+    elif hoshi_y > 120:
+        hoshi_y = 0
+        hoshi_x = pyxel.rndi(8, 150)
+
+
+def draw():
+    pyxel.cls(0)
+    pyxel.rect(bar_x, 110, 16, 6, 11)
+    pyxel.circ(hoshi_x, hoshi_y, 4, 10)
+    pyxel.text(4, 4, f"SCORE {score}", 7)
+
+
+pyxel.run(update, draw)
+```
+音を作る `set` は最初に1回、鳴らす `play` は受け止めた瞬間に書きます。
+:::
