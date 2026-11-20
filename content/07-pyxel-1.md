@@ -68,6 +68,11 @@ pyxel.run(update, draw)
 - [[game-effect]]：爆発・ゆれ・無敵時間
 - [[game-highscore]]：ハイスコアとランキング
 
+### 自分の絵や音を使う・配る
+- [[pyxel-editor]]：Pyxel Editor（絵・マップ・音を作る道具）
+- [[pyxres-game]]：Editorで作った絵と音でゲームを作る
+- [[game-package]]：作ったゲームを配る
+
 ::: point
 Pyxelの命令の意味は、[[ch9|Pyxel辞典]]でいつでも引けます。分からない命令が出てきたら、コードの中の言葉をクリックしてみよう。
 :::

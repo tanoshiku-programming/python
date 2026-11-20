@@ -237,3 +237,54 @@ print(calendar.weekday(2026, 10, 17))
 ```
 5 は土曜日です。
 :::
+
+@@ task:mymodule
+::: t
+`keisan.py` に、引き算をする関数 `hiku(a, b)` を作ろう。`main.py` から `import keisan` で使って、`hiku(10, 4)` の答えを表示します。
+```output
+6
+```
+:::
+::: s
+`keisan.py`
+```python norun
+def hiku(a, b):
+    return a - b
+```
+`main.py`
+```python norun
+import keisan
+
+print(keisan.hiku(10, 4))
+```
+```output
+6
+```
+2つのファイルは、同じフォルダに置きます。
+:::
+
+::: t
+さっきの `main.py` を、`from keisan import hiku` を使った書き方に変えよう。
+:::
+::: s
+```python norun
+from keisan import hiku
+
+print(hiku(10, 4))
+```
+```output
+6
+```
+`keisan.` をつけずに、`hiku` だけで呼べます。
+:::
+
+::: t
+`import keisan.py` と書くと、エラーになる。なぜか説明して、正しい書き方に直そう。
+:::
+::: s
+`import` に書くのは、ファイル名から `.py` を取った**モジュールの名前**です。`.py` をつけると、「`keisan` の中の `py`」という意味にとられて、エラーになります。
+
+```python norun
+import keisan
+```
+:::

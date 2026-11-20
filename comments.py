@@ -315,6 +315,10 @@ def comment_for(line, is_error=False):
     if s in OVERRIDE:
         return OVERRIDE[s]
     m = None
+    if m := re.fullmatch(r"from (\w+) import (\w+)", s):
+        return f"{m[1]} の中から {m[2]} だけを取り出して、そのまま使えるようにする"
+    if s == 'if __name__ == "__main__":':
+        return "このファイルを直接動かしたときだけ、下の処理を実行する"
     # --- 何行かに分けて書いたリスト
     if m := re.fullmatch(r"(\w+) = \[", s):
         return f"{m[1]} にリストを入れる（] の行まで）"

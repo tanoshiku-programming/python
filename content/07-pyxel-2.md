@@ -503,7 +503,7 @@ pyxel.run(update, draw)
 `pyxel.Font("…")` は、フォントファイルを読みこむ命令です（[[px-font-class]]）。日本語を書くときは、`pyxel.text` の**いちばん最後**に、読みこんだフォント `font` をつけます。
 
 ::: stuck
-`FileNotFoundError` になったら、フォントファイルが見つかっていません。フォントファイルが、プログラム（.py）と同じフォルダにあるか確かめよう（[[error]]）。ファイル名のつづり（`umplus_j12r.bdf`）も確かめよう。
+`Exception: Failed to open file 'umplus_j12r.bdf'`（ファイルを開けませんでした）と出たら、フォントファイルが見つかっていません。フォントファイルが、プログラム（.py）と同じフォルダにあるか確かめよう（[[error]]）。ファイル名のつづり（`umplus_j12r.bdf`）も確かめよう。
 :::
 
 ::: deep もっと知りたい人へ

@@ -191,6 +191,8 @@ if 〔条件〕:
 ## Pyxelの章（7章・8章・9章）
 
 - **7章**：Pyxelの基礎〜占い・ストップウォッチ・ほしキャッチ・画面の切り替え・リストでたくさん動かす（`content/07-pyxel-*.md`）
+  - `07-pyxel-4.md`：Pyxel Editor、`.pyxres` を読みこむ作品、ゲームを配る（`pyxel package` / `app2html`）
+  - `.pyxres` を読みこむコードの画面画像は、`tools/hiyoko.pyxres`（ひよこ・草と土・効果音の見本）を使って作る。見本を作り直すときは、`pyxel.images[0].set(…)` などで中身を作って `pyxel.save("hiyoko.pyxres")` する
 - **8章 クラスで作ろう**（`content/08-class.md`）：クラス・`__init__` と `self`・メソッド・Pyxelをクラスで書く・7章の作品をクラスで書きかえて見比べる
 - **9章 Pyxel辞典**：関数・変数・クラスを1ページずつ（`content/09-pyxel-ref.md`）。ページに `group:`（分類）と `api:`（Pyxelの名前。例 `api: rect`）を書くと、
   - 9章の一覧表と「名前順の早見」に、自動で出る

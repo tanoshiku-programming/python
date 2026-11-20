@@ -12,6 +12,7 @@ Pythonには、便利な機能を詰めこんだ「部品箱」がたくさん�
 - [[import]]：部品箱を使えるようにする
 - [[random]]：くじ、サイコロ、シャッフル
 - [[calendar]]：カレンダー、うるう年
+- [[mymodule]]：自分で作ったファイルを使う
 
 ## サイコロをふる
 ```python norun
@@ -272,4 +273,93 @@ import calendar
 calendar.setfirstweekday(calendar.SUNDAY)
 print(calendar.month(2026, 10))
 ```
+:::
+
+@@ mymodule
+title: 自分のファイルを import しよう
+type: 構文
+chapter: 6
+syntax: from ファイル名 import 関数名
+summary: プログラムが長くなったら、関数を別のファイルに分けて、import で使います。自分で作った .py ファイルも、モジュールとして使えます。
+aliases: 自作モジュール, ファイルを分ける, 分割, __pycache__, pyc, メイン, __main__
+reads: import=インポート | from=フロム | __name__=ネーム | __main__=メイン | pyc=ピーワイシー
+--
+## プログラムを、複数のファイルに分ける
+プログラムが長くなると、1つのファイルに全部書いていると、読みにくくなります。そこで、**関連するものを、別のファイルに分けて**、必要なところで `import` します。
+
+実は、[[module]]の説明にあった「自分で書いた `.py` ファイルも、`import` で使えます」というのは、このことです。
+
+## 例：計算用のファイルを作る
+**同じフォルダ**に、2つのファイルを作ります。
+
+`keisan.py`（関数を入れておくファイル）
+```python norun
+def tasu(a, b):
+    return a + b
+
+
+def kakeru(a, b):
+    return a * b
+```
+
+`main.py`（それを使うファイル）
+```python norun
+import keisan
+
+print(keisan.tasu(3, 4))
+print(keisan.kakeru(3, 4))
+```
+```output
+7
+12
+```
+`import keisan` と書くと、`keisan.py` の中身が使えるようになります。**ファイル名から `.py` を取った名前**が、モジュールの名前です。使うときは、`モジュール名.関数名` と書きます（[[import]]）。
+
+名前だけ取り出すこともできます。
+
+```python norun
+from keisan import tasu
+
+print(tasu(3, 4))
+```
+```output
+7
+```
+
+## ゲームを分けるなら
+たとえば、[[game-hit]]の `kasanatteru` 関数のように、いろいろなゲームで使い回したい関数を `atari.py` に入れておけば、どのゲームからも `from atari import kasanatteru` で使えます。
+
+| ファイル | 入れるもの |
+| --- | --- |
+| `main.py` | ゲームの中心（`init`、`update`、`draw`、`run`） |
+| `atari.py` | 当たり判定の関数 |
+| `hoshi.py` | ほしのクラス（[[class]]） |
+
+::: point
+分けるときの目安は、「**これは、別のゲームでも使えそう**」と思ったものです。1つのファイルが長くなりすぎたときにも、分けどきです。
+:::
+
+::: stuck
+- 2つのファイルは、**同じフォルダ**に置こう（[[pyfile]]）
+- ファイル名を、`random.py` など、もともとあるモジュールの名前にしてはいけません
+- `import keisan.py` のように `.py` をつけると、エラーになります。`import keisan` と書きます
+:::
+
+## `__pycache__` フォルダは何？
+自分のファイルを `import` すると、同じフォルダに `__pycache__` というフォルダができて、中に `keisan.cpython-312.pyc` のようなファイルが入ります。これは、Pythonが「次に読みこむとき早く動くように」自動で作る、メモのようなものです。
+
+自分で作ったり、直したりする必要はありません。**消してしまっても、また自動でできます**。
+
+::: deep `if __name__ == "__main__":` ってなに？
+他の人のプログラムで、よく見かける書き方です。
+
+```python norun
+def tasu(a, b):
+    return a + b
+
+
+if __name__ == "__main__":
+    print(tasu(3, 4))
+```
+`__name__` には、「そのファイルを直接動かしたとき」は `"__main__"` が入り、「ほかのファイルから `import` されたとき」はファイルの名前が入ります。だから、この書き方をしておくと、**直接動かしたときだけ**、`if` の中のテスト用の行が動きます。`import` したときには動きません。
 :::

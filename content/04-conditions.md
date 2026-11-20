@@ -244,6 +244,23 @@ Scratchでは、緑の「（ ）=（ ）」ブロックで「等しいか」を�
 また、Scratchには「以上」「以下」のブロックがありませんでしたが、Pythonには `>=`（以上）と `<=`（以下）があります。
 :::
 
+## 含まれているか調べる（in）
+`in` を使うと、「リストや文字の中に、それが入っているか」を `True` か `False` で調べられます。
+
+```python
+kudamono_list = ["りんご", "みかん", "バナナ"]
+print("みかん" in kudamono_list)
+print("ぶどう" in kudamono_list)
+print("ぶどう" not in kudamono_list)
+print("ン" in "ピーマン")
+```
+| 書き方 | 意味 |
+| --- | --- |
+| `A in B` | B の中に A が入っている |
+| `A not in B` | B の中に A が入っていない |
+
+`if "みかん" in kudamono_list:` のように、[[if]]の条件にもそのまま使えます。リストの中身を `for` で1つずつ調べなくても、1行で確かめられます。
+
 ## 型がちがうと等しくない
 ```python
 print(10 == "10")

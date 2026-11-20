@@ -2593,3 +2593,201 @@ for i in range(len(ranking)):
 ```
 番号は0から始まるので、順位は `i + 1` にしています。
 :::
+
+@@ task:pyxel-editor
+::: t
+Pyxel Editor の4つのエディタと、プログラムの中の置き場所（`pyxel.images`・`pyxel.tilemaps`・`pyxel.sounds`・`pyxel.musics`）を、線で結ぶつもりで、表にして書き出してみよう。
+:::
+::: s
+| エディタ | プログラムの置き場所 |
+| --- | --- |
+| イメージエディタ | `pyxel.images` |
+| タイルマップエディタ | `pyxel.tilemaps` |
+| サウンドエディタ | `pyxel.sounds` |
+| ミュージックエディタ | `pyxel.musics` |
+
+エディタの名前と、置き場所の名前は、ほとんど同じです。
+:::
+
+::: t
+`hiyoko.pyxres` を読みこんで、背景（青緑、5番）の上に、ひよこを画面の真ん中に1羽、はってみよう。
+:::
+::: s
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="ひよこ1羽")
+pyxel.load("hiyoko.pyxres")
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.blt(76, 56, 0, 0, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+ひよこは、イメージバンク0番の (0, 0) にあります。
+:::
+
+::: t
+Pyxel Editor で、自分の好きな絵を8×8で描いて、`my_first.pyxres` という名前で保存しよう。保存できたら、`pyxel.load` で読みこんで、`blt` で画面に出してみよう。
+:::
+::: s
+```python norun
+import pyxel
+
+pyxel.init(160, 120, title="わたしの絵")
+pyxel.load("my_first.pyxres")
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.blt(76, 56, 0, 0, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+`.pyxres` ファイルは、プログラム（.py）と同じフォルダに置きます。絵を、イメージバンク0番の左上に描いたなら、`blt(…, 0, 0, 0, 8, 8)` で出せます。
+:::
+
+@@ task:pyxres-game
+::: t
+`hiyoko.pyxres` を使ったひよこで、Zキーを押したときに、サウンド1番（ドーン）が鳴るようにしよう。
+:::
+::: s
+```python px frames=8 press=KEY_Z@2
+import pyxel
+
+pyxel.init(160, 120, title="Zでドーン")
+pyxel.load("hiyoko.pyxres")
+
+
+def update():
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        pyxel.play(0, 0)
+    if pyxel.btnp(pyxel.KEY_Z):
+        pyxel.play(0, 1)
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.bltm(0, 90, 0, 0, 0, 160, 24)
+    pyxel.blt(76, 82, 0, 0, 0, 8, 8, 0)
+    pyxel.text(40, 20, "SPACE: PIKON  Z: DOON", 7)
+
+
+pyxel.run(update, draw)
+```
+音は、`.pyxres` の中のサウンド1番に入っています。
+:::
+
+::: t
+ひよこの足の動きを、2倍の速さ（4フレームごと）にしよう。
+:::
+::: s
+```python px gif frames=30 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="速い足")
+pyxel.load("hiyoko.pyxres")
+x = 20
+
+
+def update():
+    global x
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = x + 1
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.bltm(0, 90, 0, 0, 0, 160, 24)
+    u = pyxel.frame_count // 4 % 2 * 8
+    pyxel.blt(x, 82, 0, u, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+`// 8` を `// 4` にすると、2枚の絵が入れかわる間隔が半分になります。
+:::
+
+::: t
+ひよこが、画面の右はし（x が 152 より右）に行かないようにしよう。（ヒント：`min`）
+:::
+::: s
+```python px gif frames=30 hold=KEY_RIGHT
+import pyxel
+
+pyxel.init(160, 120, title="はしで止まる")
+pyxel.load("hiyoko.pyxres")
+x = 140
+
+
+def update():
+    global x
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        x = min(152, x + 1)
+
+
+def draw():
+    pyxel.cls(5)
+    pyxel.bltm(0, 90, 0, 0, 0, 160, 24)
+    pyxel.blt(x, 82, 0, 0, 0, 8, 8, 0)
+
+
+pyxel.run(update, draw)
+```
+確かめやすいように、はじめの位置を 140 にしています（[[math-func]]）。
+:::
+
+@@ task:game-package
+::: t
+`my_game` フォルダの中の `main.py` を、`.pyxapp` にまとめるコマンドと、それをブラウザ用の HTML にするコマンドを、続けて書いてみよう。
+:::
+::: s
+```bash
+pyxel package my_game my_game/main.py
+pyxel app2html my_game.pyxapp
+```
+1行目で `my_game.pyxapp` ができて、2行目で `my_game.html` ができます。
+:::
+
+::: t
+Windows を使っている友だちに、ゲームを遊んでもらいたい。Pyxel も Python も入っていない。どの方法がよさそう？ 理由も書こう。
+:::
+::: s
+**`pyxel app2html` で作った HTML** がおすすめです。ブラウザで開くだけで遊べるので、友だちのパソコンに、Python も Pyxel も入っていなくて大丈夫です。インターネットにつながっていることだけ、確かめましょう。
+
+もう1つ方法があります。Windows のパソコンで `pyxel app2exe` を使うと、Windows 用の実行ファイルが作れます。ただし、Windows のパソコンで作る必要があるのと、PyInstaller が別に必要です。
+:::
+
+::: t
+次のフォルダ構成で、`pyxel package` を使うと、遊ぶときにエラーになる。何がまちがい？ どう直す？
+```
+desktop/
+├── my_game/
+│   └── main.py
+└── hiyoko.pyxres
+```
+:::
+::: s
+`hiyoko.pyxres` が、`my_game` フォルダの**外**にあるのがまちがいです。`pyxel package` は、指定したフォルダの中身だけをまとめるので、外のファイルは入りません。
+
+`hiyoko.pyxres` を `my_game` フォルダの中に移して、もう一度 `package` をします。
+
+```
+desktop/
+└── my_game/
+    ├── main.py
+    └── hiyoko.pyxres
+```
+:::
