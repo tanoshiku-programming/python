@@ -1048,6 +1048,9 @@ def render_page(page, incoming, css, js):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(title_tag)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="{FONTS_URL}">
@@ -1121,6 +1124,8 @@ def main():
     for old in OUT.glob("*.html"):
         old.unlink()
     import shutil
+    for icon in (ASSETS / "icons").glob("*"):   # ブックマーク・タブ用のアイコン
+        shutil.copy(icon, OUT / icon.name)
     (OUT / "img").mkdir(exist_ok=True)
     for old in list((OUT / "img").glob("px-*.png")) + list((OUT / "img").glob("px-*.gif")):
         old.unlink()

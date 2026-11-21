@@ -9,6 +9,7 @@ Wikipediaのように、言葉をクリックして潜っていける、Python�
 | `content/*.md` | ページの原稿（ここを編集する） |
 | `assets/style.css` | 見た目 |
 | `assets/site.js` | 検索、ホバーの説明、たどってきた道 |
+| `assets/icons/` | ブックマーク・タブのアイコン（ひよこ＋図鑑）。絵を変えるときは `tools/make_icon.py` を直して実行する |
 | `build.py` | 原稿から `site/` を作るスクリプト |
 | `site/` | できあがったサイト（これを公開する） |
 | `build.sh` | サイトを作り直す（`./build.sh open` で作ってブラウザで開く） |
