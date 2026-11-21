@@ -914,8 +914,6 @@ def nav_html(cur):
     parts = ['<a class="nav-home" href="index.html">はじめに</a>']
     ya = ' aria-current="page"' if cur["slug"] == "yomi" else ""
     parts.append(f'<a class="nav-home nav-yomi" href="yomi.html"{ya}>命令のよみかた</a>')
-    ta = ' aria-current="page"' if cur["slug"] == "trouble" else ""
-    parts.append(f'<a class="nav-home nav-yomi" href="trouble.html"{ta}>困ったとき</a>')
     first_of_part = {nums[0]: name for name, _s, nums in PARTS}
     for n, (cslug, name, _sub) in CHAPTERS.items():
         if n in first_of_part:
