@@ -1,5 +1,6 @@
 """ブックマーク用のアイコン（ひよこ＋図鑑）を作る。
 16×16 のドット絵を、SVG と PNG と ICO にして assets/icons/ に書き出す。
+おなかの 4×4 は Pyxel の16色パレット。
 絵を変えたいときは、下の PIXELS の文字を直して、python3 tools/make_icon.py を実行する。
 """
 import pathlib
@@ -9,38 +10,33 @@ from PIL import Image, ImageDraw
 
 OUT = pathlib.Path(__file__).resolve().parent.parent / "assets" / "icons"
 
-# Pyxel の16色パレット（pyxel.colors と同じ）
-PALETTE = {
-    "N": "#2B335F",   # こい青（背景）
-    "Y": "#E9C35B",   # 黄色（ひよこ）
-    "O": "#D38441",   # オレンジ（くちばし・あし）
-    "K": "#2B335F",   # 目
-    "W": "#EEEEEE",   # 白（ページ）
-    "R": "#D4186C",   # 赤（表紙）
-    "S": "#7696DE",   # 水色（とじ目）
-    "P": "#2B335F",   # >_（Pythonの入力画面の印）
-    "r": "#D4186C",   # 色のドット
-    "o": "#D38441",
-    "t": "#19959C",
-    "b": "#395C98",
-}
+# Pyxel の16色パレット（pyxel.colors と同じ）。0〜9、a〜f の文字で、パレットの色番号を表す
+PYXEL_COLORS = ['#000000', '#2B335F', '#7E2072', '#19959C', '#8B4852', '#395C98', '#A9C1FF', '#EEEEEE', '#D4186C', '#D38441', '#E9C35B', '#70C6A9', '#7696DE', '#A3A3A3', '#FF9798', '#EDC7B0']
+PALETTE = {hex(n)[2:]: c for n, c in enumerate(PYXEL_COLORS)}
+PALETTE.update({
+    "N": PYXEL_COLORS[1],    # こい青（背景）
+    "Y": PYXEL_COLORS[10],   # 黄色（ひよこ）
+    "O": PYXEL_COLORS[9],    # オレンジ（くちばし・あし）
+    "K": PYXEL_COLORS[1],    # 目
+})
 
+# 大きなひよこ。おなかの 4×4 は、Pyxelの16色パレット（左上から順に 0〜15 番）
 PIXELS = [
     "NNNNNNNNNNNNNNNN",
-    "NNNNNNNYYYNNNNNN",
-    "NNNNNNYYYYYNNNNN",
-    "NNNNNNYYYKYNNNNN",
-    "NNNNNYYYYYYYONNN",
-    "NNNNYYYYYYYNNNNN",
+    "NNNNNNNYYYYNNNNN",
+    "NNNNNYYYYYYYYNNN",
+    "NNNNYYYYYYYYYYNN",
+    "NNNNYYYYYYKYYYNN",
+    "NNNYYYYYYYYYYYOO",
+    "NNNYYYYYYYYYYYON",
+    "NNYYYYYYYYYYYYNN",
+    "NNYYYY0123YYYYNN",
+    "NNYYYY4567YYYYNN",
+    "NNYYYY89abYYYYNN",
+    "NNNYYYcdefYYYNNN",
+    "NNNNYYYYYYYYNNNN",
     "NNNNNYYYYYYNNNNN",
-    "NNNNNNYYYYNNNNNN",
-    "NNNNNNONNONNNNNN",
-    "NRWWWWWSSWWWWWRN",
-    "NRWPWWWSSWWrWoRN",
-    "NRWWPWWSSWWWWWRN",
-    "NRWPWPPSSWWtWbRN",
-    "NRWWWWWSSWWWWWRN",
-    "NRRRRRRRRRRRRRRN",
+    "NNNNNOONNOONNNNN",
     "NNNNNNNNNNNNNNNN",
 ]
 assert len(PIXELS) == 16 and all(len(r) == 16 for r in PIXELS)
