@@ -6,6 +6,7 @@ syntax: pyxel edit ファイル名.pyxres
 summary: Pyxel Editor は、ドット絵・マップ・効果音・音楽を作るための、Pyxelについてくる道具です。作ったものは .pyxres というファイル1つに入って、pyxel.load で読みこめます。
 aliases: Pyxel Editor, ピクセルエディタ, エディタ, pyxres, イメージエディタ, タイルマップエディタ, サウンドエディタ, ミュージックエディタ, リソースファイル
 reads: pyxres=ピクセルレス | edit=エディット | load=ロード | resource=リソース
+group: 自分の絵や音・配る
 --
 ## プログラムで絵を書くのは、たいへん
 [[game-image]]では、`images[0].set(0, 0, ["000aaa00", …])` のように、**文字で**ドット絵を書きました。8×8のひよこ1羽でも、それなりに手間がかかります。大きな絵や、たくさんの絵を、文字で書くのは現実的ではありません。
@@ -85,6 +86,7 @@ syntax: pyxel.load("my_game.pyxres")
 summary: Pyxel Editor で作った絵・マップ・音を、pyxel.load で読みこんで、キーで歩いて音も鳴るひよこのプログラムを作ります。
 aliases: pyxres, 絵と音, ひよこ, エディタで作る, 歩く
 reads: load=ロード | bltm=ブリットエム | play=プレイ
+group: 自分の絵や音・配る
 --
 ## 作るもの
 [[pyxel-editor]]で作った `hiyoko.pyxres`（ひよこ2枚・草と土のタイル・効果音）を使って、**左右キーで歩いて、スペースキーで鳴く**ひよこを作ります。
@@ -152,6 +154,7 @@ syntax: pyxel package APP_DIR スタートのファイル.py
 summary: pyxel package でゲームを1つのファイル（.pyxapp）にまとめて、pyxel app2html でブラウザで遊べる HTML にします。友だちや家族に配る方法です。
 aliases: 配る, 公開, パッケージ, pyxapp, app2html, app2exe, play, 共有, 友だちに遊んでもらう, watch
 reads: package=パッケージ | pyxapp=ピクセルアップ | app2html=アップツーエイチティーエムエル | app2exe=アップツーイーエグゼ | play=プレイ | watch=ウォッチ
+group: 自分の絵や音・配る
 --
 ## 配るときの問題
 作ったゲームは、自分のパソコンなら `.py` ファイルで動きます。でも友だちのパソコンには、Python も Pyxel も入っていないかもしれません。絵や音のファイル（`.pyxres`）も、いっしょに渡さないと動きません。
@@ -204,21 +207,23 @@ pyxel app2html hiyoko_game.pyxapp
 できあがった HTML を、Webサイトとして公開すれば、URLを知っている人はだれでも遊べます。このサイトも使っている **GitHub Pages** のような、無料で公開できるしくみがあります。公開のしかたは、授業で相談しよう。
 :::
 
-## ③-B 実行ファイルにする（app2exe）
+::: deep ③-B 実行ファイルにする（app2exe）
 ```bash
 pyxel app2exe hiyoko_game.pyxapp
 ```
 ダブルクリックで遊べる、実行ファイルができます。ただし、**PyInstaller** というモジュールが、別に必要です（`pip install pyinstaller`。[[terminal]]）。入っていないと、`PyInstaller is not found` と言われます。
+:::
 
 ::: stuck
 実行ファイルは、**作ったパソコンの種類**用のものになります。Windowsで作れば Windows 用、Mac で作れば Mac 用です。Windows の友だちに配りたいなら、Windows で作る必要があります。
 :::
 
-## おまけ：書きながら確かめる（watch）
+::: deep おまけ：書きながら確かめる（watch）
 ```bash
 pyxel watch フォルダ main.py
 ```
 ゲームのフォルダを見はっていて、**ファイルを保存するたびに、自動で動かしなおして**くれます。絵や音を直しながら、すぐ画面で確かめたいときに便利です（`Ctrl + C` で止まります。[[infinite-loop]]）。
+:::
 
 ## 配る前のチェック
 | 確認すること | 理由 |

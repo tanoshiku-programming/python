@@ -11,6 +11,16 @@ reads: for=フォー | in=イン | while=ホワイル | range=レンジ | break=
 - [[for]]文：回数や、リストの中身の数だけ繰り返す
 - [[while]]文：条件が続くあいだ繰り返す
 
+
+::: point この章で、自分でできるようになること
+- □ `for` と `range` で、決まった回数くり返せる
+- □ `for` で、リストの中身を1つずつ使える
+- □ `while` で、条件のあいだくり返せる
+- □ インデントで、くり返す行を決められる
+
+ゲームを作る前に、ここにあることを、**お手本を見ないで書けるように**、くりかえし練習しよう。
+:::
+
 ## for：回数を決めて繰り返す
 ```python
 for i in range(3):
@@ -85,6 +95,10 @@ syntax: for 変数 in 並び:
 summary: 回数や、リストの中身の数だけ、同じ処理を繰り返す文です。
 reads: for=フォー | in=イン | range=レンジ
 --
+::: scratch
+Scratchの「（10）回繰り返す」ブロックです。口の中に入れたブロックが繰り返されたように、Pythonでは、行の頭を下げた（インデントした）行が繰り返されます。
+:::
+
 ## 書き方のかたち
 ::: tpl for文の書き方
 for 〔変数〕 in 〔繰り返す材料〕:
@@ -113,11 +127,12 @@ for kudamono in kudamono_list:
 ```
 [[list]]の中身が、1つずつ `kudamono` に入ります。
 
-## 文字を1つずつ
+::: deep 文字を1つずつ
 ```python
 for moji in "ABC":
     print(moji)
 ```
+:::
 
 ## 計算結果をためていく
 ```python
@@ -207,6 +222,10 @@ syntax: range(終わり) / range(始め, 終わり) / range(始め, 終わり, �
 summary: 0, 1, 2… のような、連続した数のならびを作る関数です。for文とよく使います。
 reads: range=レンジ | list=リスト
 --
+::: scratch
+Scratchの「（10）回繰り返す」の「10回」の部分を作るのが、`range(10)` です。
+:::
+
 ## 書き方のかたち
 ::: tpl range の3つの形
 range(〔終わり〕)
@@ -252,6 +271,10 @@ syntax: break / continue
 summary: break はループを途中で終わらせ、continue は今回の分だけ飛ばして次に進みます。
 reads: break=ブレーク | continue=コンティニュー
 --
+::: scratch
+Scratchの「（このスクリプト）を止める」に近い命令です。Pythonの `break` は、プログラム全体ではなく、**今のくり返しだけ**を止めます。
+:::
+
 ## break：そこで終わる
 ```python
 for i in range(1, 10):
@@ -285,6 +308,10 @@ syntax: 行の頭に半角スペース4つ
 summary: 行の頭の空白のことです。Pythonでは、どこまでが同じかたまりかを表す大事なルールです。
 reads: indent=インデント | for=フォー | if=イフ
 --
+::: scratch
+Scratchでは、「もし〜なら」や「〇回繰り返す」のブロックの**口の中**に、ブロックを入れました。Pythonでは、行の頭を下げる（インデントする）ことで、「口の中」を表します。
+:::
+
 ## ルール
 `:` で終わる行の次の行は、半角スペース4つ分（または Tab キー1回）下げます。同じかたまりの行は、同じ深さにそろえます。
 
@@ -323,6 +350,10 @@ syntax: while True:
 summary: 終わらずに、ずっと続いてしまうループです。止め方を知っておけば大丈夫です。
 reads: while=ホワイル | True=トゥルー | Ctrl+C=コントロール シー
 --
+::: scratch
+Scratchの「ずっと」ブロックが、Pythonの `while True:` です。Scratchでは赤い停止ボタンで止めましたね。Pythonでは `Ctrl` + `C` で止めます。
+:::
+
 ## 原因
 [[while]]の条件が、いつまでも `True` のままだと、ループが終わりません。
 

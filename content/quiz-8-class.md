@@ -42,7 +42,7 @@ print(b.namae)
 `pyxel.sounds[0]` は、何というクラスから作られたオブジェクト？
 :::
 ::: a
-`Sound` クラスです。Pyxelを作った人が用意した設計図から作られています。`isinstance(pyxel.sounds[0], pyxel.Sound)` が `True` になります。
+`Sound` クラスです。Pyxelを作った人が用意した設計図から作られています。
 :::
 
 ::: q

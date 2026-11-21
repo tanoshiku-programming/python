@@ -46,7 +46,7 @@
 
   --font-body: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
   --font-head: "Zen Maru Gothic", "BIZ UDPGothic", "Hiragino Maru Gothic ProN", "Yu Gothic UI", sans-serif;
-  --font-code: "BIZ UDGothic", "Menlo", "Consolas", "MS Gothic", monospace;
+  --font-code: "Source Code Pro", "BIZ UDGothic", "Menlo", "Consolas", "MS Gothic", monospace;   /* 英数字は Source Code Pro（" が曲がって見えない）、日本語は BIZ UDGothic */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -687,6 +687,9 @@ td.yomi { white-space: nowrap; }
 .yomi-link a { font-weight: 700; }
 .yomi-link span { margin-left: 10px; color: var(--muted); font-size: .88rem; }
 .nav-yomi { margin-top: 2px; }
+.nav-part { margin: 18px 0 4px; padding: 0 8px; font: 700 .74rem/1.6 var(--font-head); letter-spacing: .12em; color: var(--muted); }
+.part-head { margin: 26px 0 0; font-size: 1.05rem; }
+.part-head span { margin-left: 10px; font-size: .84rem; font-weight: 400; color: var(--muted); }
 
 /* ---------- 書き方のテンプレート図 ---------- */
 figure.tpl {

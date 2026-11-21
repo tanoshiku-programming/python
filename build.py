@@ -35,13 +35,14 @@ SITE_NAME = "Pythonずかん"
 FONTS_URL = (
     "https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700"
     "&family=BIZ+UDPGothic:wght@400;700"
-    "&family=Zen+Maru+Gothic:wght@500;700&display=swap"
+    "&family=Zen+Maru+Gothic:wght@500;700"
+    "&family=Source+Code+Pro:wght@400;700&display=swap"
 )
 
 # 章の設定: 番号 -> (slug, 名前, ひとこと)
 CHAPTERS = {
     0: ("ch0", "はじめる前に", "Pythonってなに？ 最初の1行"),
-    1: ("ch1", "計算処理", "input() と print()"),
+    1: ("ch1", "表示・計算・入力", "print と input"),
     2: ("ch2", "変数とリスト", "値に名前をつける・まとめる"),
     3: ("ch3", "繰り返し", "for と while"),
     4: ("ch4", "条件分岐", "if と else"),
@@ -53,7 +54,13 @@ CHAPTERS = {
     10: ("ch10", "道具と困ったとき", "エディタ・ターミナル・つまずき集"),
 }
 REF_CHAPTER = 9   # 辞典の章（確認テスト・課題は不要）
-NO_TASK_CHAPTERS = {0, REF_CHAPTER, 10}   # 課題（作ってみよう）がいらない章
+NO_TASK_CHAPTERS = {0, REF_CHAPTER, 10}
+# 章を、大きな3つのまとまりに分けて見せる（名前、ひとこと、章の番号）
+PARTS = [
+    ("Pythonの基本", "まずはここ。基本を、自分で書けるようになるまで", [0, 1, 2, 3, 4, 5, 6]),
+    ("Pyxelでゲームを作る", "基本を使って、レトロゲームを作ろう", [7, 8]),
+    ("調べる", "分からないときに引く", [9, 10]),
+]   # 課題（作ってみよう）がいらない章
 PYXEL_API = {}    # Pyxelの名前（init, rect ...） -> 辞典ページの slug
 
 # コードの中・文章中の `code` で、クリックして飛べるようにする言葉
@@ -730,7 +737,7 @@ def blocks(lines, ctx):
                 out.append(f'<details class="note {kind}"><summary>{t}</summary>{body}</details>')
             else:
                 head = f'<p class="note-label">{NOTE_LABELS[kind]}</p>'
-                if kind == "try" and title:
+                if kind in ("try", "point") and title:
                     head += f'<p class="note-title">{inline(title, ctx)}</p>'
                 out.append(f'<aside class="note {kind}">{head}{body}</aside>')
             continue
@@ -890,7 +897,10 @@ def nav_html(cur):
     parts.append(f'<a class="nav-home nav-yomi" href="yomi.html"{ya}>命令のよみかた</a>')
     ta = ' aria-current="page"' if cur["slug"] == "trouble" else ""
     parts.append(f'<a class="nav-home nav-yomi" href="trouble.html"{ta}>困ったとき</a>')
+    first_of_part = {nums[0]: name for name, _s, nums in PARTS}
     for n, (cslug, name, _sub) in CHAPTERS.items():
+        if n in first_of_part:
+            parts.append(f'<p class="nav-part">{esc(first_of_part[n])}</p>')
         terms = terms_of(n)
         is_open = cur["chapter"] == n
         cur_attr = ' aria-current="page"' if cur["slug"] == cslug else ""
@@ -976,27 +986,33 @@ def pager_html(n):
 
 
 def home_extra():
-    cards = []
-    for n, (cslug, name, sub) in CHAPTERS.items():
-        ts = terms_of(n)
-        words = "、".join(esc(t["title"].split("（")[0]) for t in ts[:5])
-        words = f"{words} ほか" if words else esc(sub)
-        cards.append(
-            f'<li><a class="chcard ch-{n}" href="{cslug}.html"><span class="chno">{n}</span>'
-            f'<strong>{esc(name)}</strong><span class="sub">{esc(sub)}</span>'
-            f'<span class="words">{words}</span></a></li>'
-        )
+    sections = []
+    for pname, psub, nums in PARTS:
+        cards = []
+        for n in nums:
+            cslug, name, sub = CHAPTERS[n]
+            ts = terms_of(n)
+            words = "、".join(esc(t["title"].split("（")[0]) for t in ts[:5])
+            words = f"{words} ほか" if words else ""
+            cards.append(
+                f'<li><a class="chcard ch-{n}" href="{cslug}.html"><span class="chno">{n}</span>'
+                f'<strong>{esc(name)}</strong><span class="sub">{esc(sub)}</span>'
+                f'<span class="words">{words}</span></a></li>'
+            )
+        sections.append(f'<h3 class="part-head">{esc(pname)}<span>{esc(psub)}</span></h3>'
+                        f'<ol class="chapters">{"".join(cards)}</ol>')
     idx = []
     for n, (cslug, name, _sub) in CHAPTERS.items():
         links = "".join(
             f'<li><a class="term" data-slug="{t["slug"]}" href="{t["slug"]}.html">{esc(t["title"])}</a></li>'
             for t in terms_of(n)
         )
-        idx.append(f'<div class="idx ch-{n}">{chapter_chip(n)}<ul>{links}</ul></div>')
+        if links:
+            idx.append(f'<div class="idx ch-{n}">{chapter_chip(n)}<ul>{links}</ul></div>')
     return (
         '<p class="yomi-link"><a href="yomi.html">🔤 命令のよみかた（カタカナ表）</a>'
         '<span>range や elif の読み方が分からなくなったら</span></p>'
-        '<h2>章からえらぶ</h2><ol class="chapters">' + "".join(cards) + "</ol>"
+        '<h2>章からえらぶ</h2>' + "".join(sections) +
         '<h2>言葉からえらぶ</h2><div class="index-all">' + "".join(idx) + "</div>"
     )
 
