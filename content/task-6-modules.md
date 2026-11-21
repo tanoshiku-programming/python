@@ -288,3 +288,39 @@ print(hiku(10, 4))
 import keisan
 ```
 :::
+
+@@ task:library
+::: t
+`random`・`pyxel`・`math`・`calendar` を、「最初から入っている（標準ライブラリ）」と「あとから pip で入れる（外部パッケージ）」に分けよう。
+:::
+::: s
+| 分類 | 部品 |
+| --- | --- |
+| 標準ライブラリ | `random`、`math`、`calendar` |
+| 外部パッケージ | `pyxel` |
+
+標準ライブラリは、Pythonをインストールすれば、すぐ `import` できます。`pyxel` だけは、先に `pip install pyxel` が必要です。
+:::
+
+::: t
+`random` を `import` して、`type(random)` を表示しよう。何と出る？
+```output
+<class 'module'>
+```
+:::
+::: s
+```python
+import random
+print(type(random))
+```
+`random` は `module`（モジュール）という種類だと分かります。
+:::
+
+::: t
+次の文を、スマホのアプリにたとえて、自分の言葉で説明しよう。「`pip install pyxel` は1回だけ。`import pyxel` は、プログラムを書くたびに必要」
+:::
+::: s
+`pip install pyxel` は、ストアでアプリを**入手する**ことです。1回入れれば、スマホに残ります。
+
+`import pyxel` は、そのアプリを**開いて使う**ことです。アプリは入っていても、使うときには、毎回、開かないと使えません。プログラムも、`import pyxel` と書いたプログラムでだけ、Pyxelが使えます。
+:::
