@@ -1,12 +1,11 @@
 @@ app-fortune
 title: 占いアプリを作ろう
 type: 作品
-chapter: 7
+chapter: 9
 syntax: ボタンを押すと、ランダムに結果が出る
 summary: ボタンをクリックすると、おみくじの結果がランダムに出るアプリ。マウス・リスト・randomの、まとめの作品です。
 aliases: 占い, おみくじ, うらない, アプリ
 reads: random=ランダム | randint=ランディント | Font=フォント | mouse_x=マウスエックス
-group: 作品を作る
 --
 ## 作るもの
 ボタンを押すと、「大吉」「中吉」「小吉」「凶」のどれかがランダムで出る**占いアプリ**です。Pyxelはゲームだけでなく、こうした「ボタンで操作する小さなアプリ」も作れます。
@@ -82,12 +81,11 @@ pyxel.run(update, draw)
 @@ app-timer
 title: ストップウォッチを作ろう
 type: 作品
-chapter: 7
+chapter: 9
 syntax: スペースでスタート・ストップ
 summary: スペースキーでスタート・ストップできるストップウォッチ。フレームの数から秒を計算する、割り算・True/False・キー操作のまとめです。
 aliases: ストップウォッチ, タイマー, 時計, 秒, 計算アプリ
 reads: btnp=ボタンピー | not=ノット | KEY_R=キーアール | ugoiteru=ウゴイテル | byou=ビョウ | fun=フン
-group: 作品を作る
 --
 ## 作るもの
 **スペースキー**でスタートとストップ、**Rキー**で0に戻せる**ストップウォッチ**です。
@@ -181,12 +179,11 @@ Scratchの「タイマー」ブロックは、自動で時間を数えてくれ�
 @@ game-catch
 title: ゲームを作ろう（ほしキャッチ）
 type: 作品
-chapter: 7
+chapter: 9
 syntax: 落ちてくるものを、キーで受け止める
 summary: 上から落ちてくる「ほし」を、キーで動かすバーで受け止めるゲーム。ここまでの総まとめです。
 aliases: ゲーム, ほしキャッチ, 初めてのゲーム, キャッチゲーム
 reads: rndi=ランディー | max=マックス | min=ミン | score=スコア | miss=ミス
-group: 作品を作る
 --
 ## 作るもの
 上から落ちてくる**ほし**を、**左右キー**で動かす**バー**で受け止めるゲームです。受け止めたら点が入り、逃したらミスが増えます。
@@ -268,12 +265,11 @@ pyxel.run(update, draw)
 @@ game-scene
 title: 画面を切り替えよう（タイトル・ゲーム・結果）
 type: 作品
-chapter: 7
+chapter: 9
 syntax: gamen = "title"
 summary: タイトル画面 → ゲーム → 結果画面のように、場面を切り替える方法です。「今どの場面か」を変数に覚えておきます。
 aliases: 場面, シーン, タイトル画面, ゲームオーバー, 切り替え, 連打ゲーム
 reads: gamen=ガメン | title=タイトル | game=ゲーム | over=オーバー | KEY_R=キーアール
-group: 作品を作る
 --
 ## ゲームには「場面」がある
 ふつうのゲームは、いきなり始まりません。
@@ -358,12 +354,11 @@ Scratchでは、「（ゲームスタート）を送る」と「（ゲームス�
 @@ game-list
 title: たくさん動かそう（リストを使う）
 type: 作品
-chapter: 7
+chapter: 9
 syntax: for i in range(30):
 summary: 雪や敵のように、たくさんのものを動かすときは、位置をリストに入れて、for でまとめて動かします。
 aliases: たくさん, 複数, 敵を増やす, 雪, リスト, 弾幕
 reads: append=アペンド | range=レンジ | x_list=エックスリスト | y_list=ワイリスト
-group: 作品を作る
 --
 ## 1つなら変数、たくさんならリスト
 ほしキャッチでは、ほしの位置を `hoshi_x` と `hoshi_y` の2つの変数で覚えていました。でも、ほしが30個になったら、変数を60個も作るのは大変です。
@@ -470,12 +465,11 @@ pyxel.run(update, draw)
 @@ object
 title: オブジェクトとメソッド（ドットが2回出てくるわけ）
 type: 考え方
-chapter: 7
+chapter: 10
 syntax: モノ.命令()
 summary: pyxel.text() のドットは1回、pyxel.sounds[0].set() のドットは2回。ドットは「〜の」という意味です。命令のついた「モノ」がオブジェクト、そのモノについた命令がメソッドです。
 aliases: オブジェクト, メソッド, ドット, ピリオド, 関数とのちがい, 持ち物, 棚, スロット, ドットが2回
 reads: object=オブジェクト | method=メソッド | sounds=サウンズ | images=イメージズ | set=セット
-group: ゲームの技
 --
 ## ドットは「〜の」と読む
 Pyxelの命令は `pyxel.text(…)` のように**ドットが1回**でした。ところが、音や絵を作るところでは、**ドットが2回**出てきます。むずかしく見えますが、ドットの意味はどちらも同じで、「**〜の**」と読むだけです。
@@ -523,18 +517,17 @@ print(kudamono_list)
 ::: deep Pyxelには、どんなオブジェクトがある？
 番号つきの棚が5つあります。`images`（絵・3枚）、`tilemaps`（マップ・8個）、`sounds`（効果音・64個）、`musics`（曲・8個）、`channels`（スピーカー・4本）です。番号は0からなので、`pyxel.sounds[64]` はエラー（`IndexError`）になります。くわしくは辞典の[[px-objects]]を見よう。
 
-オブジェクトの設計図（クラス）は、8章の[[class]]で、自分でも作れるようになります。
+オブジェクトの設計図（クラス）は、Pyxel 6の[[class]]で、自分でも作れるようになります。
 :::
 
 @@ game-image
 title: 画像を表示して動かそう
 type: 作品
-chapter: 7
+chapter: 10
 syntax: pyxel.blt(x, y, 0, u, v, 8, 8, 0)
 summary: ドット絵のキャラクターを blt で画面に出して、キーで動かします。透明色・アニメーション・左右の向きの変え方も学びます。
 aliases: 画像, ドット絵, キャラクター, スプライト, アニメーション, 歩く, 反転
 reads: blt=ブリット | images=イメージズ | muki=ムキ
-group: ゲームの技
 --
 ## 図形から、ドット絵へ
 ここまでは、`rect` や `circ` の図形でキャラクターを作ってきました。ゲームらしくするなら、**ドット絵**を使いたいですね。
@@ -633,12 +626,11 @@ Scratchの「次のコスチュームにする」がアニメーション、「�
 @@ game-hit
 title: 当たり判定を作ろう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: x1 < x2 + w2 and x2 < x1 + w1 and …
 summary: キャラクターと敵がぶつかったかどうかを調べる「当たり判定」の作り方です。四角どうし・近さ・円どうしの3つの方法を学びます。
 aliases: 当たり判定, 衝突判定, ヒットチェック, ぶつかる, 重なる, あたりはんてい
 reads: kasanatteru=カサナッテル | kyori=キョリ | sqrt=スクエアルート
-group: ゲームの技
 --
 ## 当たり判定ってなに？
 シューティングで弾が敵に当たったか、アクションでキャラクターが敵にぶつかったか。ゲームでは「**2つのものが重なっているか**」を、毎フレーム調べます。これを**当たり判定**といいます。
@@ -737,12 +729,11 @@ print(kyori < 5 + 6)
 @@ game-sound
 title: 音を鳴らそう
 type: 作品
-chapter: 7
+chapter: 10
 syntax: pyxel.sounds[0].set(…) / pyxel.play(0, 0)
 summary: 効果音を作って鳴らします。ジャンプやアイテムを取ったときに音が鳴ると、ゲームが一気に楽しくなります。
 aliases: 音, 効果音, サウンド, BGM, 鳴らす, ドレミ
 reads: sounds=サウンズ | set=セット | play=プレイ
-group: ゲームの技
 --
 ## 2つの手順
 | 手順 | 命令 |
@@ -832,12 +823,11 @@ pyxel.run(update, draw)
 @@ game-shot
 title: 弾を撃とう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: tama_list.append({"x": x, "y": y})
 summary: スペースキーで弾を撃ちます。弾は辞書で作ってリストに入れ、画面の外に出た弾はリストから消します。
 aliases: 弾, 発射, 撃つ, シューティング, 連射, たま
 reads: tama=タマ | jibun=ジブン | nokori=ノコリ | append=アペンド
-group: ゲームの技
 --
 ## 弾は「たくさん」出てくる
 弾は、撃つたびに1つずつ増えて、画面の上に消えていきます。何発出るか分からないので、[[game-list]]と同じように**リスト**で覚えます。
@@ -906,12 +896,11 @@ pyxel.run(update, draw)
 @@ game-enemy
 title: 敵を出そう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: if pyxel.frame_count % 20 == 0:
 summary: 一定の時間ごとに敵を出して、上から動かします。弾が当たったら、敵を消して点数を増やします。
 aliases: 敵, 出現, てき, 撃ち落とす, シューティング, 点数
 reads: teki=テキ | tama=タマ | atari=アタリ
-group: ゲームの技
 --
 ## 敵を、時間ごとに出す
 「20フレームごとに1体」のように、時間を決めて敵を出すには、`pyxel.frame_count`（[[px-frame-count]]）と `%`（余り）を使います。
@@ -1000,12 +989,11 @@ tama_list = [tama for tama in tama_list if tama["y"] > -8]
 @@ game-scroll
 title: スクロールさせよう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: pyxel.camera(camera_x, 0)
 summary: 背景を動かして、進んでいるように見せる「スクロール」の作り方です。背景を流す方法と、カメラでキャラクターを追いかける方法の2つを学びます。
 aliases: スクロール, 背景, カメラ, 横スクロール, 縦スクロール
 reads: camera=カメラ | hoshizora=ホシゾラ
-group: ゲームの技
 --
 ## スクロールってなに？
 画面の外まで続く広い世界を、少しずつ見せていくことを**スクロール**といいます。作り方は2つあります。
@@ -1094,12 +1082,11 @@ pyxel.run(update, draw)
 @@ game-map
 title: マップを作ろう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: mappu[y][x] == "#"
 summary: 文字を並べた二次元リストで、迷路やステージのマップを作ります。マップを画面に描いて、壁のところは通れないようにします。
 aliases: マップ, 迷路, ステージ, 壁, タイル, マス目
 reads: mappu=マップ | masu=マス | tsugi=ツギ
-group: ゲームの技
 --
 ## マップを文字で書く
 [[list2d]]で学んだように、文字を並べて、マップを作ります。
@@ -1200,12 +1187,11 @@ pyxel.run(update, draw)
 @@ game-jump
 title: ジャンプさせよう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: vy = vy + 0.5 / y = y + vy
 summary: キャラクターをジャンプさせて、重力で落ちてくるようにします。「上下の速さ」を変数にして、毎フレーム少しずつ下向きに増やすのがコツです。
 aliases: ジャンプ, 重力, 落下, 地面, アクション
 reads: vy=ブイワイ | jimen=ジメン | jimen_ni_iru=ジメンニイル
-group: ゲームの技
 --
 ## ジャンプは「速さ」で作る
 ジャンプを「`y` を一気に20減らす」で作ると、ワープしたように見えてしまいます。本物っぽく動かすコツは、**上下の速さ** `vy` を変数にすることです。
@@ -1273,12 +1259,11 @@ pyxel.run(update, draw)
 @@ game-wall
 title: 壁にぶつかったら止めよう（押し戻し）
 type: 作品
-chapter: 7
+chapter: 11
 syntax: 動く前の位置を覚えて、壁に重なったら戻す
 summary: キャラクターが壁を通りぬけないようにする方法です。動いたあとで壁と重なっていたら、動く前の位置に戻します。
 aliases: 押し戻し, 壁, すり抜け, ぶつかる, 当たり判定
 reads: mae_x=マエエックス | kabe_list=カベリスト | kasanatteru=カサナッテル
-group: ゲームの技
 --
 ## 「戻す」だけで壁になる
 [[game-map]]では、マス目ごとに「行き先が壁か」を調べました。1ドットずつなめらかに動くゲームでは、こう考えます。
@@ -1354,12 +1339,11 @@ pyxel.run(update, draw)
 @@ game-effect
 title: エフェクトをつけよう（爆発・ゆれ・無敵）
 type: 作品
-chapter: 7
+chapter: 11
 syntax: pyxel.camera(ゆれ, ゆれ) / if pyxel.frame_count % 4 < 2:
 summary: 爆発の輪、画面のゆれ、やられたあとの点滅（無敵時間）。ゲームを気持ちよくする「演出」の作り方です。
 aliases: エフェクト, 爆発, 画面ゆれ, 振動, 無敵, 点滅, 演出
 reads: bakuhatsu=バクハツ | yure=ユレ | muteki=ムテキ
-group: ゲームの技
 --
 ## 爆発の輪
 当たったところに、輪がだんだん大きくなって消える「爆発」を出します。爆発も、[[game-shot]]の弾と同じように、辞書のリストで管理します。
@@ -1447,12 +1431,11 @@ pyxel.run(update, draw)
 @@ game-highscore
 title: ハイスコアとランキングを作ろう
 type: 作品
-chapter: 7
+chapter: 11
 syntax: ranking.sort(reverse=True)
 summary: いちばん良かった点数（ハイスコア）を覚えておいて、ゲームをやり直しても残るようにします。上位3つのランキングも作ります。
 aliases: ハイスコア, 最高点, ランキング, 記録, ソート, 並べかえ
 reads: high_score=ハイスコア | ranking=ランキング | sort=ソート | reverse=リバース
-group: ゲームの技
 --
 ## ハイスコアは「上書きしない」変数
 `score` は、ゲームを始めるたびに0に戻します。でも、**ハイスコア**（いちばん良かった点数）は戻しません。ゲームが終わったときに、今回の点数がハイスコアより大きければ、入れかえます。

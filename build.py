@@ -48,18 +48,27 @@ CHAPTERS = {
     4: ("ch4", "条件分岐", "if と else"),
     5: ("ch5", "関数", "処理に名前をつける"),
     6: ("ch6", "モジュール", "random や calendar を使う"),
-    7: ("ch7", "Pyxelで作ろう", "画面に出して、動かす"),
-    8: ("ch8", "クラスで作ろう", "class と self で、まとめて書く"),
-    9: ("ch9", "Pyxel辞典", "関数やクラスを引く"),
-    10: ("ch10", "道具と困ったとき", "エディタ・ターミナル・つまずき集"),
+    7: ("ch7", "はじめの一歩", "画面を出して、Pyxelのしくみを知る"),
+    8: ("pyxel2", "描く・動かす", "文字・図形・キー・マウス"),
+    9: ("pyxel3", "作品を作る", "占い・ストップウォッチ・ほしキャッチ"),
+    10: ("pyxel4", "絵と音", "画像・音・Pyxel Editor・配る"),
+    11: ("pyxel5", "ゲームの技", "作りたいゲームに合わせて選ぶ"),
+    12: ("ch8", "クラスで作ろう", "class と self で、まとめて書く"),
+    13: ("ch9", "Pyxel辞典", "関数やクラスを引く"),
+    14: ("ch10", "道具と困ったとき", "エディタ・ターミナル・つまずき集"),
 }
-REF_CHAPTER = 9   # 辞典の章（確認テスト・課題は不要）
-NO_TASK_CHAPTERS = {0, REF_CHAPTER, 10}
+# 章の番号の見せ方。基本は 0〜6、Pyxel は P1〜P6、調べるは記号
+PYXEL_CHAPTERS = [7, 8, 9, 10, 11, 12]
+CHAPTER_BADGE = {13: "辞", 14: "?"}
+REF_CHAPTER = 13   # 辞典の章（確認テスト・課題は不要）
+NO_TASK_CHAPTERS = {0, REF_CHAPTER, 14}
+# まとめページに確認テスト・課題がなくてもよい章（Pyxel 2〜5 は、ページを選んで読む案内だけ）
+GUIDE_ONLY_CHAPTERS = {8, 9, 10, 11}
 # 章を、大きな3つのまとまりに分けて見せる（名前、ひとこと、章の番号）
 PARTS = [
     ("Pythonの基本", "まずはここ。基本を、自分で書けるようになるまで", [0, 1, 2, 3, 4, 5, 6]),
-    ("Pyxelでゲームを作る", "基本を使って、レトロゲームを作ろう", [7, 8]),
-    ("調べる", "分からないときに引く", [9, 10]),
+    ("Pyxelでゲームを作る", "基本を使って、レトロゲームを作ろう", [7, 8, 9, 10, 11, 12]),
+    ("調べる", "分からないときに引く", [13, 14]),
 ]   # 課題（作ってみよう）がいらない章
 PYXEL_API = {}    # Pyxelの名前（init, rect ...） -> 辞典ページの slug
 
@@ -470,7 +479,7 @@ def inline(s, ctx, autolink=True, in_link=False):
                 slug = pyxel_slug(m.group(1)) or slug
             elif raw == "pyxel":
                 slug = PYXEL_API.get("pyxel")
-            elif not slug and ctx.page["chapter"] in (7, 8, 9):
+            elif not slug and ctx.page["chapter"] in range(7, 14):
                 slug = pyxel_slug(re.split(r"[(\s.]", raw)[0])
             if slug and slug != ctx.slug and slug in PAGES:
                 ctx.page["links"].add(slug)
@@ -872,7 +881,17 @@ def make_yomi_page():
     }
 
 
+def chapter_badge(n):
+    if n in PYXEL_CHAPTERS:
+        return f"P{PYXEL_CHAPTERS.index(n) + 1}"
+    return CHAPTER_BADGE.get(n, str(n))
+
+
 def chapter_label(n):
+    if n in PYXEL_CHAPTERS:
+        return f"Pyxel {PYXEL_CHAPTERS.index(n) + 1} {CHAPTERS[n][1]}"
+    if n in CHAPTER_BADGE:
+        return CHAPTERS[n][1]
     return f"第{n}章 {CHAPTERS[n][1]}"
 
 
@@ -914,7 +933,7 @@ def nav_html(cur):
             items.append(f'<li><a href="{t["slug"]}.html"{aria}>{esc(t["title"])}</a></li>')
         parts.append(
             f'<details class="nav-ch ch-{n}"{" open" if is_open else ""}>'
-            f'<summary><span class="no">{n}</span>{esc(name)}</summary>'
+            f'<summary><span class="no">{chapter_badge(n)}</span>{esc(name)}</summary>'
             f'<ul>{"".join(items)}</ul></details>'
         )
     return "".join(parts)
@@ -995,7 +1014,7 @@ def home_extra():
             words = "、".join(esc(t["title"].split("（")[0]) for t in ts[:5])
             words = f"{words} ほか" if words else ""
             cards.append(
-                f'<li><a class="chcard ch-{n}" href="{cslug}.html"><span class="chno">{n}</span>'
+                f'<li><a class="chcard ch-{n}" href="{cslug}.html"><span class="chno">{chapter_badge(n)}</span>'
                 f'<strong>{esc(name)}</strong><span class="sub">{esc(sub)}</span>'
                 f'<span class="words">{words}</span></a></li>'
             )
@@ -1119,10 +1138,12 @@ def main():
             PROBLEMS.append(f'{p["slug"]}: chapter がありません')
         if not p["summary"]:
             PROBLEMS.append(f'{p["slug"]}: summary がありません')
-        if p["kind"] in ("term", "chapter") and p["chapter"] != REF_CHAPTER and not p["quiz_html"]:
+        if p["kind"] in ("term", "chapter") and p["chapter"] != REF_CHAPTER and not p["quiz_html"] \
+                and not (p["kind"] == "chapter" and p["chapter"] in GUIDE_ONLY_CHAPTERS):
             PROBLEMS.append(f'{p["slug"]}: 確認テストがありません（@@ quiz:{p["slug"]}）')
     for p in PAGES.values():
-        if p["kind"] in ("term", "chapter") and p["chapter"] not in NO_TASK_CHAPTERS and not p["tasks_html"]:
+        if p["kind"] in ("term", "chapter") and p["chapter"] not in NO_TASK_CHAPTERS and not p["tasks_html"] \
+                and not (p["kind"] == "chapter" and p["chapter"] in GUIDE_ONLY_CHAPTERS):
             PROBLEMS.append(f'{p["slug"]}: 作ってみようがありません（@@ task:{p["slug"]}）')
         if p["kind"] in ("term", "chapter") and not p["reads"] and p["slug"] != "ch9":
             PROBLEMS.append(f'{p["slug"]}: reads（カタカナ読み）がありません')

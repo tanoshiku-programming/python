@@ -1,12 +1,11 @@
 @@ pyxel-editor
 title: Pyxel Editor（絵・マップ・音を作る道具）
 type: 道具
-chapter: 7
+chapter: 10
 syntax: pyxel edit ファイル名.pyxres
 summary: Pyxel Editor は、ドット絵・マップ・効果音・音楽を作るための、Pyxelについてくる道具です。作ったものは .pyxres というファイル1つに入って、pyxel.load で読みこめます。
 aliases: Pyxel Editor, ピクセルエディタ, エディタ, pyxres, イメージエディタ, タイルマップエディタ, サウンドエディタ, ミュージックエディタ, リソースファイル
 reads: pyxres=ピクセルレス | edit=エディット | load=ロード | resource=リソース
-group: 自分の絵や音・配る
 --
 ## プログラムで絵を書くのは、たいへん
 [[game-image]]では、`images[0].set(0, 0, ["000aaa00", …])` のように、**文字で**ドット絵を書きました。8×8のひよこ1羽でも、それなりに手間がかかります。大きな絵や、たくさんの絵を、文字で書くのは現実的ではありません。
@@ -81,12 +80,11 @@ pyxel.run(update, draw)
 @@ pyxres-game
 title: Editorで作った絵と音でゲームを作ろう
 type: 作品
-chapter: 7
+chapter: 10
 syntax: pyxel.load("my_game.pyxres")
 summary: Pyxel Editor で作った絵・マップ・音を、pyxel.load で読みこんで、キーで歩いて音も鳴るひよこのプログラムを作ります。
 aliases: pyxres, 絵と音, ひよこ, エディタで作る, 歩く
 reads: load=ロード | bltm=ブリットエム | play=プレイ
-group: 自分の絵や音・配る
 --
 ## 作るもの
 [[pyxel-editor]]で作った `hiyoko.pyxres`（ひよこ2枚・草と土のタイル・効果音）を使って、**左右キーで歩いて、スペースキーで鳴く**ひよこを作ります。
@@ -149,12 +147,11 @@ Scratchの「コスチュームタブ」「音タブ」で、絵や音を作っ�
 @@ game-package
 title: 作ったゲームを配ろう
 type: 作品
-chapter: 7
+chapter: 10
 syntax: pyxel package APP_DIR スタートのファイル.py
 summary: pyxel package でゲームを1つのファイル（.pyxapp）にまとめて、pyxel app2html でブラウザで遊べる HTML にします。友だちや家族に配る方法です。
 aliases: 配る, 公開, パッケージ, pyxapp, app2html, app2exe, play, 共有, 友だちに遊んでもらう, watch
 reads: package=パッケージ | pyxapp=ピクセルアップ | app2html=アップツーエイチティーエムエル | app2exe=アップツーイーエグゼ | play=プレイ | watch=ウォッチ
-group: 自分の絵や音・配る
 --
 ## 配るときの問題
 作ったゲームは、自分のパソコンなら `.py` ファイルで動きます。でも友だちのパソコンには、Python も Pyxel も入っていないかもしれません。絵や音のファイル（`.pyxres`）も、いっしょに渡さないと動きません。

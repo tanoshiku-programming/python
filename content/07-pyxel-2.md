@@ -1,12 +1,11 @@
 @@ pyxel-text
 title: 文字を表示してみよう
 type: 命令
-chapter: 7
+chapter: 8
 syntax: pyxel.text(x, y, "文字", 色)
 summary: pyxel.text で、画面の好きな場所に、好きな色で、文字を書きます。はじめは英数字だけです。
 aliases: text, テキスト, 文字を出す, 文字表示
 reads: text=テキスト | cls=クリアスクリーン | str=ストリング
-group: Pyxelの基本
 --
 ## 書き方のかたち
 ::: tpl 文字の書き方
@@ -97,12 +96,11 @@ pyxel.run(update, draw)
 @@ shapes
 title: いろいろな図形をかいてみよう
 type: 命令
-chapter: 7
+chapter: 8
 syntax: pyxel.rect(x, y, 幅, 高さ, 色)
 summary: 点・線・四角・円・だ円・三角形を描く命令があります。「b」がつくと、ふちだけです。
 aliases: 図形, rect, circ, line, pset, tri, 四角, 円, 線, 三角
 reads: pset=ピーセット | line=ライン | rect=レクト | rectb=レクトビー | circ=サーク | circb=サークビー | elli=エリ | tri=トライ
-group: Pyxelの基本
 --
 ## 書き方のかたち
 ::: tpl 四角と円の書き方
@@ -186,12 +184,11 @@ pyxel.run(update, draw)
 @@ pyxel-var
 title: 変数を使ってみよう
 type: 考え方
-chapter: 7
+chapter: 8
 syntax: x = x + 2
 summary: 位置や速さを変数にして、update で変えると、図形が動きます。壁で、跳ね返らせることもできます。
 aliases: 変数, 動かす, アニメーション, 速度, はね返り
 reads: global=グローバル | frame_count=フレームカウント
-group: Pyxelの基本
 --
 ## 変数で、動かす
 図形の位置を `pyxel.circ(20, 60, …)` のように**数字のまま**書くと、止まったままです。位置を**変数**にして `update` の中で変えると、動きます（[[variable]]）。
@@ -289,12 +286,11 @@ pyxel.run(update, draw)
 @@ pyxel-key
 title: キー操作をやってみよう
 type: 命令
-chapter: 7
+chapter: 8
 syntax: pyxel.btn(pyxel.KEY_LEFT)
 summary: btn でキーが押されているかを調べて、キャラクターを動かします。btnp は、押した瞬間だけです。
 aliases: キー, btn, btnp, キーボード, 操作, 矢印キー
 reads: btn=ボタン | btnp=ボタンピー | KEY_LEFT=キーレフト
-group: Pyxelの基本
 --
 ## 書き方のかたち
 ::: tpl キーを調べる書き方
@@ -384,12 +380,11 @@ x = max(0, min(152, x))
 @@ pyxel-mouse
 title: マウス操作をやってみよう
 type: 命令
-chapter: 7
+chapter: 8
 syntax: pyxel.mouse_x / pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)
 summary: マウスの位置は mouse_x と mouse_y。クリックは、btnp に MOUSE_BUTTON_LEFT を渡して調べます。
 aliases: マウス, クリック, mouse_x, mouse_y, ボタン
 reads: mouse=マウス | mouse_x=マウスエックス | mouse_y=マウスワイ | click=クリック
-group: Pyxelの基本
 --
 ## マウスの位置と、クリック
 | 知りたいこと | 書き方 |
@@ -457,12 +452,11 @@ pyxel.run(update, draw)
 @@ pyxel-jp
 title: 日本語を表示しよう
 type: 命令
-chapter: 7
+chapter: 8
 syntax: font = pyxel.Font("umplus_j12r.bdf")
 summary: 日本語は、フォントファイルを読みこんで、pyxel.text の最後に渡すと表示できます。
 aliases: 日本語, フォント, Font, bdf, 漢字
 reads: Font=フォント | text=テキスト | bdf=ビーディーエフ
-group: Pyxelの基本
 --
 ## 日本語が出ない理由
 Pyxelの文字は、はじめは**英数字だけ**です。日本語を出すには、日本語の文字が入った**フォントファイル**を読みこみます。
