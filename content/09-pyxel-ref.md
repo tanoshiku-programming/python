@@ -1939,7 +1939,7 @@ pyxel.play(〔チャンネル〕, 〔音の番号〕)
 
 音は、Pyxel Editor で作る方法と、プログラムで作る方法があります（[[px-sound-class]]）。
 
-同じチャンネルで別の音を鳴らすと、鳴っていた音は止まって、新しい音に置き換わります。
+同じチャンネルで別の音を鳴らすと、鳴っていた音は止まって、新しい音に置き換わります。チャンネルは、音を出すスピーカー4本のことです（[[px-channel-class]]）。
 
 ```python norun
 import pyxel
@@ -2033,6 +2033,8 @@ pyxel.sounds[〔番号〕].set(〔音の高さ〕, 〔音色〕, 〔大きさ〕
 ## どんな命令？
 `pyxel.sounds` は、**音を入れておく棚**（0〜63番）です。`set` で棚の中に音を作ります。作った音は[[px-play]]で鳴らします。
 
+`pyxel.sounds[0].set(…)` のように、ドットが2回出てくる書き方の意味は、[[object]]で説明しています。棚の一覧は[[px-objects]]を見よう。
+
 音の高さは、**ド（c）レ（d）ミ（e）ファ（f）ソ（g）ラ（a）シ（b）**のアルファベットと、**高さの数字**で書きます。`c3` はドで、数字が大きいほど高い音です。
 
 ```python norun
@@ -2075,11 +2077,158 @@ pyxel.playm(0, loop=True)
 ```
 チャンネル0で音0→音1を、チャンネル1で音2を、同時に鳴らします。
 
+@@ px-channel-class
+title: Channel（音を出すスピーカー）
+type: Pyxelのオブジェクト
+chapter: 9
+group: 音
+syntax: pyxel.channels[番号].play(pyxel.sounds[番号])
+summary: 音を鳴らす4本のスピーカーです。pyxel.play は、このチャンネルに音を流す命令の、短い書き方です。
+aliases: チャンネル, スピーカー, channels, Channel, 同時に鳴らす
+api: Channel, channels
+reads: Channel=チャンネル | channels=チャンネルズ | play=プレイ | stop=ストップ
+--
+## 書き方のかたち
+::: tpl Channel の書き方
+pyxel.channels[〔番号〕].play(pyxel.sounds[〔音の番号〕])
+pyxel.channels[〔番号〕].stop()
+
+| 〔番号〕 | チャンネル（スピーカー）の番号。0〜3 |
+| 〔音の番号〕 | 鳴らす音の番号。0〜63 |
+:::
+
+## どんなもの？
+Pyxelの音は、**4本のスピーカー（チャンネル）**から出ます。`pyxel.channels` は、その4本が入った棚です（[[px-objects]]）。
+
+| 番号 | 0 | 1 | 2 | 3 |
+| --- | --- | --- | --- | --- |
+| スピーカー | チャンネル0 | チャンネル1 | チャンネル2 | チャンネル3 |
+
+4本あるので、**最大4つの音を同時に**鳴らせます。たとえば、チャンネル0でBGM、チャンネル1で効果音、というように使い分けます。
+
+## 使い方
+```python px press=KEY_SPACE@2 frames=6
+import pyxel
+
+pyxel.init(160, 120, title="channels")
+pyxel.sounds[0].set("c3e3g3c4", "p", "7", "n", 8)
+
+
+def update():
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        pyxel.channels[0].play(pyxel.sounds[0])
+    if pyxel.btnp(pyxel.KEY_X):
+        pyxel.channels[0].stop()
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.text(30, 50, "SPACE: PLAY", 10)
+    pyxel.text(30, 64, "X: STOP", 8)
+
+
+pyxel.run(update, draw)
+```
+スペースキーで、チャンネル0に、サウンド0番を流します。Xキーを押すと、チャンネル0の音が止まります。
+
+## pyxel.play との関係
+いつも使っている `pyxel.play(0, 0)` は、次の書き方とほとんど同じ意味です。
+
+| 短い書き方 | 長い書き方 |
+| --- | --- |
+| `pyxel.play(0, 0)` | `pyxel.channels[0].play(pyxel.sounds[0])` |
+| `pyxel.stop(0)` | `pyxel.channels[0].stop()` |
+
+長い書き方のほうが、「**チャンネル0というスピーカー**に、**サウンド0という音**を流す」と、何をしているかが、そのまま読めます（[[object]]）。
+
+::: deep くりかえして鳴らす
+`pyxel.channels[0].play(pyxel.sounds[0], loop=True)` と書くと、音が終わっても、また最初から鳴りつづけます。BGMを流したいときに使えます。止めたいときは、`stop` を呼びます。
+:::
+
+@@ px-objects
+title: オブジェクト一覧（棚と画面）
+type: Pyxelのオブジェクト
+chapter: 9
+group: オブジェクト・データ
+syntax: pyxel.sounds[0].set(…) / pyxel.images[0].load(…)
+summary: Pyxelに用意されている「オブジェクト」の一覧です。番号つきの5つの棚（images・tilemaps・sounds・musics・channels）と、画面そのもの（screen）があります。
+aliases: オブジェクト, 棚, スロット, screen, 画面, メソッド, images, tilemaps, sounds, musics, channels, 一覧
+api: screen
+reads: object=オブジェクト | screen=スクリーン | images=イメージズ | tilemaps=タイルマップス | sounds=サウンズ | musics=ミュージックス | channels=チャンネルズ
+--
+## 書き方のかたち
+::: tpl オブジェクトの使い方
+pyxel.〔棚の名前〕[〔番号〕].〔メソッド〕(〔値〕)
+
+| 〔棚の名前〕 | images、tilemaps、sounds、musics、channels のどれか |
+| 〔番号〕 | 棚の何番目か。0から数える |
+| 〔メソッド〕 | そのオブジェクトについている命令（set、load、play など） |
+:::
+
+## どんなもの？
+`pyxel.text(…)` のような**関数**とちがって、`pyxel.sounds[0].set(…)` のように**ドットが2回**出てくるのが、オブジェクトを使うときの書き方です。「pyxel **の** sounds **の** 0番**の** set」と読みます。くわしい考え方は、[[object]]を見よう。
+
+## 5つの棚
+| 棚の名前 | 中に入っているモノ | 数 | 番号 | くわしいページ |
+| --- | --- | --- | --- | --- |
+| `pyxel.images` | ドット絵を置く画像（Image） | 3枚 | 0〜2 | [[px-image-class]] |
+| `pyxel.tilemaps` | マップ（Tilemap） | 8個 | 0〜7 | [[px-tilemap-class]] |
+| `pyxel.sounds` | 効果音（Sound） | 64個 | 0〜63 | [[px-sound-class]] |
+| `pyxel.musics` | 曲（Music） | 8個 | 0〜7 | [[px-music-class]] |
+| `pyxel.channels` | 音を出すスピーカー（Channel） | 4本 | 0〜3 | [[px-channel-class]] |
+
+数は、このサイトで動かしたPyxel 2.9.9で調べた数です。バージョンが変わると、増えることもあります。
+
+::: point
+番号は**0から**です。`pyxel.sounds` は `0` 〜 `63` なので、`pyxel.sounds[64]` は `IndexError`（範囲の外）になります。
+:::
+
+## 画面そのものも、オブジェクト
+`pyxel.screen` は、**画面そのもの**を表すオブジェクトです。画像バンクと同じ `Image` の仲間なので、同じ命令（`rect`、`circ`、`text` など）が使えます。
+
+```python px
+import pyxel
+
+pyxel.init(160, 120, title="screen")
+
+
+def update():
+    pass
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.rect(20, 30, 50, 40, 8)
+    pyxel.screen.rect(90, 30, 50, 40, 8)
+
+
+pyxel.run(update, draw)
+```
+左は `pyxel.rect(…)`、右は `pyxel.screen.rect(…)` で描きました。**まったく同じ四角**になります。いつも書いている `pyxel.rect(…)` は、「画面というオブジェクトへの命令」の、短い書き方だったのです。
+
+## 自分で作るオブジェクト
+フォントは、棚に入っていません。`pyxel.Font("ファイル名")` で、**自分で作って**変数に入れます（[[px-font-class]]）。
+
+## どのメソッドがあるの？
+主なものだけ並べます（使い方は、それぞれのページへ）。
+
+| オブジェクト | 主なメソッド |
+| --- | --- |
+| Image（`images[0]`、`screen`） | `set`・`load`・`save`・`pget`・`pset`・`cls`・`line`・`rect`・`circ`・`text`・`blt`・`bltm` |
+| Tilemap（`tilemaps[0]`） | `set`・`pget`・`pset`・`blt` |
+| Sound（`sounds[0]`） | `set`・`mml`・`save` |
+| Music（`musics[0]`） | `set`・`save` |
+| Channel（`channels[0]`） | `play`・`stop` |
+
+::: deep Pyxelのオブジェクトは、全部同じ考え方で作られている
+`images` も `sounds` も `channels` も、Pyxelを作った人が用意した**クラス**（設計図）から作られたオブジェクトです。たとえば、`isinstance(pyxel.sounds[0], pyxel.Sound)` は `True` です。クラスとオブジェクトの関係は、8章の[[class]]を見よう。
+:::
+
 @@ px-image-class
 title: Image（ドット絵の画像）
 type: Pyxelの命令
 chapter: 9
-group: 画像・データ
+group: オブジェクト・データ
 syntax: pyxel.images[番号]
 summary: ドット絵を入れておく場所（イメージバンク）です。キャラクターの絵をここに入れて、blt で画面にはります。
 aliases: イメージ, 画像, ドット絵, スプライト, キャラ絵
@@ -2130,7 +2279,7 @@ pyxel.run(update, draw)
 title: Tilemap（マップのデータ）
 type: Pyxelの命令
 chapter: 9
-group: 画像・データ
+group: オブジェクト・データ
 syntax: pyxel.tilemaps[番号]
 summary: 小さな絵（タイル）を碁盤の目のように並べて、広いマップを作るための仕組みです。
 aliases: タイルマップ, マップ, タイル, RPG
@@ -2158,7 +2307,7 @@ RPGなどのマップを作るときに使います。まずは、画像（[[px-
 title: load（データを読みこむ）
 type: Pyxelの命令
 chapter: 9
-group: 画像・データ
+group: オブジェクト・データ
 syntax: pyxel.load(ファイル名)
 summary: Pyxel Editor で作ったリソースファイル（.pyxres）を読みこみます。画像や音がまとめて使えるようになります。
 aliases: ロード, 読みこむ, pyxres, リソース, Pyxel Editor
@@ -2183,7 +2332,7 @@ Pyxel Editor は、ターミナルで `pyxel edit ファイル名.pyxres` と打
 title: Font（フォント）
 type: Pyxelの命令
 chapter: 9
-group: 画像・データ
+group: オブジェクト・データ
 syntax: pyxel.Font(ファイル名)
 summary: 日本語など、はじめから入っていない文字を書くためのフォントを読みこみます。
 aliases: フォント, 日本語, 文字, bdf

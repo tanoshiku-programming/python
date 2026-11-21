@@ -2791,3 +2791,65 @@ desktop/
     └── hiyoko.pyxres
 ```
 :::
+
+@@ task:object
+::: t
+次の6つを、「関数」と「メソッド」に分けよう。（ヒント：ドットの前が `pyxel` だけ、またはドットがなければ関数。ドットの前が「モノ」ならメソッド）
+
+1. `print("A")`
+2. `pyxel.cls(0)`
+3. `kudamono_list.append("ぶどう")`
+4. `pyxel.sounds[0].set("c3", "p", "7", "n", 10)`
+5. `pyxel.images[0].load(0, 0, "a.png")`
+6. `pyxel.play(0, 0)`
+:::
+::: s
+| 分類 | 番号 |
+| --- | --- |
+| 関数 | 1、2、6 |
+| メソッド | 3、4、5 |
+
+3は `kudamono_list` というリスト、4は `pyxel.sounds[0]`、5は `pyxel.images[0]` という、**モノ**に出している命令なので、メソッドです。
+:::
+
+::: t
+`kazu_list = [30, 10, 20]` を、`sort()` メソッドで小さい順に並べて、`pop()` メソッドで最後の1つを取り出そう。取り出した数と、残りのリストを、並べて表示します。
+```output
+30 [10, 20]
+```
+:::
+::: s
+```python
+kazu_list = [30, 10, 20]
+kazu_list.sort()
+saigo = kazu_list.pop()
+print(saigo, kazu_list)
+```
+`sort()` で `[10, 20, 30]` になって、`pop()` で最後の `30` が取り出されます。
+:::
+
+::: t
+`pyxel.sounds[2]` に、自分の好きな音を `set` で作って、Xキーを押したら、チャンネル1で鳴らそう。
+:::
+::: s
+```python px press=KEY_X@2 frames=6
+import pyxel
+
+pyxel.init(160, 120, title="Xで鳴らす")
+pyxel.sounds[2].set("e3g3b3e4", "s", "6", "n", 8)
+
+
+def update():
+    if pyxel.btnp(pyxel.KEY_X):
+        pyxel.play(1, 2)
+
+
+def draw():
+    pyxel.cls(1)
+    pyxel.text(48, 56, "X: SOUND 2", 10)
+
+
+pyxel.run(update, draw)
+```
+`pyxel.play(1, 2)` は、チャンネル1で、2番の音を鳴らす、という意味です。1つ目がチャンネル、2つ目が音の番号です。
+:::

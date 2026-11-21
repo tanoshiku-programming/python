@@ -284,6 +284,18 @@ def px_line(s):
     m = re.match(r"pyxel\.musics\[(\d+)\]\.set\(", s)
     if m:
         return f"ミュージック {m[1]} に、チャンネルごとに鳴らす音の番号を並べる"
+    m = re.fullmatch(r"pyxel\.screen\.(\w+)\((.*)\)", s)
+    if m:
+        c = px_call(m[1], split_args(m[2]))
+        if c:
+            return "画面というオブジェクトに頼んで、" + c
+        return f"画面（screen）の {m[1]} メソッドを呼び出す"
+    m = re.fullmatch(r"pyxel\.channels\[(\d+)\]\.play\((.+)\)", s)
+    if m:
+        return f"チャンネル {m[1]} のスピーカーに、{m[2]} を流す"
+    m = re.fullmatch(r"pyxel\.channels\[(\d+)\]\.stop\(\)", s)
+    if m:
+        return f"チャンネル {m[1]} の音を止める"
     m = re.fullmatch(r"pyxel\.(\w+)\((.*)\)", s)
     if m:
         c = px_call(m[1], split_args(m[2]))
