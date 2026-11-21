@@ -803,7 +803,7 @@ def render_quiz(page):
     return (
         '<section class="quiz"><h2 id="quiz">確認テスト</h2>'
         '<p class="quiz-lead">このページを見直せば、ぜんぶ解けます。'
-        'まず自分で考えて（プログラムは、自分のVS Codeで動かしてOK）、それから答えを開こう。</p>'
+        'まず自分で考えて（プログラムは、IDLE や VS Code で動かしてみてOK）、それから答えを開こう。</p>'
         + body + "</section>"
     )
 
@@ -1045,9 +1045,12 @@ def render_page(page, incoming, css, js):
             + pager_html(n) + backlinks_html(page, incoming)
         )
     else:
+        later = ('<p class="later-note">このページは「必要になったら」読むページです。'
+                 '最初は飛ばして、先に進んでOKです。</p>') if page["group"] == "必要になったら" else ""
         article = (
             '<div class="trail" id="trail" hidden></div>'
             f'<header class="art-head"><p class="eyebrow">{chip}{ptype}</p><h1>{esc(page["title"])}</h1></header>'
+            + later
             + infobox_html(page, incoming) + lede + reads_html(page) + toc_html(page) + page["html"]
             + page.get("quiz_html", "") + page.get("tasks_html", "") + backlinks_html(page, incoming)
         )

@@ -6,11 +6,15 @@ summary: 同じことを何回もするときに使う、for文とwhile文を学
 reads: for=フォー | in=イン | while=ホワイル | range=レンジ | break=ブレーク | continue=コンティニュー
 --
 ## この章のゴール
-「同じことを100回やりたい」ときに、`print` を100行書くのは大変です。繰り返しを使えば、短く書けます。
+「同じことを何回もやる」ための書き方です。`print` を100行書かなくても、くり返しを使えば、短く書けます。
 
-- [[for]]文：回数や、リストの中身の数だけ繰り返す
-- [[while]]文：条件が続くあいだ繰り返す
+### まずはこれ（この順番で読もう）
+1. [[for]]：回数や、リストの中身の数だけくり返す
+2. [[range]]：「何回」を作る
+3. [[while]]：条件が続くあいだ、くり返す
+4. [[indent]]：どこからどこまでが、くり返す部分か
 
+ほかの言葉は「必要になったら」のページです。最初は飛ばして大丈夫です。ページのいちばん下に、一覧があります。
 
 ::: point この章で、自分でできるようになること
 - □ `for` と `range` で、決まった回数くり返せる
@@ -21,47 +25,12 @@ reads: for=フォー | in=イン | while=ホワイル | range=レンジ | break=
 ゲームを作る前に、ここにあることを、**お手本を見ないで書けるように**、くりかえし練習しよう。
 :::
 
-## for：回数を決めて繰り返す
-```python
-for i in range(3):
-    print("こんにちは")
-```
-`range(3)` は「3回」という意味です（[[range]]）。`print` の前が空いているのは[[indent]]で、「繰り返したい処理」を表します。
-
-::: scratch
-`for i in range(3):` は、Scratchの「（3）回繰り返す」ブロックです。Scratchではブロックの「口」の中に入れたものが繰り返されました。Pythonでは、**行の頭を下げた（インデントした）行**が「口の中」になります。
-:::
-
-## for：リストの中身を順番に
-```python
-for name in ["はなこ", "たろう"]:
-    print(name + "さん")
-```
-
-## while：条件が続くあいだ繰り返す
-```python
-count = 3
-while count > 0:
-    print(count)
-    count -= 1
-print("スタート！")
-```
-`count > 0` が `True` のあいだ、繰り返します。`count -= 1` を忘れると、永遠に終わりません（[[infinite-loop]]）。
-
-::: scratch
-Scratchの「（〇〇）まで繰り返す」は、条件が**True になったらやめる**ブロックでした。Pythonの `while` は、条件が **True のあいだ続ける**ので、**条件が反対**になります。Scratchで「（count = 0）まで繰り返す」と書いていたものは、Pythonでは `while count != 0:`（または `while count > 0:`）です。
-:::
-
-## どちらを使う？
+## for と while、どっちを使う？
 | 場面 | 使うもの |
 | --- | --- |
 | 回数が決まっている | `for` |
 | リストの中身を順番に使う | `for` |
 | いつ終わるか分からない | `while` |
-
-::: point
-途中でやめたいときは [[break]] を使います。
-:::
 
 ## やってみよう
 ::: try 1から10までの合計
@@ -94,6 +63,7 @@ chapter: 3
 syntax: for 変数 in 並び:
 summary: 回数や、リストの中身の数だけ、同じ処理を繰り返す文です。
 reads: for=フォー | in=イン | range=レンジ
+group: まずはこれ
 --
 ::: scratch
 Scratchの「（10）回繰り返す」ブロックです。口の中に入れたブロックが繰り返されたように、Pythonでは、行の頭を下げた（インデントした）行が繰り返されます。
@@ -159,6 +129,56 @@ for a in range(1, 4):
 - 途中で止めたいときは[[break]]
 :::
 
+@@ range
+title: range関数
+type: 関数
+chapter: 3
+syntax: range(終わり) / range(始め, 終わり) / range(始め, 終わり, 増え方)
+summary: 0, 1, 2… のような、連続した数のならびを作る関数です。for文とよく使います。
+reads: range=レンジ | list=リスト
+group: まずはこれ
+--
+::: scratch
+Scratchの「（10）回繰り返す」の「10回」の部分を作るのが、`range(10)` です。
+:::
+
+## 書き方のかたち
+::: tpl range の3つの形
+range(〔終わり〕)
+range(〔始め〕, 〔終わり〕)
+range(〔始め〕, 〔終わり〕, 〔増え方〕)
+
+| 〔始め〕 | 最初の数（書かなければ 0） |
+| 〔終わり〕 | ここまで。この数は含まれない |
+| 〔増え方〕 | 1回ごとに増える数（書かなければ 1） |
+:::
+
+## 3つの書き方
+`list()` で包むと、中身を見られます（[[list]]）。
+
+```python
+print(list(range(5)))
+print(list(range(1, 6)))
+print(list(range(0, 10, 2)))
+print(list(range(5, 0, -1)))
+```
+| 書き方 | 意味 |
+| --- | --- |
+| `range(5)` | 0から4まで（5個） |
+| `range(1, 6)` | 1から5まで |
+| `range(0, 10, 2)` | 0から10の手前まで、2ずつ |
+| `range(5, 0, -1)` | 5から1まで、1ずつ減らす |
+
+## for文と一緒に使う
+```python
+for i in range(3):
+    print(i)
+```
+
+::: stuck
+**終わりの数は、含まれません。** `range(1, 10)` は1から9までです。1から10までにしたいときは `range(1, 11)` です。
+:::
+
 @@ while
 title: while文
 type: 構文
@@ -166,6 +186,7 @@ chapter: 3
 syntax: while 条件:
 summary: 条件が True のあいだ、処理を繰り返す文です。
 reads: while=ホワイル | True=トゥルー | False=フォールス
+group: まずはこれ
 --
 ## 書き方のかたち
 ::: tpl while文の書き方
@@ -214,92 +235,6 @@ print("合計は", total)
 条件がずっと `True` のままだと、終わらなくなります。[[infinite-loop]]を見てください。
 :::
 
-@@ range
-title: range関数
-type: 関数
-chapter: 3
-syntax: range(終わり) / range(始め, 終わり) / range(始め, 終わり, 増え方)
-summary: 0, 1, 2… のような、連続した数のならびを作る関数です。for文とよく使います。
-reads: range=レンジ | list=リスト
---
-::: scratch
-Scratchの「（10）回繰り返す」の「10回」の部分を作るのが、`range(10)` です。
-:::
-
-## 書き方のかたち
-::: tpl range の3つの形
-range(〔終わり〕)
-range(〔始め〕, 〔終わり〕)
-range(〔始め〕, 〔終わり〕, 〔増え方〕)
-
-| 〔始め〕 | 最初の数（書かなければ 0） |
-| 〔終わり〕 | ここまで。この数は含まれない |
-| 〔増え方〕 | 1回ごとに増える数（書かなければ 1） |
-:::
-
-## 3つの書き方
-`list()` で包むと、中身を見られます（[[list]]）。
-
-```python
-print(list(range(5)))
-print(list(range(1, 6)))
-print(list(range(0, 10, 2)))
-print(list(range(5, 0, -1)))
-```
-| 書き方 | 意味 |
-| --- | --- |
-| `range(5)` | 0から4まで（5個） |
-| `range(1, 6)` | 1から5まで |
-| `range(0, 10, 2)` | 0から10の手前まで、2ずつ |
-| `range(5, 0, -1)` | 5から1まで、1ずつ減らす |
-
-## for文と一緒に使う
-```python
-for i in range(3):
-    print(i)
-```
-
-::: stuck
-**終わりの数は、含まれません。** `range(1, 10)` は1から9までです。1から10までにしたいときは `range(1, 11)` です。
-:::
-
-@@ break
-title: break と continue
-type: 構文
-chapter: 3
-syntax: break / continue
-summary: break はループを途中で終わらせ、continue は今回の分だけ飛ばして次に進みます。
-reads: break=ブレーク | continue=コンティニュー
---
-::: scratch
-Scratchの「（このスクリプト）を止める」に近い命令です。Pythonの `break` は、プログラム全体ではなく、**今のくり返しだけ**を止めます。
-:::
-
-## break：そこで終わる
-```python
-for i in range(1, 10):
-    if i == 4:
-        break
-    print(i)
-```
-`i` が `4` になったところで、ループ全体が終わります。条件は[[if]]で書きます。
-
-## continue：今回だけ飛ばす
-```python
-for i in range(1, 6):
-    if i == 3:
-        continue
-    print(i)
-```
-`i` が `3` のときだけ、そのあとの `print` を飛ばして、次の回に進みます。ループは続きます。
-
-::: point
-- `break`：ループをやめる
-- `continue`：今回だけやめて、次へ進む
-:::
-
-[[for]]でも[[while]]でも使えます。
-
 @@ indent
 title: インデント
 type: 書き方
@@ -307,6 +242,7 @@ chapter: 3
 syntax: 行の頭に半角スペース4つ
 summary: 行の頭の空白のことです。Pythonでは、どこまでが同じかたまりかを表す大事なルールです。
 reads: indent=インデント | for=フォー | if=イフ
+group: まずはこれ
 --
 ::: scratch
 Scratchでは、「もし〜なら」や「〇回繰り返す」のブロックの**口の中**に、ブロックを入れました。Pythonでは、行の頭を下げる（インデントする）ことで、「口の中」を表します。
@@ -342,6 +278,44 @@ print("あ")
 見た目は同じでも、スペースと Tab は別のものです。混ぜると、エラーになることがあります。多くのエディタは、Tab キーを押すとスペース4つを入れてくれます。
 :::
 
+@@ break
+title: break と continue
+type: 構文
+chapter: 3
+syntax: break / continue
+summary: break はループを途中で終わらせ、continue は今回の分だけ飛ばして次に進みます。
+reads: break=ブレーク | continue=コンティニュー
+group: 必要になったら
+--
+::: scratch
+Scratchの「（このスクリプト）を止める」に近い命令です。Pythonの `break` は、プログラム全体ではなく、**今のくり返しだけ**を止めます。
+:::
+
+## break：そこで終わる
+```python
+for i in range(1, 10):
+    if i == 4:
+        break
+    print(i)
+```
+`i` が `4` になったところで、ループ全体が終わります。条件は[[if]]で書きます。
+
+## continue：今回だけ飛ばす
+```python
+for i in range(1, 6):
+    if i == 3:
+        continue
+    print(i)
+```
+`i` が `3` のときだけ、そのあとの `print` を飛ばして、次の回に進みます。ループは続きます。
+
+::: point
+- `break`：ループをやめる
+- `continue`：今回だけやめて、次へ進む
+:::
+
+[[for]]でも[[while]]でも使えます。
+
 @@ infinite-loop
 title: 無限ループ
 type: 考え方
@@ -349,6 +323,7 @@ chapter: 3
 syntax: while True:
 summary: 終わらずに、ずっと続いてしまうループです。止め方を知っておけば大丈夫です。
 reads: while=ホワイル | True=トゥルー | Ctrl+C=コントロール シー
+group: 必要になったら
 --
 ::: scratch
 Scratchの「ずっと」ブロックが、Pythonの `while True:` です。Scratchでは赤い停止ボタンで止めましたね。Pythonでは `Ctrl` + `C` で止めます。
